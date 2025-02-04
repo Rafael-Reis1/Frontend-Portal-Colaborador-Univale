@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <script src="ocorrenciasPonto.js"></script>
+    <script src="../../header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="ocorrenciasPonto.css">
+    <link rel="icon" href="../../assets/favicon-logo-FPF-White.svg" type="image/svg+xml">
+    <title>Form process</title>
+</head>
+<body>
+    <div class="mainContainer" id="mainContainerBlueBackground">
+        <div class="header">
+            <div id="left">
+                <button id="logoHeader">
+                    <img src="../../assets/logos alinhadas.png" alt="FPF UNIVALE ETEIT UNIVALE TV" />
+                </button>
+                <button id="logoHeaderSmall">FPF</button>
+            </div>
+            <div id="right">
+                <div id="containerUser">
+                    <div id="optionsUser">
+                        <span id="nomeUser"><div class="skeleton-text" id="userName"></div></span>
+                        <span id="setorCurso">Setor/Curso:</span>
+                        <span id="darkMode">Dark Mode: Off</span>
+                        <Span id="sair">Sair</Span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="topOptionsBar">
+            <button class="whiteButton" id="newForm">Adicionar novo</button>
+            <input type="text" class="inputSearch" id="searchForms" placeholder="Pesquisar">
+        </div>
+        <div class="containerSituation">
+            <div class="cardsSituation" id="cardsSkeleton">
+                <div class="titleCardsSituation"><div class="skeleton-text"></div></div>
+                <div class="bodyCardsSituation" id="bodyCardsSkeleton">
+                    <div class="cardSituation">
+                        <div class="skeleton-text"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="cardsSituation"  id="cardsRascunho" style="display: none;">
+                <div class="titleCardsSituation"><p>Rascunho</p></div>
+                <div class="bodyCardsSituation" id="bodyCardsRascunho">
+                </div>
+            </div>
+            <div class="cardsSituation"  id="cardsCorrecao" style="display: none;">
+                <div class="titleCardsSituation"><p>Correção</p></div>
+                <div class="bodyCardsSituation" id="bodyCardsCorreção">
+                </div>
+            </div>
+            <div class="cardsSituation" id="cardsAprovGestor" style="display: none;">
+                <div class="titleCardsSituation"><p>Aprovação gestor</p></div>
+                <div class="bodyCardsSituation" id="bodyCardsAprovGestor">
+                </div>
+            </div>
+            <div class="cardsSituation" id="cardsAprovCoordenador" style="display: none;">
+                <div class="titleCardsSituation"><p>Aprovação coordenador</p></div>
+                <div class="bodyCardsSituation" id="bodyCardsCoordenador">
+                </div>
+            </div>
+            <div class="cardsSituation" id="cardsAprovSeplac" style="display: none;">
+                <div class="titleCardsSituation"><p>Aprovação Seplac</p></div>
+                <div class="bodyCardsSituation" id="bodyCardsSeplac">
+                </div>
+            </div>
+            <div class="cardsSituation" id="cardsAprovDiretoria" style="display: none;">
+                <div class="titleCardsSituation"><p>Aprovação diretoria</p></div>
+                <div class="bodyCardsSituation" id="bodyCardsDiretoria">
+                </div>
+            </div>
+            <div class="cardsSituation" id="cardsAprovProReitoria" style="display: none;">
+                <div class="titleCardsSituation"><p>Aprovação pro reitoria</p></div>
+                <div class="bodyCardsSituation" id="bodyCardsProReitoria">
+                </div>
+            </div>
+            <div class="cardsSituation" id="cardsAprovRH" style="display: none;">
+                <div class="titleCardsSituation"><p>Aprovação RH</p></div>
+                <div class="bodyCardsSituation" id="bodyCardsAprovRH">
+                </div>
+            </div>
+            <div class="cardsSituation" id="cardsAprovados" style="display: none;">
+                <div class="titleCardsSituation"><p>Aprovados</p></div>
+                <div class="bodyCardsSituation" id="bodyCardsAprovados">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="selectTipoAtividade" style="display: none;">
+        <div id="selectBackgroud">
+        </div>
+        <div class="popupCard">
+            <p>Curso/Setor</p>
+            <select name="selectCursoSetor" id="selectCursoSetor" class="FormInputs">
+            </select>
+            <button class="blueButton" id="confirmarSetor">Confirmar</button>
+        </div>
+    </div>
+</body>
+</html>

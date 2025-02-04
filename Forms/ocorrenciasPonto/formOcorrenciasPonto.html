@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <script src="ocorrenciasPonto.js"></script>
+    <script src="../../header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="ocorrenciasPonto.css">
+    <link rel="icon" href="../../assets/favicon-logo-FPF-White.svg" type="image/svg+xml">
+    <title>Form</title>
+</head>
+<body>
+    <div class="mainContainer" id="mainContainerBlueBackground">
+        <div id="formBackground"></div>
+        <div class="header">
+            <div id="left">
+                <button id="logoHeader">
+                    <img src="../../assets/logos alinhadas.png" alt="FPF UNIVALE ETEIT UNIVALE TV" />
+                </button>
+                <button id="logoHeaderSmall">FPF</button>
+            </div>
+            <div id="right">
+                <div id="containerUser">
+                    <div id="optionsUser">
+                        <span id="nomeUser"><div class="skeleton-text" id="userName"></div></span>
+                        <span id="setorCurso">Setor/Curso:</span>
+                        <span id="darkMode">Dark Mode: Off</span>
+                        <Span id="sair">Sair</Span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="topOptionsBar">
+            <div id="leftForm">
+                <button class="whiteButton" id="returnToProcessCards" onclick="history.back()" style="display: none;">Voltar</button>
+                <button class="whiteButton" id="somenteSalvar" style="display: none;">Somente salvar</button>
+            </div>
+            <div id="right">
+                <button class="whiteButton" id="cancelForm" style="display: none;">Cancelar</button>
+                <button class="whiteButton" id="sendForm" style="display: none;">Enviar Formulário</button>
+            </div>
+        </div>
+        <div class="containerForm">
+            <div id="divFormPaper">
+                <div id="formPaper">
+                    <div id="formHeader">
+                        <div id="headerSubdivision">
+                            <div id="logoInfo">
+                                <div id="logosForm" style="display: none;">
+                                    <div class="logoRow">
+                                        <object type="image/svg+xml" data="../../assets/logo-FPF.svg" class="logo-svg">
+                                            FPF
+                                        </object>
+                                        <object type="image/svg+xml" data="../../assets/logo-Univale.svg" class="logo-svg">
+                                            UNIVALE
+                                        </object>
+                                    </div> 
+                                    <div class="logoRow">
+                                        <object type="image/svg+xml" data="../../assets/logo-ETEIT.svg" class="logo-svg">
+                                            FPF
+                                        </object>
+                                        <object type="image/svg+xml" data="../../assets/logo-UnivaleTv.svg" class="logo-svg">
+                                            UNIVALE
+                                        </object>
+                                    </div> 
+                                </div>
+                                <div id="info">
+                                    <div>
+                                        <label for="nome">Nome</label><br>
+                                        <input type="text" name="nome" id="nome" class="FormInputs" placeholder="Digite seu nome">
+                                    </div>
+                                    <div>
+                                        <label for="funcao">Função</label><br>
+                                        <input type="text" name="funcao" id="funcao" class="FormInputs" placeholder="Digite sua função">
+                                    </div>
+                                    <div>
+                                        <label for="cursoSetor">Curso/Setor</label><br>
+                                        <input type="text" name="cursoSetor" id="cursoSetor" class="FormInputs" placeholder="Digite o Curso/Setor">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="fpfMission">
+                                <div>
+                                    <p><b>MISSÃO FPF:</b> Administrar os meios necessários ao pleno desenvolvimento das políticas institucionais das suas mantidas.</p>
+                                </div>
+                                <div>
+                                    <b>MISSÃO UNIVALE:</b> Construir e compartilhar o conhecimento por meio da formação de profissionais competentes, éticos e comprometidos com o desenvolvimento humano e regional.
+                                </div>
+                            </div>
+                        </div>
+                        <div id="relatos">
+                            <div id="radioButtonsTipoJus">
+                                <div>
+                                    <input type="radio" id="faltas" name="grupo" value="faltas">
+                                    <label for="faltas">Falta de Registro</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="atraso" name="grupo" value="atraso">
+                                    <label for="atraso">Atraso ou Antecipação no Registro</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="outros" name="grupo" value="outros">
+                                    <label for="outros">Duplicidade de Registro</label>
+                                </div>
+                            </div> 
+                            <br>
+                            <div>
+                                <div>
+                                    <label for="obs">Descrever o motivo e anexar documento comprobatório do cumprimento da jornada de trabalho (quando cabível):</label>
+                                    <button class="whiteButton" id="formAttachment">Anexos<span class="badge" id="attachmentsQTDEicon"></span></button><br>
+                                    <textarea name="obs" id="obs" rows="10" class="FormInputs" style="max-width: 45.9375rem;"></textarea>
+                                </div>
+                                <br>
+                                <div>
+                                    <label for="relato">Parecer do(a) Gestor(a):</label><br>
+                                    <textarea name="relato" id="relato" rows="10" class="FormInputs" style="max-width: 45.9375rem;" disabled></textarea>
+                                </div>
+                            </div>                  
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="subtitle"><p>Clique em <b>"Adicionar"</b> para informar o(s) horário(s) em que houve inconsistência(s):</p></div>
+                    <div id="divTabela">
+                        <button id="btnADD" class="blueButton" style="display: none;">Adicionar</button>
+                        <div style="overflow-x: auto;">
+                            <table id="tableOcorrencias">
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Aula e/ou Atividade</th>
+                                    <th>Entrada</th>
+                                    <th>Saída para o Intervalo</th>
+                                    <th>Retorno do intervalo</th>
+                                    <th>Saída</th>
+                                    <th id="deleteTh" style="display: none;"></th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="selectTipoAtividade" style="display: none;">
+        <div id="selectBackgroud">
+        </div>
+        <div class="popupCard">
+            <p>Curso/Setor</p>
+            <select name="selectCursoSetor" id="selectCursoSetor" class="FormInputs">
+            </select>
+            <button class="blueButton" id="confirmarSetor">Confirmar</button>
+        </div>
+    </div>
+
+    <div id="cancelFormPopup" style="display: none;">
+        <div id="cancelBackgroud">
+        </div>
+        <div class="popupCard">
+            <p>Tem certeza que deseja cancelar?</p>
+            <div class="popupButtons">
+                <button id="cancel" onclick="history.back()" class="redHover">Sim</button>
+                <button id="dontCancel" class="blueHover">Não</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sendFormPopup" style="display: none;">
+        <div id="sendBackgroud">
+        </div>
+        <div class="popupCard">
+            <p id="enviarPara"></p>
+            <div class="popupButtons">
+                <button id="btnCorrigir" class="redHover">Corrigir</button>
+                <button id="btnEnviar" class="blueHover">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="formAttachmentPopup" style="display: none;">
+        <div id="formAttachmentBackgroud">
+        </div>
+        <div class="popupCard">
+            <div id="file-list" class="file-list">
+                <div id="file-upload" class="file-upload">
+                  <label for="file-input" class="file-upload-label">
+                    Selecione ou arraste o arquivo
+                  </label>
+                  <input type="file" id="file-input" class="custom-file-input" accept="*/*" capture="camera" multiple>
+                </div>
+                <span id="semAnexo">Sem anexos</span>
+            </div>
+            <button class="blueButton" id="btnConfirmarAttachment">Confirmar</button>
+            <div id="loadingAttachment" style="display: none;">
+                <span class="loader-6"></span>
+            </div> 
+        </div>
+    </div>
+    
+    <div id="loadingFullScreen" style="display: none;">
+        <span class="loader-6"></span>
+    </div> 
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/favicon-logo-FPF-White.svg" type="image/svg+xml">
+    <title>Login</title>
+</head>
+<body>
+    <div id="containerLogin">
+        <div id="logosLogin">
+            <div class="logoRowLogin">
+                <object type="image/svg+xml" data="assets/logo-FPF-White.svg" class="logo-svg">
+                    FPF
+                </object>
+                <object type="image/svg+xml" data="assets/logo-Univale-White.svg" class="logo-svg">
+                    UNIVALE
+                </object>
+            </div> 
+            <div class="logoRowLogin">
+                <object type="image/svg+xml" data="assets/logo-ETEIT-White.svg" class="logo-svg">
+                    FPF
+                </object>
+                <object type="image/svg+xml" data="assets/logo-UnivaleTv-White.svg" class="logo-svg">
+                    UNIVALE
+                </object>
+            </div> 
+        </div>
+        <div id="formLogin">
+            <div class="divFormInputs">
+                <div id="logoLoginTop">
+                    <img src="assets/logos alinhadas.png" alt="Logos FPF e mantidadas">
+                </div>
+                <div id="divCpfLogin">
+                    <label for="cpfLogin" class="labelLogin">CPF</label><br>
+                    <input type="number" name="cpfLogin" id="cpfLogin" class="FormInputs" placeholder="Digite seu CPF">
+                </div>
+                <div id="divSenhaLogin">
+                    <label for="senhaLogin" class="labelLogin">Senha</label><br>
+                    <input type="password" name="senhaLogin" id="senhaLogin" class="FormInputs" placeholder="Digite sua senha">
+                </div>
+            </div>
+            <div>
+                <button id="loginEntrar" class="blueButton">Entrar</button>
+            </div> 
+        </div>
+        <div id="loading" style="display: none;">
+            <span class="loader-6"></span>
+        </div> 
+    </div>
+</body>
+</html>

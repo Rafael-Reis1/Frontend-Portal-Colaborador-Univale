@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <script src="app.js"></script>
+    <script src="header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/favicon-logo-FPF-White.svg" type="image/svg+xml">
+    <title>Forms home</title>
+</head>
+<body>
+    <div class="mainContainer">
+        <div class="header">
+            <div id="left">
+                <button id="logoHeader">
+                    <img src="assets/logos alinhadas.png" alt="FPF UNIVALE ETEIT UNIVALE TV" />
+                </button>
+                <button id="logoHeaderSmall">FPF</button>
+            </div>
+            <div id="right">
+                <div id="containerUser">
+                    <div id="optionsUser">
+                        <span id="nomeUser"><div class="skeleton-text" id="userName"></div></span>
+                        <span id="setorCurso">Setor/Curso:</span>
+                        <span id="darkMode">Dark Mode: Off</span>
+                        <Span id="sair">Sair</Span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="topOptionsBar">
+            <input type="text" class="inputSearch" id="searchForms" placeholder="Pesquisar">
+        </div>
+        <div class="containerFormCards">
+            <div id="divFormCards">
+                <div class="formCard" id="ocorrenciasPonto" style="display: none;">
+                    <p>Ocorrências de ponto</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="selectTipoAtividade" style="display: none;">
+        <div id="selectBackgroud">
+        </div>
+        <div class="popupCard">
+            <p>Curso/Setor</p>
+            <select name="selectCursoSetor" id="selectCursoSetor" class="FormInputs">
+            </select>
+            <button class="blueButton" id="confirmarSetor">Confirmar</button>
+        </div>
+    </div>
+</body>
+</html>
