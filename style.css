@@ -307,7 +307,7 @@
     border: 1px solid var(--border-color);
     border-radius: 9999px;
     padding: 0rem 1rem;
-    background-image: url('assets/Search.png');
+    background-image: url('assets/Search.svg');
     background-position: right 1rem center;
     background-repeat: no-repeat;
 }
