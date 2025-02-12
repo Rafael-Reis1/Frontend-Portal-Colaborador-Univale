@@ -288,7 +288,8 @@
 .mainContainer {
     background-color: var(--background-color);
     color: var(--font-color);
-    height: 93.5vh;
+    height: 100vh;
+    box-sizing: border-box;
     padding-top: 3.125rem;
 }
 
