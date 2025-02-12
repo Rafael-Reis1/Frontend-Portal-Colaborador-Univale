@@ -288,7 +288,8 @@
 .mainContainer {
     background-color: var(--background-color);
     color: var(--font-color);
-    height: 93.5vh;
+    height: 100vh;
+    box-sizing: border-box;
     padding-top: 3.125rem;
 }
 
@@ -327,7 +328,8 @@
 .containerSituation {
     display: flex;
     gap: 1.25rem;
-    padding: 0rem 3.75rem 1.25rem 3.75rem;
+    padding: 0rem 3.75rem 0 3.75rem;
+    margin-bottom: 1.25rem;
     overflow: auto;
     height: 82.5%;
 }
