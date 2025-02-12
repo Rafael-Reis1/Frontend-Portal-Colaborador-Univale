@@ -728,39 +728,39 @@ window.onload = function() {
             activities.sort((a, b) => b.movementSequence - a.movementSequence);
             const ultimoMovimento = activities[0];
             
-            if (ultimoMovimento.state.stateName == 'Início' && ultimoMovimento.active == true) {
+            if (ultimoMovimento.state.sequence == 4 && ultimoMovimento.active == true) {
                 cardsRascunho.style.display = 'flex';
                 populateCards(ultimoMovimento, 'bodyCardsRascunho');
             }
-            if (ultimoMovimento.state.stateName == 'Correção' && ultimoMovimento.active == true) {
+            if (ultimoMovimento.state.sequence == 78 && ultimoMovimento.active == true) {
                 cardsCorrecao.style.display = 'flex';
                 populateCards(ultimoMovimento, 'bodyCardsCorreção');
             }
-            if (ultimoMovimento.state.stateName == 'Aprovação gestor' && ultimoMovimento.active == true) {
+            if (ultimoMovimento.state.sequence == 5 && ultimoMovimento.active == true) {
                 cardsAprovGestor.style.display = 'flex';
                 populateCards(ultimoMovimento, 'bodyCardsAprovGestor');
             }
-            if (ultimoMovimento.state.stateName == 'Aprovação RH' && ultimoMovimento.active == true) {
+            if (ultimoMovimento.state.sequence == 7 && ultimoMovimento.active == true) {
                 cardsAprovRH.style.display = 'flex';
                 populateCards(ultimoMovimento, 'bodyCardsAprovRH');
             }
-            if (ultimoMovimento.state.stateName == 'Aprovação coordenador' && ultimoMovimento.active == true) {
+            if (ultimoMovimento.state.sequence == 23 && ultimoMovimento.active == true) {
                 cardsAprovCoordenador.style.display = 'flex';
                 populateCards(ultimoMovimento, 'bodyCardsCoordenador');
             }
-            if (ultimoMovimento.state.stateName == 'Aprovação Seplac' && ultimoMovimento.active == true) {
+            if (ultimoMovimento.state.sequence == 34 && ultimoMovimento.active == true) {
                 cardsAprovSeplac.style.display = 'flex';
                 populateCards(ultimoMovimento, 'bodyCardsSeplac');
             }
-            if (ultimoMovimento.state.stateName == 'Aprovação diretoria' && ultimoMovimento.active == true) {
+            if (ultimoMovimento.state.sequence == 44 && ultimoMovimento.active == true) {
                 cardsAprovDiretoria.style.display = 'flex';
                 populateCards(ultimoMovimento, 'bodyCardsDiretoria');
             }
-            if (ultimoMovimento.state.stateName == 'Aprovação pro reitoria' && ultimoMovimento.active == true) {
+            if (ultimoMovimento.state.sequence == 50 && ultimoMovimento.active == true) {
                 cardsAprovProReitoria.style.display = 'flex';
                 populateCards(ultimoMovimento, 'bodyCardsProReitoria');
             }
-            if (ultimoMovimento.state.stateName == 'Fim') {
+            if (ultimoMovimento.state.sequence == 9) {
                 cardsAprovados.style.display = 'flex';
                 populateCards(ultimoMovimento, 'bodyCardsAprovados');
             }            
