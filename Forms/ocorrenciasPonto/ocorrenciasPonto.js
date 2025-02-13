@@ -299,6 +299,7 @@ window.onload = function() {
         const cursoSetor = document.getElementById('cursoSetor');
         const obs = document.getElementById('obs');
         const cardId = localStorage.getItem('cardId');
+        const aceitoAlterarPonto = document.getElementById('aceitoAlterarPonto');
 
         const radioButtons = document.querySelectorAll('#radioButtonsTipoJus input[type="radio"]');
         let valorSelecionado;
@@ -318,6 +319,13 @@ window.onload = function() {
         formData.push(funcao.value);
         formIds.push('cursoSetor');
         formData.push(cursoSetor.value);
+        formIds.push('aceitoAlterarPonto');
+        if(aceitoAlterarPonto.checked) {
+            formData.push('checked');
+        }
+        else {
+            formData.push('');
+        }
         let data = {
             obs: obs.value
         }
