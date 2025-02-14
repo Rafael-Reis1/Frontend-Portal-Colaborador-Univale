@@ -62,6 +62,7 @@ window.onload = function() {
         const formAttachmentBackgroud = document.getElementById('formAttachmentBackgroud');
         const btnConfirmarAttachment = document.getElementById('btnConfirmarAttachment');
         const attachmentsQTDEicon = document.getElementById('attachmentsQTDEicon');
+        const aceitoAlterarPonto = document.getElementById('aceitoAlterarPonto');
 
         attachmentsQTDEicon.innerHTML = attachmentsQTDE;
 
@@ -107,7 +108,9 @@ window.onload = function() {
                         cursoSetor.value = formFields.find(item => item.field.startsWith('cursoSetor'))?.value || '';
                         obs.value = formFields.find(item => item.field.startsWith('obs'))?.value || '';
                         relato.value = formFields.find(item => item.field.startsWith('relato'))?.value || '';
-                        
+                        if(formFields.find(item => item.field.startsWith('aceitoAlterarPonto'))?.value || '' === 'checked') {
+                            aceitoAlterarPonto.checked = true;
+                        }
                         const dataOcorrencia = filtrarEOrdenarPorIndice(formFields, 'dataOcorrencia___');
                         const atividade = filtrarEOrdenarPorIndice(formFields, 'atividade___');
                         const entrada = filtrarEOrdenarPorIndice(formFields, 'entrada___');
@@ -581,6 +584,7 @@ window.onload = function() {
         const cursoSetorForm = document.getElementById('cursoSetor');
         const somenteSalvar =  document.getElementById('somenteSalvar');
         const fileUploadArea = document.getElementById('file-upload');
+        const aceitoAlterarPonto = document.getElementById('aceitoAlterarPonto');
 
         axios.get(baseURL + `/user/me`, {
             headers: {
@@ -636,6 +640,7 @@ window.onload = function() {
                     relato.disabled = true;
                     returnToProcessCards.style.display = 'block'
                     fileUploadArea.style.display = 'none';
+                    aceitoAlterarPonto.disabled = true;
                     
                     disabled = 'disabled';
                     style = 'style="display: none;'
