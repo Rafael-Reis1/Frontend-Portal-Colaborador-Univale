@@ -15,6 +15,11 @@
     --logos-background: white;
 }
 
+::selection {
+    background-color: var(--base-color);
+    color: #F5F5F5;
+}
+
 .dark-mode{
     --base-color: #0033CA;
     --base-color-hover: #0040FF;
