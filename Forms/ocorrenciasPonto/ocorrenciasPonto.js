@@ -598,7 +598,7 @@ window.onload = function() {
             const tipoAtividade = response.data.tipoAtividade;
             const cpfGestor = response.data.cpfGestor;
             const nomeGestor = response.data.nomeGestor;
-            tipoFuncionario = response.data.tipoFuncionario;
+            const tipoFuncionario = response.data.tipoFuncionario;
             const selectTipoAtividade = document.getElementById('selectTipoAtividade');
             const containerUser = document.getElementById('containerUser');
             let i = 0;
@@ -743,78 +743,45 @@ window.onload = function() {
             
             if (ultimoMovimento.state.sequence == 4 && processo.active == true) {
                 cardsRascunho.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsRascunho');
+                populateCards(ultimoMovimento, 'bodyCardsRascunho', formOcorrenciasPonto);
             }
             if (ultimoMovimento.state.sequence == 78 && processo.active == true) {
                 cardsCorrecao.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsCorreção');
+                populateCards(ultimoMovimento, 'bodyCardsCorreção', formOcorrenciasPonto);
             }
             if (ultimoMovimento.state.sequence == 5 && processo.active == true) {
                 cardsAprovGestor.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsAprovGestor');
+                populateCards(ultimoMovimento, 'bodyCardsAprovGestor', formOcorrenciasPonto);
             }
             if (ultimoMovimento.state.sequence == 7 && processo.active == true) {
                 cardsAprovRH.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsAprovRH');
+                populateCards(ultimoMovimento, 'bodyCardsAprovRH', formOcorrenciasPonto);
             }
             if (ultimoMovimento.state.sequence == 23 && processo.active == true) {
                 cardsAprovCoordenador.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsCoordenador');
+                populateCards(ultimoMovimento, 'bodyCardsCoordenador', formOcorrenciasPonto);
             }
             if (ultimoMovimento.state.sequence == 34 && processo.active == true) {
                 cardsAprovSeplac.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsSeplac');
+                populateCards(ultimoMovimento, 'bodyCardsSeplac', formOcorrenciasPonto);
             }
             if (ultimoMovimento.state.sequence == 44 && processo.active == true) {
                 cardsAprovDiretoria.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsDiretoria');
+                populateCards(ultimoMovimento, 'bodyCardsDiretoria', formOcorrenciasPonto);
             }
             if (ultimoMovimento.state.sequence == 50 && processo.active == true) {
                 cardsAprovProReitoria.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsProReitoria');
+                populateCards(ultimoMovimento, 'bodyCardsProReitoria', formOcorrenciasPonto);
             }
             if (ultimoMovimento.state.sequence == 9) {
                 cardsAprovados.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsAprovados');
+                populateCards(ultimoMovimento, 'bodyCardsAprovados', formOcorrenciasPonto);
             }            
           });
         })
         .catch(erro => {
           console.error(erro);
         });
-    }
-
-    function populateCards(dados, bodyCardsName) {
-        const bodyCard = document.getElementById(bodyCardsName);
-        
-        const fragment = document.createDocumentFragment();
-      
-        const card = document.createElement('div');
-        card.classList.add(bodyCardsName);
-        card.dataset.id = dados.processInstanceId;
-        
-        card.innerHTML = `
-            <div class="cardSituation">
-                <p>Solicitação: ${dados.processInstanceId}</p>
-            </div>
-        `; 
-    
-        card.addEventListener('click', () => {
-            localStorage.setItem('cardId', card.dataset.id);
-            if(bodyCardsName == 'bodyCardsCorreção' || bodyCardsName == 'bodyCardsRascunho') {
-                localStorage.setItem('correcao', 'true');
-                localStorage.setItem('adicionar', 'false');
-            }
-            else {
-                localStorage.setItem('correcao', 'false');
-                localStorage.setItem('adicionar', 'false');
-            }
-            document.location.href = formOcorrenciasPonto;
-        });
-    
-        fragment.appendChild(card);
-        
-        bodyCard.appendChild(fragment);
     }
 
     function adicionarAttachments() {
@@ -914,24 +881,5 @@ window.onload = function() {
         attachmentsQTDEicon.innerHTML = attachmentsQTDE;
 
         fileListContainer.appendChild(li);
-    }
-
-    function search() {
-        
-        const searchInput = document.getElementById('searchForms');
-
-        searchInput.addEventListener('input', () => {
-            const filter = searchInput.value.toLowerCase();
-            const cards = document.querySelectorAll('.cardSituation'); // Seleciona todos os cards
-
-            cards.forEach(card => {
-                const text = card.textContent.toLowerCase(); // Pega o texto do card
-                if (text.includes(filter)) {
-                    card.style.display = ''; // Mostra o card
-                } else {
-                    card.style.display = 'none'; // Oculta o card
-                }
-            });
-        });
     }
 }
