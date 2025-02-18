@@ -50,6 +50,7 @@ function search() {
     });
 }
 
+const fileInput = document.getElementById('file-input');
 function loadAnexos() {
     const token = localStorage.getItem('token');
     const cardId = localStorage.getItem('cardId');
@@ -64,7 +65,7 @@ function loadAnexos() {
     .then(response => {
         if(response.data.length > 0) {
             response.data.forEach(item => {
-                criaListaAttachment(fileListContainer, '', 'api', item.documentDescription, item.fileUrl, 'attachmentsQTDEicon');
+                criaListaAttachment(fileListContainer, '', 'api', item.documentDescription, item.fileUrl);
             });
         } 
     })
@@ -74,7 +75,7 @@ function loadAnexos() {
 }
 
 //Logica para buscar os anexos nos arquivos do pc
-function adicionarAttachments(attachmentsQTDEicon) {
+function adicionarAttachments() {
     const fileListContainer = document.getElementById('file-list');
     const fileUploadArea = document.getElementById('file-upload');
 
@@ -87,7 +88,7 @@ function adicionarAttachments(attachmentsQTDEicon) {
 
         selectedFiles.set(file.name, file); // Armazena o arquivo completo no Map
 
-        criaListaAttachment(fileListContainer, file, "upload", '', '', attachmentsQTDEicon);
+        criaListaAttachment(fileListContainer, file, "upload", '', '');
     }
 
     // Quando o usuário seleciona arquivos
@@ -115,8 +116,8 @@ function adicionarAttachments(attachmentsQTDEicon) {
 }
 
 //Logica para definir se é um arquivo que foi buscado da api ou do armazenamento + criar a lista
-function criaListaAttachment(fileListContainer, file, source, documentDescription, fileUrl, attachmentsQTDEiconParam) {
-    const attachmentsQTDEicon = document.getElementById(attachmentsQTDEiconParam);
+function criaListaAttachment(fileListContainer, file, source, documentDescription, fileUrl) {
+    const attachmentsQTDEicon = document.getElementById('attachmentsQTDEicon');
 
     // Cria o item de lista com ícone
     const li = document.createElement('li');

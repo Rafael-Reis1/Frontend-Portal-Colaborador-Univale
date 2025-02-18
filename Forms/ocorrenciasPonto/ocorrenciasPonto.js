@@ -13,7 +13,6 @@ let completeTask = '';
 let attachmentsQTDE = 0;
 
 window.onload = function() {
-    const fileInput = document.getElementById('file-input');
     const selectedFiles = new Map();
 
     authentication();
@@ -262,7 +261,7 @@ window.onload = function() {
             }, 200);
         }
 
-        adicionarAttachments('attachmentsQTDEicon');
+        adicionarAttachments();
     }
 
     //cria as linhas da tabela e preenche automaticamente se vier algo do fluig ou cria uma linha vazia caso clicado no botão "Adicionar"
