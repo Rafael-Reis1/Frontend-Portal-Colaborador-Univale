@@ -66,6 +66,7 @@ window.onload = function() {
 
         attachmentsQTDEicon.innerHTML = attachmentsQTDE;
 
+        //Preenche o formulário caso seja pra conferir, correção ou rascunho
         if(cardId) {
             loadingFullScreen.style.display = 'flex';
             document.documentElement.style.overflow = 'hidden';
@@ -261,9 +262,10 @@ window.onload = function() {
             }, 200);
         }
 
-        adicionarAttachments();
+        adicionarAttachments('attachmentsQTDEicon');
     }
 
+    //cria as linhas da tabela e preenche automaticamente se vier algo do fluig ou cria uma linha vazia caso clicado no botão "Adicionar"
     function tableRows(dataOcorrencia, atividade, entrada, saidaIntervalo, entradaIntervalo, saida, disabled, style) {
         return `<tr>
             <td>
@@ -294,6 +296,7 @@ window.onload = function() {
         </tr>`;
     }
 
+    //Formata os dados do formulário para serem enviados ao Fluig
     async function sendFormApi(tabela, somenteSalvar) {
         const token = localStorage.getItem('token');
         const linhas = tabela.querySelectorAll('tr');
@@ -385,6 +388,7 @@ window.onload = function() {
         }
     }
 
+    //Inicia um novo processo no Fluig
     function processStart(formIds, formData, textAreaData, somenteSalvar, token) {
         const loadingFullScreen = document.getElementById('loadingFullScreen');
 
@@ -442,6 +446,7 @@ window.onload = function() {
         });
     }
 
+    //Atualiza um formulário existente no fluig
     function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token) {
         const loadingFullScreen = document.getElementById('loadingFullScreen');
         const ocorrenciasPontoFolderId = 8;
@@ -478,6 +483,7 @@ window.onload = function() {
         });
     }
 
+    //Envia os arquivos de anexo para o Fluig
     function enviarAttachment(processInstanceId, formIds, formDataJson, textAreaData) {
         const formData = new FormData();
         const token = localStorage.getItem('token');
@@ -513,6 +519,7 @@ window.onload = function() {
         });
     }
 
+    //Move um formulário existente para a proxima atividade
     function moveRequest(processInstanceId, formIds, formData, textAreaData) {
         const token = localStorage.getItem('token');
         const cardId = localStorage.getItem('cardId');
@@ -563,7 +570,8 @@ window.onload = function() {
         });
     }
     
-    //Faz a pagina ser uma pagina que so pode ter acesso por autenticação
+    //Faz a pagina ser uma pagina que so pode ter acesso por autenticação desabilita alguns campos 
+    // e preenche os dados do usuario no Formulário
     function authentication() {
         const token = localStorage.getItem('token');
         const nomeUser = document.getElementById('nomeUser');
@@ -671,30 +679,8 @@ window.onload = function() {
             document.location.replace(loginPage);
         });
     }
-    
-    function loadAnexos() {
-        const token = localStorage.getItem('token');
-        const cardId = localStorage.getItem('cardId');
-        const fileListContainer = document.getElementById('file-list');
 
-        axios.get(baseURL + `/process/attachments/${cardId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Cache-Control': 'no-cache, no-store, must-revalidate'
-            }
-        })
-        .then(response => {
-            if(response.data.length > 0) {
-                response.data.forEach(item => {
-                    criaListaAttachment(fileListContainer, '', 'api', item.documentDescription, item.fileUrl);
-                });
-            } 
-        })
-        .catch(error => {
-            alert(error.message);
-        });
-    }
-
+    //Mostra onde os precessos estão por exemplo: Aprov. gestor, RH, correção, etc.
     function loadCards() {
         const token = localStorage.getItem('token');
         const bodyCardsAprovGestor = document.getElementById('bodyCardsAprovGestor');
@@ -782,104 +768,5 @@ window.onload = function() {
         .catch(erro => {
           console.error(erro);
         });
-    }
-
-    function adicionarAttachments() {
-        const fileListContainer = document.getElementById('file-list');
-        const fileUploadArea = document.getElementById('file-upload');
-    
-        // Função para adicionar arquivos à lista
-        function addFileToList(file) {
-            if (selectedFiles.has(file.name)) {
-                alert('Este arquivo já foi selecionado!');
-                return;
-            }
-    
-            selectedFiles.set(file.name, file); // Armazena o arquivo completo no Map
-    
-            criaListaAttachment(fileListContainer, file, "upload");
-        }
-    
-        // Quando o usuário seleciona arquivos
-        fileInput.addEventListener('change', function () {
-            Array.from(fileInput.files).forEach(file => addFileToList(file)); // Processa todos os arquivos selecionados
-            fileInput.value = ''; // Limpa o input para permitir nova seleção
-        });
-    
-        // Evento de arraste para dentro da área de upload
-        fileUploadArea.addEventListener('dragover', function (event) {
-            event.preventDefault(); // Impede o comportamento padrão
-            fileUploadArea.style.backgroundColor = '#e0f7e0'; // Indica que o arquivo pode ser solto
-        });
-    
-        fileUploadArea.addEventListener('dragleave', function () {
-            fileUploadArea.style.backgroundColor = '#f9f9f9'; // Volta ao estilo original
-        });
-    
-        // Quando o arquivo é solto
-        fileUploadArea.addEventListener('drop', function (event) {
-            event.preventDefault(); // Impede o comportamento padrão
-            Array.from(event.dataTransfer.files).forEach(file => addFileToList(file)); // Processa todos os arquivos arrastados
-            fileUploadArea.style.backgroundColor = '#f9f9f9'; // Volta ao estilo original
-        });
-    }
-
-    function criaListaAttachment(fileListContainer, file, source, documentDescription, fileUrl) {
-        const attachmentsQTDEicon = document.getElementById('attachmentsQTDEicon');
-
-        // Cria o item de lista com ícone
-        const li = document.createElement('li');
-    
-        // Ícone do arquivo
-        const icon = document.createElement('span');
-        icon.classList.add('file-icon');
-        icon.textContent = '📄';
-
-        const fileName = document.createElement('span');
-        fileName.classList.add('file-name');
-
-        let actionIcon; // Ícone de ação (excluir ou baixar)
-        if (source === 'upload') {
-            // Nome do arquivo
-            fileName.textContent = file.name;
-            // Ícone de excluir
-            actionIcon = document.createElement('span');
-            actionIcon.classList.add('remove-icon');
-            actionIcon.textContent = '❌';
-            actionIcon.addEventListener('click', function () {
-                selectedFiles.delete(file.name); // Remove o arquivo do Map
-                attachmentsQTDE--;
-                if(attachmentsQTDE == 0) {
-                    semAnexo.style.display = 'inline';
-                }
-                attachmentsQTDEicon.innerHTML = attachmentsQTDE;
-                li.remove(); // Remove o elemento da lista
-            });
-        } else if (source === 'api') {
-            /// Ícone de baixar
-            fileName.textContent = documentDescription; // adicionar nome que vem da API
-
-            actionIcon = document.createElement('span');
-            actionIcon.classList.add('download-icon');
-            actionIcon.textContent = '⬇️';
-
-            // Adicionar evento de clique para redirecionar
-            actionIcon.addEventListener('click', function () {
-                window.open(fileUrl, '_blank'); // Substitua 'file.url' pela URL que você vai passar
-            });
-
-            // Adicionar o ícone ao DOM
-            document.body.appendChild(actionIcon);
-        }
-
-        li.appendChild(icon);
-        li.appendChild(fileName);
-        li.appendChild(actionIcon);
-
-        semAnexo.style.display = 'none';
-        attachmentsQTDE++;
-        attachmentsQTDEicon.innerHTML = attachmentsQTDE;
-
-        fileListContainer.appendChild(li);
     }
 }
