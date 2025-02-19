@@ -32,16 +32,11 @@ function authentication() {
     const setorCurso = document.getElementById('setorCurso');
     const selectCursoSetor = document.getElementById('selectCursoSetor');
     const adicionarlocalStorage = localStorage.getItem('adicionar');
-    const deleteTh = document.getElementById('deleteTh');
     const correcaoStorage = localStorage.getItem('correcao');
-    const nome = document.getElementById('nome');
-    const btnADD = document.getElementById('btnADD');
     const cancelForm = document.getElementById('cancelForm');
     const sendForm = document.getElementById('sendForm');
     const returnToProcessCards = document.getElementById('returnToProcessCards');
-    const cursoSetorForm = document.getElementById('cursoSetor');
     const somenteSalvar =  document.getElementById('somenteSalvar');
-    const fileUploadArea = document.getElementById('file-upload');
 
     axios.get(baseURL + `/user/me`, {
         headers: {
@@ -55,7 +50,6 @@ function authentication() {
         const tipoAtividade = response.data.tipoAtividade;
         const cpfGestor = response.data.cpfGestor;
         const nomeGestor = response.data.nomeGestor;
-        const tipoFuncionario = response.data.tipoFuncionario;
         const selectTipoAtividade = document.getElementById('selectTipoAtividade');
         const containerUser = document.getElementById('containerUser');
         let i = 0;
@@ -90,22 +84,15 @@ function authentication() {
             loadAnexos();
 
             if(correcaoStorage == 'false' && adicionarlocalStorage == 'false') {
-                nome.disabled = true;
-                cursoSetorForm.disabled = true;
                 returnToProcessCards.style.display = 'block'
-                fileUploadArea.style.display = 'none';
                 
                 disabled = 'disabled';
                 style = 'style="display: none;'
             }
             else {
-                btnADD.style.display = 'block';
                 cancelForm.style.display = 'block';
                 sendForm.style.display = 'block';
                 somenteSalvar.style.display = 'block'
-                deleteTh.style.display = 'table-cell';
-                cursoSetorForm.value = cursoSetor;
-                nome.value = nomeUser.innerHTML;
             }
         }
 
@@ -116,6 +103,6 @@ function authentication() {
             alert(error.message);
         }
         
-        document.location.replace(loginPage);
+        //document.location.replace(loginPage);
     });
 }
