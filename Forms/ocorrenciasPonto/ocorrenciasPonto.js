@@ -380,7 +380,15 @@ window.onload = function() {
         });
 
         if (cardId == null) {
-            processStart(formIds, formData, textAreaData, somenteSalvar, token);
+            let targetState
+
+            if (tipoAtividadeApi == 'PTA') {
+                targetState = 5;
+            }
+            else if (tipoAtividadeApi == 'PROFESSOR') {
+                targetState = 23;
+            }
+            processStart(formIds, formData, textAreaData, somenteSalvar, token, targetState, 'Ocorrências de ponto', ocorrenciasPonto);
         }
         else if (cardId != null) {
             processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token);
@@ -388,23 +396,15 @@ window.onload = function() {
     }
 
     //Inicia um novo processo no Fluig
-    function processStart(formIds, formData, textAreaData, somenteSalvar, token) {
+    function processStart(formIds, formData, textAreaData, somenteSalvar, token, targetState, processId, nextPage) {
         const loadingFullScreen = document.getElementById('loadingFullScreen');
 
         loadingFullScreen.style.display = 'flex';
         document.documentElement.style.overflow = 'hidden';
-        let targetState
-
-        if (tipoAtividadeApi == 'PTA') {
-            targetState = 5;
-        }
-        else if (tipoAtividadeApi == 'PROFESSOR') {
-            targetState = 23;
-        }
-
+        
         axios.post(baseURL + `/process/start`, {
             targetState: targetState,
-            processId: 'Ocorrências de ponto',
+            processId: processId,
             colleagueIds: [cpfGestorApi],
             nomeGestor: nomeGestorApi,
             cpfGestor: cpfGestorApi,
@@ -428,7 +428,7 @@ window.onload = function() {
                 if(somenteSalvar) {
                     loadingFullScreen.style.display = 'none';
                     document.body.style.overflow = 'auto';
-                    document.location.replace(ocorrenciasPonto);
+                    document.location.replace(nextPage);
                 }
                 else {
                     document.body.style.overflow = 'auto';
