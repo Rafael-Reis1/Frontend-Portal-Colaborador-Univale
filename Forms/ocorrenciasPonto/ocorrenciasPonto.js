@@ -32,9 +32,6 @@ window.onload = function() {
         }
     }
     if (document.title == 'Form') {
-        const token = localStorage.getItem('token');
-        const tabela = document.querySelector('table');
-        const btnADD = document.getElementById('btnADD');
         const cancelForm = document.getElementById('cancelForm');
         const cancelFormPopup = document.getElementById('cancelFormPopup');
         const cancelBackgroud = document.getElementById('cancelBackgroud');
@@ -44,15 +41,17 @@ window.onload = function() {
         const sendBackgroud = document.getElementById('sendBackgroud');
         const btnCorrigir = document.getElementById('btnCorrigir');
         const btnEnviar = document.getElementById('btnEnviar');
+        const enviarPara = document.getElementById('enviarPara');
+        const somenteSalvar = document.getElementById('somenteSalvar');
+        const token = localStorage.getItem('token');
+        const tabela = document.querySelector('table');
+        const btnADD = document.getElementById('btnADD');
         const cardId = localStorage.getItem('cardId');
         const nome = document.getElementById('nome');
         const funcao = document.getElementById('funcao');
         const cursoSetor = document.getElementById('cursoSetor');
         const obs = document.getElementById('obs');
         const relato = document.getElementById('relato');
-        const returnToProcessCards = document.getElementById('returnToProcessCards');
-        const enviarPara = document.getElementById('enviarPara');
-        const somenteSalvar = document.getElementById('somenteSalvar');
         const loadingFullScreen = document.getElementById('loadingFullScreen');
         const formAttachment =  document.getElementById('formAttachment');
         const formAttachmentPopup = document.getElementById('formAttachmentPopup');
@@ -161,11 +160,6 @@ window.onload = function() {
                 cancelFormPopup.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }, 200);
-        }
-
-        returnToProcessCards.onclick = function() {
-            document.body.style.overflow = 'auto';
-            document.location.replace(ocorrenciasPonto);
         }
 
         sendForm.onclick = function() {

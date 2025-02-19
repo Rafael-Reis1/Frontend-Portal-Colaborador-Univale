@@ -23,6 +23,78 @@ window.onload = function() {
             localStorage.setItem('adicionar', 'true');
             document.location.href = formPrestacaoContas;
         }
+    }if (document.title == 'Form') {
+        const cancelForm = document.getElementById('cancelForm');
+        const cancelFormPopup = document.getElementById('cancelFormPopup');
+        const cancelBackgroud = document.getElementById('cancelBackgroud');
+        const dontCancel = document.getElementById('dontCancel');
+        const sendForm = document.getElementById('sendForm');
+        const sendFormPopup = document.getElementById('sendFormPopup');
+        const sendBackgroud = document.getElementById('sendBackgroud');
+        const btnCorrigir = document.getElementById('btnCorrigir');
+        const btnEnviar = document.getElementById('btnEnviar');
+        const enviarPara = document.getElementById('enviarPara');
+        const somenteSalvar = document.getElementById('somenteSalvar');
+
+        cancelForm.onclick = function() {
+            cancelFormPopup.style = 'flex';
+            document.documentElement.style.overflow = 'hidden';
+        }
+
+        cancelBackgroud.onclick = function() {
+            cancelFormPopup.style.opacity = 0;
+
+            setTimeout(() => {
+                cancelFormPopup.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 200);
+        }
+
+        dontCancel.onclick = function() {
+            cancelFormPopup.style.opacity = 0;
+
+            setTimeout(() => {
+                cancelFormPopup.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 200);
+        }
+
+        sendForm.onclick = function() {
+            sendFormPopup.style = 'flex';
+            enviarPara.innerText = 'Enviar para: ' + nomeGestorApi;
+            document.documentElement.style.overflow = 'hidden';
+        }
+
+        sendBackgroud.onclick = function() {
+            sendFormPopup.style.opacity = 0;
+
+            setTimeout(() => {
+                sendFormPopup.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 200);
+        }
+
+        btnCorrigir.onclick = function() {
+            sendFormPopup.style.opacity = 0;
+
+            setTimeout(() => {
+                sendFormPopup.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 200);
+        }
+
+        btnEnviar.onclick = function() {
+            localStorage.setItem('correcao', 'false');
+            localStorage.setItem('adicionar', 'true');
+            sendFormApi(tabela, false);
+        }
+
+        somenteSalvar.onclick = function() {
+            loadingFullScreen.style.display = 'flex';
+            localStorage.setItem('correcao', 'false');
+            localStorage.setItem('adicionar', 'true');
+            sendFormApi(tabela, true);
+        }
     }
 }
 
