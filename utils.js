@@ -1,3 +1,178 @@
+const selectedFiles = new Map();
+
+//Inicia um novo processo no Fluig
+function processStart(formIds, formData, textAreaData, somenteSalvar, token, 
+    targetState, processId, cpfGestorApi, nomeGestorApi, tipoAtividadeApi, 
+    completeTask, processSector, nextPage) {
+    const loadingFullScreen = document.getElementById('loadingFullScreen');
+
+    loadingFullScreen.style.display = 'flex';
+    document.documentElement.style.overflow = 'hidden';
+    
+    axios.post(baseURL + `/process/start`, {
+        targetState: targetState,
+        processId: processId,
+        colleagueIds: [cpfGestorApi],
+        nomeGestor: nomeGestorApi,
+        cpfGestor: cpfGestorApi,
+        tipoAtividade: tipoAtividadeApi,
+        formIds: formIds,
+        formData: formData,
+        textAreaData,
+        completeTask: completeTask
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if(response.data[0] == "ERROR") {
+            loadingFullScreen.style.display = 'none'
+            document.body.style.overflow = 'auto';
+            alert(response.data[1]);
+        }
+        else {
+            if(somenteSalvar) {
+                loadingFullScreen.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                document.location.replace(nextPage);
+            }
+            else {
+                document.body.style.overflow = 'auto';
+                localStorage.setItem('correcao', 'true');
+                localStorage.setItem('adicionar', 'false');
+                enviarAttachment(response.data, formIds, formData, textAreaData, processId, processSector, 
+                    targetState, cpfGestorApi, nextPage);
+            }
+        }
+    })
+    .catch(error =>{
+        alert(JSON.stringify(error.response.data, null, 2));
+        document.body.style.overflow = 'auto';
+        loadingFullScreen.style.display = 'none'
+    });
+}
+
+//Atualiza um formulário existente no fluig
+function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token, 
+    cpfGestorApi, formFolderId, processId, processSector, targetState, nextPage) {
+    const loadingFullScreen = document.getElementById('loadingFullScreen');
+
+    loadingFullScreen.style.display = 'flex';
+    document.documentElement.style.overflow = 'hidden';
+
+    axios.put(baseURL + `/process/update`, {
+        processInstanceId: cardId,
+        colleagueIds: [cpfGestorApi],
+        formIds: formIds,
+        formData: formData,
+        textAreaData,
+        forlderId: formFolderId
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if(somenteSalvar) {
+            loadingFullScreen.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.location.replace(nextPage);
+        }
+        else {
+            enviarAttachment(cardId, formIds, formData, textAreaData, processId,
+                processSector, targetState, cpfGestorApi, nextPage);
+        }
+    })
+    .catch(error =>{
+        loadingFullScreen.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        alert(error.response.data.message.replace(/[{}]/g, ''));
+    });
+}
+
+//Envia os arquivos de anexo para o Fluig
+function enviarAttachment(processInstanceId, formIds, formDataJson, 
+    textAreaData, processId, processSector, targetState, cpfGestorApi, nextPage) {
+    const formData = new FormData();
+    const token = localStorage.getItem('token');
+
+    // Adicionar todos os arquivos de `selectedFiles` ao FormData
+    selectedFiles.forEach(file => {
+        formData.append('files', file);
+    });
+
+    const jsonData = {
+        key: processInstanceId,
+        value: processId,
+        key2: tipoAtividadeApi,
+        value2: processSector
+    };
+    formData.append('json', JSON.stringify(jsonData));
+    
+    // Enviar os arquivos via Axios
+    axios.post(baseURL + '/process/attachments', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+        },
+    })
+    .then(response => {
+        formIds.push('attachmentId');
+        formDataJson.push(response.data);
+        moveRequest(processInstanceId, formIds, formDataJson, textAreaData, 
+            targetState, cpfGestorApi, nextPage);
+    })
+    .catch(error => {
+        console.error('Erro ao enviar arquivos', error);
+    });
+}
+
+//Move um formulário existente para a proxima atividade
+function moveRequest(processInstanceId, formIds, formData, textAreaData, 
+    targetState, cpfGestorApi, nextPage) {
+    const token = localStorage.getItem('token');
+    const cardId = localStorage.getItem('cardId');
+    const loadingFullScreen = document.getElementById('loadingFullScreen');
+
+    loadingFullScreen.style.display = 'flex';
+    document.documentElement.style.overflow = 'hidden';
+
+    let processInstanceIdApi = '';
+
+    if(cardId == null) {
+        processInstanceIdApi = processInstanceId;
+    }
+    else {
+        processInstanceIdApi = cardId;
+    }
+
+    axios.post(baseURL + `/process/move`, {
+        processInstanceId: processInstanceIdApi,
+        targetState: targetState,
+        colleagueIds: [cpfGestorApi],
+        formIds: formIds,
+        formData: formData,
+        textAreaData
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        loadingFullScreen.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        document.location.replace(nextPage);
+    })
+    .catch(error =>{
+        //alert(JSON.stringify(error.response.data, null, 2));
+        loadingFullScreen.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        alert(error.response.data.message.replace(/[{}]/g, ''));
+    });
+}
+
 function populateCards(dados, bodyCardsName, pageToGo) {
     const bodyCard = document.getElementById(bodyCardsName);
     
@@ -50,7 +225,7 @@ function search() {
     });
 }
 
-const fileInput = document.getElementById('file-input');
+
 function loadAnexos() {
     const token = localStorage.getItem('token');
     const cardId = localStorage.getItem('cardId');
@@ -75,7 +250,7 @@ function loadAnexos() {
 }
 
 //Logica para buscar os anexos nos arquivos do pc
-function adicionarAttachments() {
+function adicionarAttachments(fileInput) {
     const fileListContainer = document.getElementById('file-list');
     const fileUploadArea = document.getElementById('file-upload');
 

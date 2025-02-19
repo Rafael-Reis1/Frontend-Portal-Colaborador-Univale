@@ -9,12 +9,10 @@ var cpfGestorApi = sessionStorage.getItem('cpfGestor');
 var nomeGestorApi = sessionStorage.getItem('nomeGestor');
 let disabled = '';
 let style = '';
-let completeTask = '';
 let attachmentsQTDE = 0;
 
 window.onload = function() {
-    const selectedFiles = new Map();
-
+    
     authentication();
 
     header();
@@ -197,12 +195,10 @@ window.onload = function() {
         btnEnviar.onclick = function() {
             localStorage.setItem('correcao', 'false');
             localStorage.setItem('adicionar', 'true');
-            completeTask = 'false';
             sendFormApi(tabela, false);
         }
 
         somenteSalvar.onclick = function() {
-            completeTask = 'false';
             loadingFullScreen.style.display = 'flex';
             localStorage.setItem('correcao', 'false');
             localStorage.setItem('adicionar', 'true');
@@ -261,7 +257,9 @@ window.onload = function() {
             }, 200);
         }
 
-        adicionarAttachments();
+        const fileInput = document.getElementById('file-input');
+
+        adicionarAttachments(fileInput);
     }
 
     //cria as linhas da tabela e preenche automaticamente se vier algo do fluig ou cria uma linha vazia caso clicado no botão "Adicionar"
@@ -388,187 +386,19 @@ window.onload = function() {
             else if (tipoAtividadeApi == 'PROFESSOR') {
                 targetState = 23;
             }
-            processStart(formIds, formData, textAreaData, somenteSalvar, token, targetState, 'Ocorrências de ponto', ocorrenciasPonto);
+            //Ids campos, dados campos, ids e dados textAreas, é somente salvar?, tokenUser
+            //Proxima atividade, nome formulário, cpf do gestor, nome do gestor
+            //tipo atividade pta/professor, passar para proxima atividade?, tipo setor, proxima pagina
+            processStart(formIds, formData, textAreaData, somenteSalvar, token, 
+                targetState, 'Ocorrências de ponto', cpfGestorApi, nomeGestorApi, 
+                tipoAtividadeApi, 'false', 'RH', ocorrenciasPonto);
         }
         else if (cardId != null) {
-            processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token);
+            processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
+                cpfGestorApi, 8, 'Ocorrências de ponto', 'RH', targetState, ocorrenciasPonto);
         }
     }
 
-    //Inicia um novo processo no Fluig
-    function processStart(formIds, formData, textAreaData, somenteSalvar, token, targetState, processId, nextPage) {
-        const loadingFullScreen = document.getElementById('loadingFullScreen');
-
-        loadingFullScreen.style.display = 'flex';
-        document.documentElement.style.overflow = 'hidden';
-        
-        axios.post(baseURL + `/process/start`, {
-            targetState: targetState,
-            processId: processId,
-            colleagueIds: [cpfGestorApi],
-            nomeGestor: nomeGestorApi,
-            cpfGestor: cpfGestorApi,
-            tipoAtividade: tipoAtividadeApi,
-            formIds: formIds,
-            formData: formData,
-            textAreaData,
-            completeTask: completeTask
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            if(response.data[0] == "ERROR") {
-                loadingFullScreen.style.display = 'none'
-                document.body.style.overflow = 'auto';
-                alert(response.data[1]);
-            }
-            else {
-                if(somenteSalvar) {
-                    loadingFullScreen.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                    document.location.replace(nextPage);
-                }
-                else {
-                    document.body.style.overflow = 'auto';
-                    localStorage.setItem('correcao', 'true');
-                    localStorage.setItem('adicionar', 'false');
-                    enviarAttachment(response.data, formIds, formData, textAreaData);
-                }
-            }
-        })
-        .catch(error =>{
-            alert(JSON.stringify(error.response.data, null, 2) + 'teste');
-            document.body.style.overflow = 'auto';
-            loadingFullScreen.style.display = 'none'
-        });
-    }
-
-    //Atualiza um formulário existente no fluig
-    function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token) {
-        const loadingFullScreen = document.getElementById('loadingFullScreen');
-        const ocorrenciasPontoFolderId = 8;
-
-        loadingFullScreen.style.display = 'flex';
-        document.documentElement.style.overflow = 'hidden';
-
-        axios.put(baseURL + `/process/update`, {
-            processInstanceId: cardId,
-            colleagueIds: [cpfGestorApi],
-            formIds: formIds,
-            formData: formData,
-            textAreaData,
-            forlderId: ocorrenciasPontoFolderId
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            if(somenteSalvar) {
-                loadingFullScreen.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                document.location.replace(ocorrenciasPonto);
-            }
-            else {
-                enviarAttachment(cardId, formIds, formData, textAreaData);
-            }
-        })
-        .catch(error =>{
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            alert(error.response.data.message.replace(/[{}]/g, ''));
-        });
-    }
-
-    //Envia os arquivos de anexo para o Fluig
-    function enviarAttachment(processInstanceId, formIds, formDataJson, textAreaData) {
-        const formData = new FormData();
-        const token = localStorage.getItem('token');
-
-        // Adicionar todos os arquivos de `selectedFiles` ao FormData
-        selectedFiles.forEach(file => {
-            formData.append('files', file);
-        });
-    
-        const jsonData = {
-            key: processInstanceId,
-            value: 'Ocorrências de ponto',
-            key2: tipoAtividadeApi,
-            value2: 'RH'
-        };
-        formData.append('json', JSON.stringify(jsonData));
-        
-        // Enviar os arquivos via Axios
-        axios.post(baseURL + '/process/attachments', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: `Bearer ${token}`,
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-            },
-        })
-        .then(response => {
-            formIds.push('attachmentId');
-            formDataJson.push(response.data);
-            moveRequest(processInstanceId, formIds, formDataJson, textAreaData);
-        })
-        .catch(error => {
-            console.error('Erro ao enviar arquivos', error);
-        });
-    }
-
-    //Move um formulário existente para a proxima atividade
-    function moveRequest(processInstanceId, formIds, formData, textAreaData) {
-        const token = localStorage.getItem('token');
-        const cardId = localStorage.getItem('cardId');
-        const loadingFullScreen = document.getElementById('loadingFullScreen');
-
-        loadingFullScreen.style.display = 'flex';
-        document.documentElement.style.overflow = 'hidden';
-        let targetState = 0;
-
-        if (tipoAtividadeApi == 'PTA') {
-            targetState = 5;
-        }
-        else if (tipoAtividadeApi == 'PROFESSOR') {
-            targetState = 23;
-        }
-
-        let processInstanceIdApi = '';
-
-        if(cardId == null) {
-            processInstanceIdApi = processInstanceId;
-        }
-        else {
-            processInstanceIdApi = cardId;
-        }
-
-        axios.post(baseURL + `/process/move`, {
-            processInstanceId: processInstanceIdApi,
-            targetState: targetState,
-            colleagueIds: [cpfGestorApi],
-            formIds: formIds,
-            formData: formData,
-            textAreaData
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            document.location.replace(ocorrenciasPonto);
-        })
-        .catch(error =>{
-            //alert(JSON.stringify(error.response.data, null, 2));
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            alert(error.response.data.message.replace(/[{}]/g, ''));
-        });
-    }
-    
     //Faz a pagina ser uma pagina que so pode ter acesso por autenticação desabilita alguns campos 
     // e preenche os dados do usuario no Formulário
     function authentication() {
