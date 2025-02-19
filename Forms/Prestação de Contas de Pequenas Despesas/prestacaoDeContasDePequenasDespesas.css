@@ -35,6 +35,10 @@
     --logos-background: #cccccc;
 }
 
+body {
+    font-family: Inter;
+}
+
 .btnDelete {
     padding: 0.625rem;
     background-color: var(--th-background-color);
@@ -77,8 +81,12 @@ th:nth-child(1) {
     width: 6.25rem;
 }
 
-th:nth-child(3) {
+th:nth-child(2) {
     width: 6.25rem;
+}
+
+th:nth-child(3) {
+    width: 21.875rem;
 }
 
 th:nth-child(4) {
@@ -90,11 +98,11 @@ th:nth-child(5) {
 }  
 
 th:nth-child(6) {
-    width: 6.25rem;
+    width: 21.875rem;
 }
 
 th:nth-child(7) {
-    width: 3.125rem;
+    width: 50px;
 }
 
 tr {
@@ -360,6 +368,21 @@ tr:selected {
     z-index: -1;
 }
 
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3125rem;
+    width: fit-content;
+    height: fit-content;
+}
+
+.row {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
 @media (max-width: 762px) {
     th:nth-child(1) {
         width: auto;
@@ -392,6 +415,40 @@ tr:selected {
     }
 
     #newForm {
-        margin-right: 20px;
+        margin-right: 1.25rem;
     }
+}
+
+/*Especifico do formulário*/
+.subTitulo {
+    font-size: 1.5rem;
+    width: fit-content;
+}
+
+.linhaSubtitulo {
+    margin-top: 0.9375rem;
+    width: 110%;
+}
+
+.secaoForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 0.9375rem;
+}
+
+#nomeResponsavel {
+    width: 330px;
+}
+
+#departamentoAcessoria {
+    width: 20.625rem;
+}
+
+#nomeGestor {
+    width: 20.625rem;
+}
+
+#totalGeral {
+    width: 6.25rem;
 }

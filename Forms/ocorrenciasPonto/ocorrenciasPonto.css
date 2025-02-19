@@ -35,6 +35,10 @@
     --logos-background: #cccccc;
 }
 
+body {
+    font-family: Inter;
+}
+
 #formHeader {
     display: flex;
     width: 100%;
@@ -487,6 +491,6 @@ tr:selected {
     }
 
     #newForm {
-        margin-right: 20px;
+        margin-right: 1.25rem;
     }
 }
