@@ -175,6 +175,6 @@ function authentication() {
             alert(error.message);
         }
         
-        //document.location.replace(loginPage);
+        document.location.replace(loginPage);
     });
 }
