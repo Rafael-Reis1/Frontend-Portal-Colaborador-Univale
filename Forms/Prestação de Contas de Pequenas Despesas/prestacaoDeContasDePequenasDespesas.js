@@ -153,7 +153,7 @@ function authentication() {
 
         if(document.title == 'Form') {
 
-            loadAnexos();
+            //loadAnexos();
 
             if(correcaoStorage == 'false' && adicionarlocalStorage == 'false') {
                 returnToProcessCards.style.display = 'block'
