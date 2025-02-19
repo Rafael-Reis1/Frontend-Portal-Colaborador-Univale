@@ -377,15 +377,16 @@ window.onload = function() {
               });
         });
 
-        if (cardId == null) {
-            let targetState
+        let targetState;
 
-            if (tipoAtividadeApi == 'PTA') {
-                targetState = 5;
-            }
-            else if (tipoAtividadeApi == 'PROFESSOR') {
-                targetState = 23;
-            }
+        if (tipoAtividadeApi == 'PTA') {
+            targetState = 5;
+        }
+        else if (tipoAtividadeApi == 'PROFESSOR') {
+            targetState = 23;
+        }
+
+        if (cardId == null) {
             //Ids campos, dados campos, ids e dados textAreas, é somente salvar?, tokenUser
             //Proxima atividade, nome formulário, cpf do gestor, nome do gestor
             //tipo atividade pta/professor, passar para proxima atividade?, tipo setor, proxima pagina
