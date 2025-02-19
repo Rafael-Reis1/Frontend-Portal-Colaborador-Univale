@@ -9,13 +9,10 @@ var cpfGestorApi = sessionStorage.getItem('cpfGestor');
 var nomeGestorApi = sessionStorage.getItem('nomeGestor');
 let disabled = '';
 let style = '';
-let completeTask = '';
 let attachmentsQTDE = 0;
 
 window.onload = function() {
-    const fileInput = document.getElementById('file-input');
-    const selectedFiles = new Map();
-
+    
     authentication();
 
     header();
@@ -66,6 +63,7 @@ window.onload = function() {
 
         attachmentsQTDEicon.innerHTML = attachmentsQTDE;
 
+        //Preenche o formulário caso seja pra conferir, correção ou rascunho
         if(cardId) {
             loadingFullScreen.style.display = 'flex';
             document.documentElement.style.overflow = 'hidden';
@@ -197,12 +195,10 @@ window.onload = function() {
         btnEnviar.onclick = function() {
             localStorage.setItem('correcao', 'false');
             localStorage.setItem('adicionar', 'true');
-            completeTask = 'false';
             sendFormApi(tabela, false);
         }
 
         somenteSalvar.onclick = function() {
-            completeTask = 'false';
             loadingFullScreen.style.display = 'flex';
             localStorage.setItem('correcao', 'false');
             localStorage.setItem('adicionar', 'true');
@@ -261,9 +257,12 @@ window.onload = function() {
             }, 200);
         }
 
-        adicionarAttachments();
+        const fileInput = document.getElementById('file-input');
+
+        adicionarAttachments(fileInput);
     }
 
+    //cria as linhas da tabela e preenche automaticamente se vier algo do fluig ou cria uma linha vazia caso clicado no botão "Adicionar"
     function tableRows(dataOcorrencia, atividade, entrada, saidaIntervalo, entradaIntervalo, saida, disabled, style) {
         return `<tr>
             <td>
@@ -294,6 +293,7 @@ window.onload = function() {
         </tr>`;
     }
 
+    //Formata os dados do formulário para serem enviados ao Fluig
     async function sendFormApi(tabela, somenteSalvar) {
         const token = localStorage.getItem('token');
         const linhas = tabela.querySelectorAll('tr');
@@ -377,193 +377,31 @@ window.onload = function() {
               });
         });
 
+        let targetState;
+
+        if (tipoAtividadeApi == 'PTA') {
+            targetState = 5;
+        }
+        else if (tipoAtividadeApi == 'PROFESSOR') {
+            targetState = 23;
+        }
+
         if (cardId == null) {
-            processStart(formIds, formData, textAreaData, somenteSalvar, token);
+            //Ids campos, dados campos, ids e dados textAreas, é somente salvar?, tokenUser
+            //Proxima atividade, nome formulário, cpf do gestor, nome do gestor
+            //tipo atividade pta/professor, passar para proxima atividade?, tipo setor, proxima pagina
+            processStart(formIds, formData, textAreaData, somenteSalvar, token, 
+                targetState, 'Ocorrências de ponto', cpfGestorApi, nomeGestorApi, 
+                tipoAtividadeApi, 'false', 'RH', ocorrenciasPonto);
         }
         else if (cardId != null) {
-            processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token);
+            processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
+                cpfGestorApi, 8, 'Ocorrências de ponto', 'RH', targetState, ocorrenciasPonto);
         }
     }
 
-    function processStart(formIds, formData, textAreaData, somenteSalvar, token) {
-        const loadingFullScreen = document.getElementById('loadingFullScreen');
-
-        loadingFullScreen.style.display = 'flex';
-        document.documentElement.style.overflow = 'hidden';
-        let targetState
-
-        if (tipoAtividadeApi == 'PTA') {
-            targetState = 5;
-        }
-        else if (tipoAtividadeApi == 'PROFESSOR') {
-            targetState = 23;
-        }
-
-        axios.post(baseURL + `/process/start`, {
-            targetState: targetState,
-            processId: 'Ocorrências de ponto',
-            colleagueIds: [cpfGestorApi],
-            nomeGestor: nomeGestorApi,
-            cpfGestor: cpfGestorApi,
-            tipoAtividade: tipoAtividadeApi,
-            formIds: formIds,
-            formData: formData,
-            textAreaData,
-            completeTask: completeTask
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            if(response.data[0] == "ERROR") {
-                loadingFullScreen.style.display = 'none'
-                document.body.style.overflow = 'auto';
-                alert(response.data[1]);
-            }
-            else {
-                if(somenteSalvar) {
-                    loadingFullScreen.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                    document.location.replace(ocorrenciasPonto);
-                }
-                else {
-                    document.body.style.overflow = 'auto';
-                    localStorage.setItem('correcao', 'true');
-                    localStorage.setItem('adicionar', 'false');
-                    enviarAttachment(response.data, formIds, formData, textAreaData);
-                }
-            }
-        })
-        .catch(error =>{
-            alert(JSON.stringify(error.response.data, null, 2) + 'teste');
-            document.body.style.overflow = 'auto';
-            loadingFullScreen.style.display = 'none'
-        });
-    }
-
-    function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token) {
-        const loadingFullScreen = document.getElementById('loadingFullScreen');
-        const ocorrenciasPontoFolderId = 8;
-
-        loadingFullScreen.style.display = 'flex';
-        document.documentElement.style.overflow = 'hidden';
-
-        axios.put(baseURL + `/process/update`, {
-            processInstanceId: cardId,
-            colleagueIds: [cpfGestorApi],
-            formIds: formIds,
-            formData: formData,
-            textAreaData,
-            forlderId: ocorrenciasPontoFolderId
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            if(somenteSalvar) {
-                loadingFullScreen.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                document.location.replace(ocorrenciasPonto);
-            }
-            else {
-                enviarAttachment(cardId, formIds, formData, textAreaData);
-            }
-        })
-        .catch(error =>{
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            alert(error.response.data.message.replace(/[{}]/g, ''));
-        });
-    }
-
-    function enviarAttachment(processInstanceId, formIds, formDataJson, textAreaData) {
-        const formData = new FormData();
-        const token = localStorage.getItem('token');
-
-        // Adicionar todos os arquivos de `selectedFiles` ao FormData
-        selectedFiles.forEach(file => {
-            formData.append('files', file);
-        });
-    
-        const jsonData = {
-            key: processInstanceId,
-            value: 'Ocorrências de ponto',
-            key2: tipoAtividadeApi,
-            value2: 'RH'
-        };
-        formData.append('json', JSON.stringify(jsonData));
-        
-        // Enviar os arquivos via Axios
-        axios.post(baseURL + '/process/attachments', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: `Bearer ${token}`,
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-            },
-        })
-        .then(response => {
-            formIds.push('attachmentId');
-            formDataJson.push(response.data);
-            moveRequest(processInstanceId, formIds, formDataJson, textAreaData);
-        })
-        .catch(error => {
-            console.error('Erro ao enviar arquivos', error);
-        });
-    }
-
-    function moveRequest(processInstanceId, formIds, formData, textAreaData) {
-        const token = localStorage.getItem('token');
-        const cardId = localStorage.getItem('cardId');
-        const loadingFullScreen = document.getElementById('loadingFullScreen');
-
-        loadingFullScreen.style.display = 'flex';
-        document.documentElement.style.overflow = 'hidden';
-        let targetState = 0;
-
-        if (tipoAtividadeApi == 'PTA') {
-            targetState = 5;
-        }
-        else if (tipoAtividadeApi == 'PROFESSOR') {
-            targetState = 23;
-        }
-
-        let processInstanceIdApi = '';
-
-        if(cardId == null) {
-            processInstanceIdApi = processInstanceId;
-        }
-        else {
-            processInstanceIdApi = cardId;
-        }
-
-        axios.post(baseURL + `/process/move`, {
-            processInstanceId: processInstanceIdApi,
-            targetState: targetState,
-            colleagueIds: [cpfGestorApi],
-            formIds: formIds,
-            formData: formData,
-            textAreaData
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            document.location.replace(ocorrenciasPonto);
-        })
-        .catch(error =>{
-            //alert(JSON.stringify(error.response.data, null, 2));
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            alert(error.response.data.message.replace(/[{}]/g, ''));
-        });
-    }
-    
-    //Faz a pagina ser uma pagina que so pode ter acesso por autenticação
+    //Faz a pagina ser uma pagina que so pode ter acesso por autenticação desabilita alguns campos 
+    // e preenche os dados do usuario no Formulário
     function authentication() {
         const token = localStorage.getItem('token');
         const nomeUser = document.getElementById('nomeUser');
@@ -671,30 +509,8 @@ window.onload = function() {
             document.location.replace(loginPage);
         });
     }
-    
-    function loadAnexos() {
-        const token = localStorage.getItem('token');
-        const cardId = localStorage.getItem('cardId');
-        const fileListContainer = document.getElementById('file-list');
 
-        axios.get(baseURL + `/process/attachments/${cardId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Cache-Control': 'no-cache, no-store, must-revalidate'
-            }
-        })
-        .then(response => {
-            if(response.data.length > 0) {
-                response.data.forEach(item => {
-                    criaListaAttachment(fileListContainer, '', 'api', item.documentDescription, item.fileUrl);
-                });
-            } 
-        })
-        .catch(error => {
-            alert(error.message);
-        });
-    }
-
+    //Mostra onde os precessos estão por exemplo: Aprov. gestor, RH, correção, etc.
     function loadCards() {
         const token = localStorage.getItem('token');
         const bodyCardsAprovGestor = document.getElementById('bodyCardsAprovGestor');
@@ -782,104 +598,5 @@ window.onload = function() {
         .catch(erro => {
           console.error(erro);
         });
-    }
-
-    function adicionarAttachments() {
-        const fileListContainer = document.getElementById('file-list');
-        const fileUploadArea = document.getElementById('file-upload');
-    
-        // Função para adicionar arquivos à lista
-        function addFileToList(file) {
-            if (selectedFiles.has(file.name)) {
-                alert('Este arquivo já foi selecionado!');
-                return;
-            }
-    
-            selectedFiles.set(file.name, file); // Armazena o arquivo completo no Map
-    
-            criaListaAttachment(fileListContainer, file, "upload");
-        }
-    
-        // Quando o usuário seleciona arquivos
-        fileInput.addEventListener('change', function () {
-            Array.from(fileInput.files).forEach(file => addFileToList(file)); // Processa todos os arquivos selecionados
-            fileInput.value = ''; // Limpa o input para permitir nova seleção
-        });
-    
-        // Evento de arraste para dentro da área de upload
-        fileUploadArea.addEventListener('dragover', function (event) {
-            event.preventDefault(); // Impede o comportamento padrão
-            fileUploadArea.style.backgroundColor = '#e0f7e0'; // Indica que o arquivo pode ser solto
-        });
-    
-        fileUploadArea.addEventListener('dragleave', function () {
-            fileUploadArea.style.backgroundColor = '#f9f9f9'; // Volta ao estilo original
-        });
-    
-        // Quando o arquivo é solto
-        fileUploadArea.addEventListener('drop', function (event) {
-            event.preventDefault(); // Impede o comportamento padrão
-            Array.from(event.dataTransfer.files).forEach(file => addFileToList(file)); // Processa todos os arquivos arrastados
-            fileUploadArea.style.backgroundColor = '#f9f9f9'; // Volta ao estilo original
-        });
-    }
-
-    function criaListaAttachment(fileListContainer, file, source, documentDescription, fileUrl) {
-        const attachmentsQTDEicon = document.getElementById('attachmentsQTDEicon');
-
-        // Cria o item de lista com ícone
-        const li = document.createElement('li');
-    
-        // Ícone do arquivo
-        const icon = document.createElement('span');
-        icon.classList.add('file-icon');
-        icon.textContent = '📄';
-
-        const fileName = document.createElement('span');
-        fileName.classList.add('file-name');
-
-        let actionIcon; // Ícone de ação (excluir ou baixar)
-        if (source === 'upload') {
-            // Nome do arquivo
-            fileName.textContent = file.name;
-            // Ícone de excluir
-            actionIcon = document.createElement('span');
-            actionIcon.classList.add('remove-icon');
-            actionIcon.textContent = '❌';
-            actionIcon.addEventListener('click', function () {
-                selectedFiles.delete(file.name); // Remove o arquivo do Map
-                attachmentsQTDE--;
-                if(attachmentsQTDE == 0) {
-                    semAnexo.style.display = 'inline';
-                }
-                attachmentsQTDEicon.innerHTML = attachmentsQTDE;
-                li.remove(); // Remove o elemento da lista
-            });
-        } else if (source === 'api') {
-            /// Ícone de baixar
-            fileName.textContent = documentDescription; // adicionar nome que vem da API
-
-            actionIcon = document.createElement('span');
-            actionIcon.classList.add('download-icon');
-            actionIcon.textContent = '⬇️';
-
-            // Adicionar evento de clique para redirecionar
-            actionIcon.addEventListener('click', function () {
-                window.open(fileUrl, '_blank'); // Substitua 'file.url' pela URL que você vai passar
-            });
-
-            // Adicionar o ícone ao DOM
-            document.body.appendChild(actionIcon);
-        }
-
-        li.appendChild(icon);
-        li.appendChild(fileName);
-        li.appendChild(actionIcon);
-
-        semAnexo.style.display = 'none';
-        attachmentsQTDE++;
-        attachmentsQTDEicon.innerHTML = attachmentsQTDE;
-
-        fileListContainer.appendChild(li);
     }
 }
