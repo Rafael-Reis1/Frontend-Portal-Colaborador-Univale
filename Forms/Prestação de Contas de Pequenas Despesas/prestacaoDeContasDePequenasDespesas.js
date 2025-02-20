@@ -23,7 +23,8 @@ window.onload = function() {
             localStorage.setItem('adicionar', 'true');
             document.location.href = formPrestacaoContas;
         }
-    }if (document.title == 'Form') {
+    }
+    if (document.title == 'Form') {
         const cancelForm = document.getElementById('cancelForm');
         const cancelFormPopup = document.getElementById('cancelFormPopup');
         const cancelBackgroud = document.getElementById('cancelBackgroud');
@@ -284,23 +285,4 @@ function authentication() {
         
         document.location.replace(loginPage);
     });
-
-    function formatCurrency(input) {
-        let value = input.value.replace(/[^0-9,]/g, ''); // Remove caracteres não numéricos
-        value = value.replace(',', '.'); // Substitui vírgula por ponto
-      
-        const number = parseFloat(value);
-      
-        if (isNaN(number)) {
-          input.value = 'R$ 0,00';
-          return;
-        }
-      
-        const formattedNumber = new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(number);
-      
-        input.value = formattedNumber;
-      }
 }
