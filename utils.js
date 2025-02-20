@@ -1,4 +1,5 @@
 const selectedFiles = new Map();
+let hasAttachments;
 
 //Inicia um novo processo no Fluig
 function processStart(formIds, formData, textAreaData, somenteSalvar, token, 
@@ -41,8 +42,15 @@ function processStart(formIds, formData, textAreaData, somenteSalvar, token,
                 document.body.style.overflow = 'auto';
                 localStorage.setItem('correcao', 'true');
                 localStorage.setItem('adicionar', 'false');
-                enviarAttachment(response.data, formIds, formData, textAreaData, processId, processSector, 
-                    targetState, cpfGestorApi, nextPage);
+
+                if(hasAttachments) {
+                    enviarAttachment(response.data, formIds, formData, textAreaData, processId, processSector, 
+                        targetState, cpfGestorApi, nextPage);
+                }
+                else {
+                    moveRequest(response.data, formIds, formData, textAreaData, 
+                        targetState, cpfGestorApi, nextPage);
+                }
             }
         }
     })
@@ -80,8 +88,14 @@ function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, t
             document.location.replace(nextPage);
         }
         else {
-            enviarAttachment(cardId, formIds, formData, textAreaData, processId,
-                processSector, targetState, cpfGestorApi, nextPage);
+            if(hasAttachments) {
+                enviarAttachment(cardId, formIds, formData, textAreaData, processId,
+                    processSector, targetState, cpfGestorApi, nextPage);
+            }
+            else {
+                moveRequest(cardId, formIds, formData, textAreaData, 
+                    targetState, cpfGestorApi, nextPage);
+            }
         }
     })
     .catch(error =>{
@@ -307,6 +321,7 @@ function criaListaAttachment(fileListContainer, file, source, documentDescriptio
 
     let actionIcon; // Ícone de ação (excluir ou baixar)
     if (source === 'upload') {
+        hasAttachments = true;
         // Nome do arquivo
         fileName.textContent = file.name;
         // Ícone de excluir
@@ -317,6 +332,7 @@ function criaListaAttachment(fileListContainer, file, source, documentDescriptio
             selectedFiles.delete(file.name); // Remove o arquivo do Map
             attachmentsQTDE--;
             if(attachmentsQTDE == 0) {
+                hasAttachments = false;
                 semAnexo.style.display = 'inline';
             }
             attachmentsQTDEicon.innerHTML = attachmentsQTDE;

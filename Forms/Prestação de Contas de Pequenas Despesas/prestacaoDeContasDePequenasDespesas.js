@@ -35,6 +35,37 @@ window.onload = function() {
         const btnEnviar = document.getElementById('btnEnviar');
         const enviarPara = document.getElementById('enviarPara');
         const somenteSalvar = document.getElementById('somenteSalvar');
+        const btnADD = document.getElementById('btnADD');
+        const tabela = document.querySelector('table');
+        const loadingFullScreen = document.getElementById('loadingFullScreen');
+
+        tabela.onclick = function(e) {
+            if (!e.target.classList.contains('btnDelete')) {
+                return
+            }
+
+            e.target.closest('tr').remove();
+        }
+
+        btnADD.onclick = function() {
+            const novaLinha = tableRows('', '', '', '', '', '', '', '');
+            tabela.insertAdjacentHTML('beforeend', novaLinha);
+            const hoje = new Date();
+            const ano = hoje.getFullYear();
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0'); // Janeiro é 0
+            const dia = String(hoje.getDate()).padStart(2, '0');
+
+            // Formata no padrão AAAA-MM-DD
+            const dataMaxima = `${ano}-${mes}-${dia}`;
+
+            // Seleciona todos os inputs da classe "data-ocorrencia"
+            const inputs = document.querySelectorAll('.dataOcorrencia');
+
+            // Aplica o atributo "max" para cada input
+            inputs.forEach(input => {
+                input.setAttribute('max', dataMaxima);
+            });
+        }
 
         cancelForm.onclick = function() {
             cancelFormPopup.style = 'flex';
@@ -98,6 +129,36 @@ window.onload = function() {
     }
 }
 
+function tableRows(dataOcorrencia, atividade, entrada, saidaIntervalo, entradaIntervalo, saida, disabled, style) {
+    return `<tr>
+        <td>
+            <label for="numNotaFiscal" class="tableLabels" style="display: none;">N° da Nota Fiscal/Cupom</label>
+            <input type="number" name="numNotaFiscal" id="numNotaFiscal" class="FormInputs" placeholder="N° nota fiscal" value="${dataOcorrencia}" ${disabled}>
+        </td>
+        <td>
+            <label for="dataCompra" class="tableLabels" style="display: none;">Aula e/ou Atividade</label>
+            <input type="date" name="dataCompra" id="dataCompra" class="FormInputs" value="${atividade}" ${disabled}>
+        </td>
+        <td>
+            <label for="itenAdquiridos" class="tableLabels" style="display: none;">Itens Adquiridos</label>
+            <input type="text" name="itenAdquiridos" id="itenAdquiridos" class="FormInputs" placeholder="Itens Adquiridos" value="${entrada}" ${disabled}>
+        </td>
+        <td>
+            <label for="quantidade" class="tableLabels" style="display: none;">Saída para o Intervalo</label>
+            <input type="number" name="quantidade" id="quantidade" class="FormInputs" placeholder="Quant." value="${saidaIntervalo}" ${disabled}>
+        </td>
+        <td>
+            <label for="valorNota" class="tableLabels" style="display: none;">Valor da Nota (R$)</label>
+            <input type="text" name="valorNota" id="valorNota" class="FormInputs" value="${entradaIntervalo}" ${disabled}>
+        </td>
+        <td>
+            <label for="justCompra" class="tableLabels" style="display: none;">Justificativa da Compra</label>
+            <input type="text" name="justCompra" id="justCompra" class="FormInputs" placeholder="Justificativa da Compra" value="${saida}" ${disabled}>
+        </td>
+        <td ${style}><button class="btnDelete">Delete</button></td>
+    </tr>`;
+}
+
 function authentication() {
     const token = localStorage.getItem('token');
     const nomeUser = document.getElementById('nomeUser');
@@ -109,6 +170,8 @@ function authentication() {
     const sendForm = document.getElementById('sendForm');
     const returnToProcessCards = document.getElementById('returnToProcessCards');
     const somenteSalvar =  document.getElementById('somenteSalvar');
+    const deleteTh = document.getElementById('deleteTh');
+    const btnADD = document.getElementById('btnADD');
 
     axios.get(baseURL + `/user/me`, {
         headers: {
@@ -162,6 +225,8 @@ function authentication() {
                 style = 'style="display: none;'
             }
             else {
+                btnADD.style.display = 'block';
+                deleteTh.style.display = 'table-cell';
                 cancelForm.style.display = 'block';
                 sendForm.style.display = 'block';
                 somenteSalvar.style.display = 'block'
