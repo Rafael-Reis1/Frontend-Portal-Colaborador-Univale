@@ -43,27 +43,45 @@ window.onload = function() {
             if (!e.target.classList.contains('btnDelete')) {
                 return
             }
-
             e.target.closest('tr').remove();
+            calcularTotal();
         }
 
         btnADD.onclick = function() {
             const novaLinha = tableRows('', '', '', '', '', '', '', '');
             tabela.insertAdjacentHTML('beforeend', novaLinha);
-            const hoje = new Date();
-            const ano = hoje.getFullYear();
-            const mes = String(hoje.getMonth() + 1).padStart(2, '0'); // Janeiro é 0
-            const dia = String(hoje.getDate()).padStart(2, '0');
 
-            // Formata no padrão AAAA-MM-DD
-            const dataMaxima = `${ano}-${mes}-${dia}`;
+            const novosInputsValorNota = document.querySelectorAll('#valorNota:not([data-listener-adicionado])'); // Seleciona apenas os inputs novos.
+            novosInputsValorNota.forEach(input => {
+                input.addEventListener('change', calcularTotal);
+                input.setAttribute('data-listener-adicionado', 'true'); // Marca o input para não adicionar o listener novamente.
+            });
 
-            // Seleciona todos os inputs da classe "data-ocorrencia"
-            const inputs = document.querySelectorAll('.dataOcorrencia');
+            calcularTotal(); // Recalcula o total após adicionar a linha
 
-            // Aplica o atributo "max" para cada input
-            inputs.forEach(input => {
-                input.setAttribute('max', dataMaxima);
+            // Aplica a máscara aos inputs existentes
+            const inputsExistentes = document.querySelectorAll('#valorNota');
+            inputsExistentes.forEach(input => {
+                aplicarMascara(input);
+            });
+
+            const novoInputValorNota = tabela.querySelector('#valorNota:last-of-type');
+
+            novoInputValorNota.addEventListener('keyup', function(e) {
+                calcularTotal(); // Recalcula o total
+            });
+
+            aplicarMascara(novoInputValorNota);
+        }
+
+        function aplicarMascara(input) {
+            new Cleave(input, {
+                numeral: true,
+                numeralThousandsGroupStyle: 'thousand',
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: 'R$ ',
+                noImmediate: false // Formatação imediata
             });
         }
 
@@ -126,6 +144,30 @@ window.onload = function() {
             localStorage.setItem('adicionar', 'true');
             sendFormApi(tabela, true);
         }
+
+        function calcularTotal() {
+            let total = 0;
+            const elementosValorNota = document.querySelectorAll('#valorNota');
+          
+            elementosValorNota.forEach(elemento => {
+              let valorString = elemento.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'); // Limpeza do valor
+              const valor = parseFloat(valorString);
+          
+              if (!isNaN(valor)) {
+                total += valor;
+              }
+            });
+          
+            const formattedTotal = new Intl.NumberFormat('pt-BR', {
+              style: 'currency',
+              currency: 'BRL'
+            }).format(total);
+          
+            document.getElementById('totalGeral').value = formattedTotal;
+        }
+        
+        // Chama a função calcularTotal() inicialmente.
+        calcularTotal();
     }
 }
 
@@ -242,4 +284,23 @@ function authentication() {
         
         document.location.replace(loginPage);
     });
+
+    function formatCurrency(input) {
+        let value = input.value.replace(/[^0-9,]/g, ''); // Remove caracteres não numéricos
+        value = value.replace(',', '.'); // Substitui vírgula por ponto
+      
+        const number = parseFloat(value);
+      
+        if (isNaN(number)) {
+          input.value = 'R$ 0,00';
+          return;
+        }
+      
+        const formattedNumber = new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        }).format(number);
+      
+        input.value = formattedNumber;
+      }
 }
