@@ -341,34 +341,32 @@ window.onload = function() {
            
             colunas.forEach((coluna, index) => {
                 if (index != 6) {
-                      if (inputs[index]) {
-                          if (index == 0) {
-                              formIds.push('dataOcorrencia___' + col);
-                              formData.push(inputs[index].value);
-                          }
-                          if (index == 1) {
-                              formIds.push('atividade___' + col);
-                              formData.push(inputs[index].value);
-                          }
-                          if (index == 2) {
-                              formIds.push('entrada___' + col);
-                              formData.push(inputs[index].value);
-                          }
-                          if (index == 3) {
-                              formIds.push('saidaIntervalo___' + col);
-                              formData.push(inputs[index].value);
-                          }
-                          if (index == 4) {
-                              formIds.push('entradaIntervalo___' + col);
-                              formData.push(inputs[index].value);
-                          }
-                          if (index == 5) {
-                              formIds.push('saida___' + col);
-                              formData.push(inputs[index].value);
-                          }
-                      }
-                  }
-              });
+                    if (index == 0) {
+                        formIds.push('dataOcorrencia___' + col);
+                        formData.push(inputs[0].value);
+                    }
+                    if (index == 1) {
+                        formIds.push('atividade___' + col);
+                        formData.push(inputs[1].value);
+                    }
+                    if (index == 2) {
+                        formIds.push('entrada___' + col);
+                        formData.push(inputs[2].value);
+                    }
+                    if (index == 3) {
+                        formIds.push('saidaIntervalo___' + col);
+                        formData.push(inputs[3].value);
+                    }
+                    if (index == 4) {
+                        formIds.push('entradaIntervalo___' + col);
+                        formData.push(inputs[4].value);
+                    }
+                    if (index == 5) {
+                        formIds.push('saida___' + col);
+                        formData.push(inputs[5].value);
+                    }
+                }
+            });
         });
 
         let targetState;

@@ -4,6 +4,9 @@ const formsPage = '/';
 const loginPage = '../../login.html';
 const PrestacaoContas = 'prestacaoDeContasDePequenasDespesas.html'
 const formPrestacaoContas = 'formPrestacaoDeContasDePequenasDespesas.html';
+var tipoAtividadeApi = sessionStorage.getItem('tipoAtividade');
+var cpfGestorApi = sessionStorage.getItem('cpfGestor');
+var nomeGestorApi = sessionStorage.getItem('nomeGestor');
 
 window.onload = function() {
     authentication();
@@ -39,6 +42,22 @@ window.onload = function() {
         const btnADD = document.getElementById('btnADD');
         const tabela = document.querySelector('table');
         const loadingFullScreen = document.getElementById('loadingFullScreen');
+        const limiteCartao = document.getElementById('limiteCartao');
+        const valorUtilizado = document.getElementById('valorUtilizado');
+
+        aplicarMascara(limiteCartao);
+        aplicarMascara(valorUtilizado);
+
+        valorUtilizado.addEventListener('keyup', function(e) {
+            if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+                valorUtilizado.style.border = '1px solid red';
+                valorUtilizado.style.background = 'red';
+            }
+            else {
+                valorUtilizado.style.border = '1px solid var(--border-color)';
+                valorUtilizado.style.background = 'background-color: var(--form-paper-background-color)';
+            }
+        });
 
         tabela.onclick = function(e) {
             if (!e.target.classList.contains('btnDelete')) {
@@ -164,6 +183,14 @@ window.onload = function() {
               currency: 'BRL'
             }).format(total);
           
+            if (total > parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+                document.getElementById('totalGeral').style.border = '1px solid red';
+                document.getElementById('totalGeral').style.background = 'red';
+            }
+            else {
+                document.getElementById('totalGeral').style.border = '1px solid var(--border-color)';
+                document.getElementById('totalGeral').style.background = 'var(--form-paper-background-color)';
+            }
             document.getElementById('totalGeral').value = formattedTotal;
         }
         
@@ -184,7 +211,7 @@ function tableRows(dataOcorrencia, atividade, entrada, saidaIntervalo, entradaIn
         </td>
         <td>
             <label for="itenAdquiridos" class="tableLabels" style="display: none;">Itens Adquiridos</label>
-            <input type="text" name="itenAdquiridos" id="itenAdquiridos" class="FormInputs" placeholder="Itens Adquiridos" value="${entrada}" ${disabled}>
+            <textarea type="text" name="itenAdquiridos" id="itenAdquiridos" class="FormInputs" placeholder="Itens Adquiridos" rows="1" ${disabled}>${entrada}</textarea>
         </td>
         <td>
             <label for="quantidade" class="tableLabels" style="display: none;">Saída para o Intervalo</label>
@@ -196,10 +223,118 @@ function tableRows(dataOcorrencia, atividade, entrada, saidaIntervalo, entradaIn
         </td>
         <td>
             <label for="justCompra" class="tableLabels" style="display: none;">Justificativa da Compra</label>
-            <input type="text" name="justCompra" id="justCompra" class="FormInputs" placeholder="Justificativa da Compra" value="${saida}" ${disabled}>
+            <textarea type="text" name="justCompra" id="justCompra" class="FormInputs" placeholder="Justificativa da Compra" rows="1" ${disabled}>${saida}</textarea>
         </td>
         <td ${style}><button class="btnDelete">Delete</button></td>
     </tr>`;
+}
+
+async function sendFormApi(tabela, somenteSalvar) {
+    const token = localStorage.getItem('token');
+    const cardId = localStorage.getItem('cardId');
+    const linhas = tabela.querySelectorAll('tr');
+    const nomeResponsavel = document.getElementById('nomeResponsavel');
+    const departamentoAcessoria = document.getElementById('departamentoAcessoria');
+    const nomeGestor = document.getElementById('nomeGestor');
+    const dataInicio = document.getElementById('dataInicio');
+    const dataFim = document.getElementById('dataFim');
+    const limiteCartao = document.getElementById('limiteCartao');
+    const valorUtilizado = document.getElementById('valorUtilizado');
+    const totalGeral = document.getElementById('totalGeral');
+
+    let formIds = [];
+    let formData = [];
+
+    formIds.push('nomeResponsavel');
+    formData.push(nomeResponsavel.value);
+    formIds.push('departamentoAcessoria');
+    formData.push(departamentoAcessoria.value);
+    formIds.push('nomeGestor');
+    formData.push(nomeGestor.value);
+    formIds.push('dataInicio');
+    formData.push(dataInicio.value);
+    formIds.push('dataFim');
+    formData.push(dataFim.value);
+    formIds.push('limiteCartao');
+    formData.push(limiteCartao.value);
+    formIds.push('valorUtilizado');
+    formData.push(valorUtilizado.value);
+    formIds.push('totalGeral');
+    formData.push(totalGeral.value);
+    let data = {}
+    
+    let col = -1;
+    linhas.forEach(linha => {
+        col++;
+        const colunas = linha.querySelectorAll('td');
+        const inputs = linha.querySelectorAll('input');
+        const textareas = linha.querySelectorAll('textarea');
+
+        colunas.forEach((coluna, index) => {
+            if (index != 6) {
+                if (index == 0) {
+                    formIds.push('numNotaFiscal___' + col);
+                    formData.push(inputs[0].value);
+                }
+                if (index == 1) {
+                    formIds.push('dataCompra___' + col);
+                    formData.push(inputs[1].value);
+                }
+                if (index == 2) {
+                    data[`itenAdquiridos___${col}`] = textareas[0].value;
+                }
+                if (index == 3) {
+                    formIds.push('quantidade___' + col);
+                    formData.push(inputs[2].value);
+                }
+                if (index == 4) {
+                    formIds.push('valorNota___' + col);
+                    formData.push(inputs[3].value);
+                }
+                if (index == 5) {
+                    data[`justCompra___${col}`] = textareas[1].value;
+                }
+            }
+              
+        });
+    });
+
+    if (Object.keys(data).length === 0) {
+        data.vazio = 'vazio';
+    }
+
+    let textAreaData = JSON.stringify(data);
+
+    let targetState = 2;
+
+    if (cardId == null) {
+        //Ids campos, dados campos, ids e dados textAreas, é somente salvar?, tokenUser
+        //Proxima atividade, nome formulário, cpf do gestor, nome do gestor
+        //tipo atividade pta/professor, passar para proxima atividade?, tipo setor, proxima pagina
+        if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+            alert('O valor utilizado deve ser menor que o limite do cartão!');
+        }
+        else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) > parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+            alert('O valor total dos itens deve ser menor que o valor utilizado do cartão!')
+        }
+        else {
+            processStart(formIds, formData, textAreaData, somenteSalvar, token, 
+                targetState, 'Prestação de Contas de Pequenas Despesas', cpfGestorApi, nomeGestorApi, 
+                tipoAtividadeApi, 'false', 'RH', PrestacaoContas);
+        }
+    }
+    else if (cardId != null) {
+        if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+            alert('O valor utilizado deve ser menor que o limite do cartão!');
+        }
+        else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) > parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+            alert('O valor total dos itens deve ser menor que o valor utilizado do cartão!')
+        }
+        else {
+            processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
+                cpfGestorApi, 8, 'Prestação de Contas de Pequenas Despesas', 'RH', targetState, PrestacaoContas);
+        }
+    }
 }
 
 function authentication() {
@@ -215,6 +350,9 @@ function authentication() {
     const somenteSalvar =  document.getElementById('somenteSalvar');
     const deleteTh = document.getElementById('deleteTh');
     const btnADD = document.getElementById('btnADD');
+    const nomeResponsavel = document.getElementById('nomeResponsavel');
+    const departamentoAcessoria = document.getElementById('departamentoAcessoria');
+    const nomeGestorForm = document.getElementById('nomeGestor');
 
     axios.get(baseURL + `/user/me`, {
         headers: {
@@ -273,6 +411,9 @@ function authentication() {
                 cancelForm.style.display = 'block';
                 sendForm.style.display = 'block';
                 somenteSalvar.style.display = 'block'
+                nomeResponsavel.value = nomeUser.innerHTML;
+                departamentoAcessoria.value = cursoSetor;
+                nomeGestorForm.value = nomeGestor;
             }
         }
 
