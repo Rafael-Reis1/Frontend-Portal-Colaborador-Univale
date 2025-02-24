@@ -96,6 +96,7 @@ window.onload = function() {
                     if(formFields.find(item => item.field.startsWith('aceitoDeclaracao'))?.value || '' === 'checked') {
                         aceitoDeclaracao.checked = true;
                     }
+                    console.log(formFields);
                     const numNotaFiscal = filtrarEOrdenarPorIndice(formFields, 'numNotaFiscal___');
                     const dataCompra = filtrarEOrdenarPorIndice(formFields, 'dataCompra___');
                     const itenAdquiridos = filtrarEOrdenarPorIndice(formFields, 'itenAdquiridos___');
