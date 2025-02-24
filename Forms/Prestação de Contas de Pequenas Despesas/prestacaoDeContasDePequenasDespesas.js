@@ -16,7 +16,7 @@ window.onload = function() {
     if (document.title == 'Form process') {
         const newForm = document.getElementById('newForm');
         
-        //loadCards();
+        loadCards();
 
         search();
         
@@ -335,6 +335,81 @@ async function sendFormApi(tabela, somenteSalvar) {
                 cpfGestorApi, 8, 'Prestação de Contas de Pequenas Despesas', 'RH', targetState, PrestacaoContas);
         }
     }
+}
+
+function loadCards() {
+    const token = localStorage.getItem('token');
+    const bodyCardsAprovGestor = document.getElementById('bodyCardsAprovGestor');
+    const cardsAprovGestor = document.getElementById('cardsAprovGestor');
+    const bodyCardsCorreção = document.getElementById('bodyCardsCorreção');
+    const cardsCorrecao = document.getElementById('cardsCorrecao');
+    const cardsSkeleton = document.getElementById('cardsSkeleton');
+    const cardsRascunho = document.getElementById('cardsRascunho');
+    const bodyCardsRascunho = document.getElementById('bodyCardsRascunho');
+    const cardsAprovFinanceiro = document.getElementById('cardsAprovFinanceiro');
+    const bodyCardsAprovFinanceiro = document.getElementById('bodyCardsAprovFinanceiro');
+    const cardsAprovControladoria = document.getElementById('cardsAprovControladoria');
+    const bodyCardsAprovControladoria = document.getElementById('bodyCardsAprovControladoria');
+    const cardsAprovados = document.getElementById('cardsAprovados');
+    const bodyCardsAprovados = document.getElementById('bodyCardsAprovados');
+    bodyCardsAprovGestor.innerHTML = '';
+    bodyCardsCorreção.innerHTML = '';
+    bodyCardsRascunho.innerHTML = '';
+    bodyCardsAprovFinanceiro.innerHTML = '';
+    bodyCardsAprovControladoria.innerHTML = '';
+    bodyCardsAprovados.innerHTML = '';
+
+    axios.post(baseURL + '/process/all', {
+        tipoAtividade: tipoAtividadeApi,
+        processId: 'Prestação de Contas de Pequenas Despesas'
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Cache-Control': 'no-cache, no-store, must-revalidate'
+        }
+    })
+    .then(response => {
+       
+      const processos = response.data;
+      cardsSkeleton.style.display = 'none';
+      processos.forEach(processo => {
+        const activities = processo.activities;
+        activities.sort((a, b) => b.movementSequence - a.movementSequence);
+        const ultimoMovimento = activities[0];
+        
+        if (ultimoMovimento.state.sequence == 1 && processo.active == true) {
+            cardsRascunho.style.display = 'flex';
+            populateCards(ultimoMovimento, 'bodyCardsRascunho', formPrestacaoContas);
+        }
+        if (ultimoMovimento.state.sequence == 6 && processo.active == true) {
+            cardsCorrecao.style.display = 'flex';
+            populateCards(ultimoMovimento, 'bodyCardsCorreção', formPrestacaoContas);
+        }
+        if (ultimoMovimento.state.sequence == 2 && processo.active == true) {
+            cardsAprovGestor.style.display = 'flex';
+            populateCards(ultimoMovimento, 'bodyCardsAprovGestor', formPrestacaoContas);
+        }
+        if (ultimoMovimento.state.sequence == 2 && processo.active == true) {
+            cardsAprovGestor.style.display = 'flex';
+            populateCards(ultimoMovimento, 'bodyCardsAprovGestor', formPrestacaoContas);
+        } 
+        if (ultimoMovimento.state.sequence == 10 && processo.active == true) {
+            cardsAprovFinanceiro.style.display = 'flex';
+            populateCards(ultimoMovimento, 'cardsAprovFinanceiro', formPrestacaoContas);
+        }  
+        if (ultimoMovimento.state.sequence == 13 && processo.active == true) {
+            cardsAprovControladoria.style.display = 'flex';
+            populateCards(ultimoMovimento, 'cardsAprovControladoria', formPrestacaoContas);
+        }     
+        if (ultimoMovimento.state.sequence == 16) {
+            cardsAprovados.style.display = 'flex';
+            populateCards(ultimoMovimento, 'bodyCardsAprovados', formOcorrenciasPonto);
+        } 
+      });
+    })
+    .catch(erro => {
+      console.error(erro);
+    });
 }
 
 function authentication() {

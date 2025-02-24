@@ -510,6 +510,7 @@ window.onload = function() {
         const bodyCardsAprovRH = document.getElementById('bodyCardsAprovRH');
         const cardsAprovRH = document.getElementById('cardsAprovRH');
         const cardsAprovados = document.getElementById('cardsAprovados');
+        const bodyCardsAprovados = document.getElementById('bodyCardsAprovados');
         const bodyCardsCorreção = document.getElementById('bodyCardsCorreção');
         const cardsCorrecao = document.getElementById('cardsCorrecao');
         const cardsAprovCoordenador = document.getElementById('cardsAprovCoordenador');
@@ -531,9 +532,11 @@ window.onload = function() {
         bodyCardsDiretoria.innerHTML = '';
         bodyCardsProReitoria.innerHTML = '';
         bodyCardsRascunho.innerHTML = '';
+        bodyCardsAprovados.innerHTML = '';
     
         axios.post(baseURL + '/process/all', {
-            tipoAtividade: tipoAtividadeApi
+            tipoAtividade: tipoAtividadeApi,
+            processId: 'Ocorrências de ponto'
         }, {
             headers: {
                 Authorization: `Bearer ${token}`,
