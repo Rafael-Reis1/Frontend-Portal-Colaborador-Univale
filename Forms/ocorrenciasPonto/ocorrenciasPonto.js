@@ -69,7 +69,8 @@ window.onload = function() {
 
             axios.post(baseURL + '/process/id', {   
                 tipoAtividade: tipoAtividadeApi,
-                processInstanceId: cardId
+                processInstanceId: cardId,
+                processId: 'Ocorrências de ponto'
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,

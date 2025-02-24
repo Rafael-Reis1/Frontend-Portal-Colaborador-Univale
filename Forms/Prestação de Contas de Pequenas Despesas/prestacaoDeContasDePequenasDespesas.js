@@ -7,6 +7,8 @@ const formPrestacaoContas = 'formPrestacaoDeContasDePequenasDespesas.html';
 var tipoAtividadeApi = sessionStorage.getItem('tipoAtividade');
 var cpfGestorApi = sessionStorage.getItem('cpfGestor');
 var nomeGestorApi = sessionStorage.getItem('nomeGestor');
+let disabled = '';
+let style = '';
 
 window.onload = function() {
     authentication();
@@ -44,6 +46,86 @@ window.onload = function() {
         const loadingFullScreen = document.getElementById('loadingFullScreen');
         const limiteCartao = document.getElementById('limiteCartao');
         const valorUtilizado = document.getElementById('valorUtilizado');
+        const cardId = localStorage.getItem('cardId');
+        const token = localStorage.getItem('token');
+        const nomeResponsavel =  document.getElementById('nomeResponsavel');
+        const departamentoAcessoria = document.getElementById('departamentoAcessoria');
+        const nomeGestor = document.getElementById('nomeGestor');
+        const dataInicio = document.getElementById('dataInicio');
+        const totalGeral = document.getElementById('totalGeral');
+        const aceitoDeclaracao =  document.getElementById('aceitoDeclaracao');
+        const dataFim = document.getElementById('dataFim');
+
+        axios.post(baseURL + '/process/id', {   
+            tipoAtividade: tipoAtividadeApi,
+            processInstanceId: cardId,
+            processId: 'Prestação de Contas de Pequenas Despesas'
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Cache-Control': 'no-cache, no-store, must-revalidate'
+            }
+        })
+        .then(response => {
+            const processos = response.data;
+            if(processos.length == 0) {
+                window.location.replace(PrestacaoContas);
+            }
+            processos.forEach(processo => {
+                const formFields = processo.formFields;
+                
+                setTimeout(() => {
+                    function filtrarEOrdenarPorIndice(array, prefixo) {
+                        return array
+                        .filter(item => item.field.startsWith(prefixo))
+                        .sort((a, b) => {
+                            const indiceA = parseInt(a.field.split('___')[1], 10);
+                            const indiceB = parseInt(b.field.split('___')[1], 10);
+                            return indiceA - indiceB;
+                        });
+                    }
+                    
+                    nomeResponsavel.value = formFields.find(item => item.field.startsWith('nomeResponsavel'))?.value || '';
+                    departamentoAcessoria.value = formFields.find(item => item.field.startsWith('departamentoAcessoria'))?.value || '';
+                    nomeGestor.value = formFields.find(item => item.field.startsWith('nomeGestor'))?.value || '';
+                    dataInicio.value = formFields.find(item => item.field.startsWith('dataInicio'))?.value || '';
+                    limiteCartao.value = formFields.find(item => item.field.startsWith('limiteCartao'))?.value || '';
+                    valorUtilizado.value = formFields.find(item => item.field.startsWith('valorUtilizado'))?.value || '';
+                    totalGeral.value = formFields.find(item => item.field.startsWith('totalGeral'))?.value || '';
+                    dataFim.value = formFields.find(item => item.field.startsWith('dataFim'))?.value || '';
+                    if(formFields.find(item => item.field.startsWith('aceitoDeclaracao'))?.value || '' === 'checked') {
+                        aceitoDeclaracao.checked = true;
+                    }
+                    const numNotaFiscal = filtrarEOrdenarPorIndice(formFields, 'numNotaFiscal___');
+                    const dataCompra = filtrarEOrdenarPorIndice(formFields, 'dataCompra___');
+                    const itenAdquiridos = filtrarEOrdenarPorIndice(formFields, 'itenAdquiridos___');
+                    const quantidade = filtrarEOrdenarPorIndice(formFields, 'quantidade___');
+                    const valorNota = filtrarEOrdenarPorIndice(formFields, 'valorNota___');
+                    const justCompra = filtrarEOrdenarPorIndice(formFields, 'justCompra___');
+                    
+                    for (let i = 0; i < numNotaFiscal.length; i++) {
+                            const novaLinha = tableRows(
+                            numNotaFiscal[i]?.value || '',
+                            dataCompra[i]?.value || '',
+                            itenAdquiridos[i]?.value || '',
+                            quantidade[i]?.value || '',
+                            valorNota[i]?.value || '',
+                            justCompra[i]?.value || '',
+                            disabled,
+                            style
+                        );
+                        tabela.insertAdjacentHTML('beforeend', novaLinha);
+                    }
+                }, 0);
+            });
+
+            loadingFullScreen.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        })
+        .catch(erro => {
+            console.error(erro);
+        });
+
 
         aplicarMascara(limiteCartao);
         aplicarMascara(valorUtilizado);
@@ -199,31 +281,31 @@ window.onload = function() {
     }
 }
 
-function tableRows(dataOcorrencia, atividade, entrada, saidaIntervalo, entradaIntervalo, saida, disabled, style) {
+function tableRows(nomeResponsavel, departamentoAcessoria, nomeGestor, dataInicio, valorUtilizado, totalGeral, disabled, style) {
     return `<tr>
         <td>
             <label for="numNotaFiscal" class="tableLabels" style="display: none;">N° da Nota Fiscal/Cupom</label>
-            <input type="number" name="numNotaFiscal" id="numNotaFiscal" class="FormInputs" placeholder="N° nota fiscal" value="${dataOcorrencia}" ${disabled}>
+            <input type="number" name="numNotaFiscal" id="numNotaFiscal" class="FormInputs" placeholder="N° nota fiscal" value="${nomeResponsavel}" ${disabled}>
         </td>
         <td>
             <label for="dataCompra" class="tableLabels" style="display: none;">Aula e/ou Atividade</label>
-            <input type="date" name="dataCompra" id="dataCompra" class="FormInputs" value="${atividade}" ${disabled}>
+            <input type="date" name="dataCompra" id="dataCompra" class="FormInputs" value="${departamentoAcessoria}" ${disabled}>
         </td>
         <td>
             <label for="itenAdquiridos" class="tableLabels" style="display: none;">Itens Adquiridos</label>
-            <textarea type="text" name="itenAdquiridos" id="itenAdquiridos" class="FormInputs" placeholder="Itens Adquiridos" rows="1" ${disabled}>${entrada}</textarea>
+            <textarea type="text" name="itenAdquiridos" id="itenAdquiridos" class="FormInputs" placeholder="Itens Adquiridos" rows="1" ${disabled}>${nomeGestor}</textarea>
         </td>
         <td>
             <label for="quantidade" class="tableLabels" style="display: none;">Saída para o Intervalo</label>
-            <input type="number" name="quantidade" id="quantidade" class="FormInputs" placeholder="Quant." value="${saidaIntervalo}" ${disabled}>
+            <input type="number" name="quantidade" id="quantidade" class="FormInputs" placeholder="Quant." value="${dataInicio}" ${disabled}>
         </td>
         <td>
             <label for="valorNota" class="tableLabels" style="display: none;">Valor da Nota (R$)</label>
-            <input type="text" name="valorNota" id="valorNota" class="FormInputs" value="${entradaIntervalo}" ${disabled}>
+            <input type="text" name="valorNota" id="valorNota" class="FormInputs" value="${valorUtilizado}" ${disabled}>
         </td>
         <td>
             <label for="justCompra" class="tableLabels" style="display: none;">Justificativa da Compra</label>
-            <textarea type="text" name="justCompra" id="justCompra" class="FormInputs" placeholder="Justificativa da Compra" rows="1" ${disabled}>${saida}</textarea>
+            <textarea type="text" name="justCompra" id="justCompra" class="FormInputs" placeholder="Justificativa da Compra" rows="1" ${disabled}>${totalGeral}</textarea>
         </td>
         <td ${style}><button class="btnDelete">Delete</button></td>
     </tr>`;
@@ -389,10 +471,6 @@ function loadCards() {
             cardsAprovGestor.style.display = 'flex';
             populateCards(ultimoMovimento, 'bodyCardsAprovGestor', formPrestacaoContas);
         }
-        if (ultimoMovimento.state.sequence == 2 && processo.active == true) {
-            cardsAprovGestor.style.display = 'flex';
-            populateCards(ultimoMovimento, 'bodyCardsAprovGestor', formPrestacaoContas);
-        } 
         if (ultimoMovimento.state.sequence == 10 && processo.active == true) {
             cardsAprovFinanceiro.style.display = 'flex';
             populateCards(ultimoMovimento, 'cardsAprovFinanceiro', formPrestacaoContas);
@@ -425,9 +503,16 @@ function authentication() {
     const somenteSalvar =  document.getElementById('somenteSalvar');
     const deleteTh = document.getElementById('deleteTh');
     const btnADD = document.getElementById('btnADD');
+    const nomeGestorForm = document.getElementById('nomeGestor');
+    const selectTipoAtividade = document.getElementById('selectTipoAtividade');
+    const containerUser = document.getElementById('containerUser');
     const nomeResponsavel = document.getElementById('nomeResponsavel');
     const departamentoAcessoria = document.getElementById('departamentoAcessoria');
-    const nomeGestorForm = document.getElementById('nomeGestor');
+    const dataInicio =  document.getElementById('dataInicio');
+    const dataFim = document.getElementById('dataFim');
+    const limiteCartao = document.getElementById('limiteCartao');
+    const valorUtilizado = document.getElementById('valorUtilizado');
+    const totalGeral =  document.getElementById('totalGeral');
 
     axios.get(baseURL + `/user/me`, {
         headers: {
@@ -441,8 +526,7 @@ function authentication() {
         const tipoAtividade = response.data.tipoAtividade;
         const cpfGestor = response.data.cpfGestor;
         const nomeGestor = response.data.nomeGestor;
-        const selectTipoAtividade = document.getElementById('selectTipoAtividade');
-        const containerUser = document.getElementById('containerUser');
+       
         let i = 0;
          
         cursoSetor.forEach(cursoSetor => {
@@ -472,10 +556,18 @@ function authentication() {
 
         if(document.title == 'Form') {
 
-            //loadAnexos();
+            loadAnexos();
 
             if(correcaoStorage == 'false' && adicionarlocalStorage == 'false') {
-                returnToProcessCards.style.display = 'block'
+                returnToProcessCards.style.display = 'block';
+                nomeResponsavel.disabled = true;
+                departamentoAcessoria.disabled = true;
+                nomeGestorForm.disabled = true;
+                dataInicio.disabled = true;
+                dataFim.disabled = true;
+                limiteCartao.disabled = true;
+                valorUtilizado.disabled = true;
+                totalGeral.disabled = true;
                 
                 disabled = 'disabled';
                 style = 'style="display: none;'
