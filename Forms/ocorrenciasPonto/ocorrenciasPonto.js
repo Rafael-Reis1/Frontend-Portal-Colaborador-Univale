@@ -1,5 +1,5 @@
-//const baseURL = `http://127.0.0.1:3000`;
-const baseURL = `http://192.168.218.26:3000`;
+const baseURL = `http://127.0.0.1:3000`;
+//const baseURL = `http://192.168.218.26:3000`;
 const formsPage = '/';
 const loginPage = '../../login.html';
 const ocorrenciasPonto = 'ocorrenciasPonto.html'
@@ -549,45 +549,43 @@ window.onload = function() {
           const processos = response.data;
           cardsSkeleton.style.display = 'none';
           processos.forEach(processo => {
-            const activities = processo.activities;
-            activities.sort((a, b) => b.movementSequence - a.movementSequence);
-            const ultimoMovimento = activities[0];
+            const activity = processo.activity;
             
-            if (ultimoMovimento.state.sequence == 4 && processo.active == true) {
+            if (activity == 4) {
                 cardsRascunho.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsRascunho', formOcorrenciasPonto);
+                populateCards(processo, 'bodyCardsRascunho', formOcorrenciasPonto);
             }
-            if (ultimoMovimento.state.sequence == 78 && processo.active == true) {
+            if (activity == 78) {
                 cardsCorrecao.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsCorreção', formOcorrenciasPonto);
+                populateCards(processo, 'bodyCardsCorreção', formOcorrenciasPonto);
             }
-            if (ultimoMovimento.state.sequence == 5 && processo.active == true) {
+            if (activity == 5) {
                 cardsAprovGestor.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsAprovGestor', formOcorrenciasPonto);
+                populateCards(processo, 'bodyCardsAprovGestor', formOcorrenciasPonto);
             }
-            if (ultimoMovimento.state.sequence == 7 && processo.active == true) {
+            if (activity == 7) {
                 cardsAprovRH.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsAprovRH', formOcorrenciasPonto);
+                populateCards(processo, 'bodyCardsAprovRH', formOcorrenciasPonto);
             }
-            if (ultimoMovimento.state.sequence == 23 && processo.active == true) {
+            if (activity == 23) {
                 cardsAprovCoordenador.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsCoordenador', formOcorrenciasPonto);
+                populateCards(processo, 'bodyCardsCoordenador', formOcorrenciasPonto);
             }
-            if (ultimoMovimento.state.sequence == 34 && processo.active == true) {
+            if (activity == 34) {
                 cardsAprovSeplac.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsSeplac', formOcorrenciasPonto);
+                populateCards(processo, 'bodyCardsSeplac', formOcorrenciasPonto);
             }
-            if (ultimoMovimento.state.sequence == 44 && processo.active == true) {
+            if (activity == 44) {
                 cardsAprovDiretoria.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsDiretoria', formOcorrenciasPonto);
+                populateCards(processo, 'bodyCardsDiretoria', formOcorrenciasPonto);
             }
-            if (ultimoMovimento.state.sequence == 50 && processo.active == true) {
+            if (activity == 50) {
                 cardsAprovProReitoria.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsProReitoria', formOcorrenciasPonto);
+                populateCards(processo, 'bodyCardsProReitoria', formOcorrenciasPonto);
             }
-            if (ultimoMovimento.state.sequence == 9) {
+            if (activity == 9) {
                 cardsAprovados.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsAprovados', formOcorrenciasPonto);
+                populateCards(processo, 'bodyCardsAprovados', formOcorrenciasPonto);
             }            
           });
         })
