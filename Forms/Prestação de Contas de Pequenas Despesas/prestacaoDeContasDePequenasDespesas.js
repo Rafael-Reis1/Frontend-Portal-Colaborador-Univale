@@ -454,7 +454,8 @@ function loadCards() {
         const processos = response.data;
         cardsSkeleton.style.display = 'none';
         processos.forEach(processo => {
-            const activity = processo.activities;
+            const activity = processo.activity;
+            
             
             if (activity == 1) {
                 cardsRascunho.style.display = 'flex';
