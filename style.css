@@ -41,6 +41,10 @@
     margin: 0;
 }
 
+body {
+    font-family: Inter;
+}
+
 #containerLogin {
     display: flex;
     width: 100vw;
@@ -531,6 +535,10 @@
 
 #logoLoginTop {
     display: none;
+}
+
+label {
+    font-weight: 500;
 }
 
 /* .skeleton-text {

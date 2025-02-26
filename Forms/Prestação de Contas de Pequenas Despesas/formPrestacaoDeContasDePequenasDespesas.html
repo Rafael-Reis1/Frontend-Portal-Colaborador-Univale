@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <script src="prestacaoDeContasDePequenasDespesas.js"></script>
+    <script src="../../header.js"></script>
+    <script src="../../utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://nosir.github.io/cleave.js/dist/cleave.min.js"></script>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="prestacaoDeContasDePequenasDespesas.css">
+    <link rel="icon" href="../../assets/favicon-logo-FPF-White.svg" type="image/svg+xml">
+    <title>Form</title>
+</head>
+<body>
+    <div class="mainContainer" id="mainContainerBlueBackground">
+        <div id="formBackground"></div>
+        <div class="header">
+            <div id="left">
+                <button id="logoHeader">
+                    <img src="../../assets/logos alinhadas.png" alt="FPF UNIVALE ETEIT UNIVALE TV" />
+                </button>
+                <button id="logoHeaderSmall">FPF</button>
+            </div>
+            <div id="right">
+                <div id="containerUser">
+                    <div id="optionsUser">
+                        <span id="nomeUser"><div class="skeleton-text" id="userName"></div></span>
+                        <span id="setorCurso">Setor/Curso:</span>
+                        <span id="darkMode">Dark Mode: Off</span>
+                        <Span id="sair">Sair</Span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="topOptionsBar">
+            <div id="leftForm">
+                <button class="whiteButton" id="returnToProcessCards" onclick="history.back()" style="display: none;">Voltar</button>
+                <button class="whiteButton" id="somenteSalvar" style="display: none;">Somente salvar</button>
+            </div>
+            <div id="right">
+                <button class="whiteButton" id="cancelForm" style="display: none;">Cancelar</button>
+                <button class="whiteButton" id="sendForm" style="display: none;">Enviar Formulário</button>
+            </div>
+        </div>
+        <div class="containerForm">
+            <div id="divFormPaper">
+                <div id="formPaper">
+                    <div class="subTitulo">
+                        <h3>Identificação</h3>
+                        <hr class="linhaSubtitulo">
+                    </div>
+                    <div class="secaoForm">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="nomeResponsavel">Nome do Responsável pelo Preenchimento:</label>
+                                <input type="text" name="nomeResponsavel" id="nomeResponsavel" class="FormInputs" placeholder="Nome do responsável">
+                            </div>
+                            <div class="form-group">
+                                <label for="departamentoAcessoria">Departamento/Assessoria:</label>
+                                <input type="text" name="departamentoAcessoria" id="departamentoAcessoria" class="FormInputs" placeholder="Departamento/Acessoria">
+                            </div>
+                            <div class="form-group">
+                                <label for="nomeGestor">Nome do Gestor Responsável pelo Cartão:</label>
+                                <input type="text" name="nomeGestor" id="nomeGestor" class="FormInputs" placeholder="Nome do gestor">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="tempoUtilizacao">Período de Utilização:</label>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="dataInicio">Data início:</label>
+                                <input type="date" name="dataInicio" id="dataInicio" class="FormInputs">
+                            </div>
+                            <div class="form-group">
+                                <label for="dataFim">Data fim:</label>
+                                <input type="date" name="dataFim" id="dataFim" class="FormInputs">
+                            </div>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="subTitulo">
+                        <h3>Informações gerais</h3>
+                        <hr class="linhaSubtitulo">
+                    </div>
+                    <div class="secaoForm">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="limiteCartao">Limite do Cartão:</label>
+                                <input type="text" name="limiteCartao" id="limiteCartao" class="FormInputs">
+                            </div>
+                            <div class="form-group">
+                                <label for="valorUtilizado">Valor Utilizado:</label>
+                                <input type="text" name="valorUtilizado" id="valorUtilizado" class="FormInputs">
+                            </div>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="subTitulo">
+                        <h3>Descrição da despesas</h3>
+                        <hr class="linhaSubtitulo">
+                    </div>
+                    <div class="secaoForm">
+                        <div id="divTabela">
+                            <button id="btnADD" class="blueButton" style="display: none;">Adicionar</button>
+                            <div style="overflow-x: auto;">
+                                <table id="tableOcorrencias">
+                                    <tr>
+                                        <th>N° da Nota Fiscal/Cupom</th>
+                                        <th>Data da Compra</th>
+                                        <th>Itens Adquiridos</th>
+                                        <th>Quant.</th>
+                                        <th>Valor da Nota (R$)</th>
+                                        <th>Justificativa da Compra</th>
+                                        <th id="deleteTh" style="display: none;"></th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="totalGeral">Total:</label>
+                                <input type="text" name="totalGeral" id="totalGeral" class="FormInputs">
+                            </div>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="subTitulo">
+                        <h3>Declaração do gestor responsável</h3>
+                        <hr class="linhaSubtitulo">
+                    </div>
+                    <br>
+                    <div class="row">
+                        <p>Declaro que os valores foram utilizados exclusivamente para as finalidades previstas no 
+                            Regulamento de Pequenas Despesas da FPF e que todas as despesas realizadas estão conforme 
+                            as políticas internas e a legislação aplicável.</p>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label for="aceitoDeclaracao">Concordo com a declaração acima:</label>
+                        <input type="checkbox" name="aceitoDeclaracao" id="aceitoDeclaracao" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="selectTipoAtividade" style="display: none;">
+        <div id="selectBackgroud">
+        </div>
+        <div class="popupCard">
+            <p>Curso/Setor</p>
+            <select name="selectCursoSetor" id="selectCursoSetor" class="FormInputs">
+            </select>
+            <button class="blueButton" id="confirmarSetor">Confirmar</button>
+        </div>
+    </div>
+
+    <div id="cancelFormPopup" style="display: none;">
+        <div id="cancelBackgroud">
+        </div>
+        <div class="popupCard">
+            <p>Tem certeza que deseja cancelar?</p>
+            <div class="popupButtons">
+                <button id="cancel" onclick="history.back()" class="redHover">Sim</button>
+                <button id="dontCancel" class="blueHover">Não</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sendFormPopup" style="display: none;">
+        <div id="sendBackgroud">
+        </div>
+        <div class="popupCard">
+            <p id="enviarPara"></p>
+            <div class="popupButtons">
+                <button id="btnCorrigir" class="redHover">Corrigir</button>
+                <button id="btnEnviar" class="blueHover">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingFullScreen" style="display: none;">
+        <span class="loader-6"></span>
+    </div> 
+</body>
+</html>

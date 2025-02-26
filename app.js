@@ -3,6 +3,7 @@ const baseURL = `http://192.168.218.26:3000`;
 const formsPage = '/';
 const loginPage = 'login.html';
 const ocorrenciasPontoPage = 'Forms/ocorrenciasPonto/ocorrenciasPonto.html';
+const pequenasDespesasPage = 'Forms/Prestação de Contas de Pequenas Despesas/prestacaoDeContasDePequenasDespesas.html'
 var tipoAtividadeApi = sessionStorage.getItem('tipoAtividade');
 var cpfGestorApi = sessionStorage.getItem('cpfGestor');
 var nomeGestorApi = sessionStorage.getItem('nomeGestor');
@@ -37,6 +38,7 @@ window.onload = function() {
     //Home com os cards de formularios
     if (document.title == 'Forms home') {
         const ocorrenciasPonto = document.getElementById('ocorrenciasPonto');
+        const pequenasDespesas = document.getElementById('pequenasDespesas');
 
         authentication();
 
@@ -46,6 +48,10 @@ window.onload = function() {
 
         ocorrenciasPonto.onclick = function() {
             document.location.href = ocorrenciasPontoPage;
+        }
+
+        pequenasDespesas.onclick = function() {
+            document.location.href = pequenasDespesasPage;
         }
     }
 }
@@ -167,10 +173,12 @@ function authentication() {
 
 function filtraCards(tipoAtividade, Estagiario, nome) {
     const ocorrenciasPonto = document.getElementById('ocorrenciasPonto');
+    const pequenasDespesas = document.getElementById('pequenasDespesas');
 
     if(!Estagiario) {
         if(tipoAtividade == 'PTA') {
             ocorrenciasPonto.style.display = 'flex';
+            pequenasDespesas.style.display = 'flex'
         }
     
         else if(tipoAtividade == 'PROFESSOR') {
@@ -180,6 +188,7 @@ function filtraCards(tipoAtividade, Estagiario, nome) {
 
     if(nome === "RAFAEL REIS DA SILVEIRA") {
         ocorrenciasPonto.style.display = 'flex';
+        pequenasDespesas.style.display = 'flex'
     }
 }
 

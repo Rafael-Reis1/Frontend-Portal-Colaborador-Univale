@@ -39,48 +39,6 @@ body {
     font-family: Inter;
 }
 
-#formHeader {
-    display: flex;
-    width: 100%;
-    font-family: Inter;
-}
-
-#logosForm {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    flex-grow: 1;
-    margin-right: 1.875rem;
-    width: 18.75rem;
-}
-
-#info{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 1.25rem;
-    font-family: Inter;
-}
-
-#radioButtonsTipoJus {
-    display: flex;
-    font-family: Inter;
-    gap: 0.625rem;
-}
-
-#relatos {
-    font-family: Inter;
-    padding-left: 1.875rem;
-    flex-grow: 1;
-}
-
-hr {
-    height: 0.125rem;
-    background-color: var(--th-background-color);
-    margin: 3.75rem 0px 1.25rem 0px;
-}
-
 .btnDelete {
     padding: 0.625rem;
     background-color: var(--th-background-color);
@@ -123,8 +81,12 @@ th:nth-child(1) {
     width: 6.25rem;
 }
 
-th:nth-child(3) {
+th:nth-child(2) {
     width: 6.25rem;
+}
+
+th:nth-child(3) {
+    width: 21.875rem;
 }
 
 th:nth-child(4) {
@@ -136,11 +98,11 @@ th:nth-child(5) {
 }  
 
 th:nth-child(6) {
-    width: 6.25rem;
+    width: 21.875rem;
 }
 
 th:nth-child(7) {
-    width: 3.125rem;
+    width: 50px;
 }
 
 tr {
@@ -257,29 +219,6 @@ tr:selected {
     height: 100%;
 }
 
-#logoInfo {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-#headerSubdivision {
-    width: 50%;
-}
-
-#fpfMission {
-    display: flex;
-    flex-direction: column;
-    margin-top: 4.6875rem;
-    gap: 3.125rem;
-}
-
-#subtitle {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.25rem;
-    font-family: Inter;
-}
 
 #formAttachment {
     height: 30px;
@@ -429,37 +368,22 @@ tr:selected {
     z-index: -1;
 }
 
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3125rem;
+    width: fit-content;
+    height: fit-content;
+}
+
+.row {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
 @media (max-width: 762px) {
-    #logosForm {
-        display: none;
-    }
-
-    #fpfMission {
-        display: none;
-    }
-
-    #formHeader {
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-        width: 100%;
-        font-family: Inter;
-    }
-
-    #headerSubdivision {
-        width: 100%;
-    }
-
-    #relatos {
-        font-family: Inter;
-        padding-left: 0rem;
-        flex-grow: 1;
-    }
-
-    #info{
-        width: 100%;
-    }
-
     th:nth-child(1) {
         width: auto;
     }
@@ -493,4 +417,38 @@ tr:selected {
     #newForm {
         margin-right: 1.25rem;
     }
+}
+
+/*Especifico do formulário*/
+.subTitulo {
+    font-size: 1.5rem;
+    width: fit-content;
+}
+
+.linhaSubtitulo {
+    margin-top: 0.9375rem;
+    width: 110%;
+}
+
+.secaoForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 0.9375rem;
+}
+
+#nomeResponsavel {
+    width: 330px;
+}
+
+#departamentoAcessoria {
+    width: 20.625rem;
+}
+
+#nomeGestor {
+    width: 20.625rem;
+}
+
+#totalGeral {
+    width: 7.5rem;
 }
