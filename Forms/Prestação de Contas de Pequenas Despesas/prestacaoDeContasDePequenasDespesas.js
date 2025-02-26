@@ -115,6 +115,28 @@ window.onload = function() {
                             style
                         );
                         tabela.insertAdjacentHTML('beforeend', novaLinha);
+
+                        const novosInputsValorNota = document.querySelectorAll('#valorNota:not([data-listener-adicionado])'); // Seleciona apenas os inputs novos.
+                        novosInputsValorNota.forEach(input => {
+                            input.addEventListener('change', calcularTotal);
+                            input.setAttribute('data-listener-adicionado', 'true'); // Marca o input para não adicionar o listener novamente.
+                        });
+
+                        calcularTotal(); // Recalcula o total após adicionar a linha
+
+                        // Aplica a máscara aos inputs existentes
+                        const inputsExistentes = document.querySelectorAll('#valorNota');
+                        inputsExistentes.forEach(input => {
+                            aplicarMascara(input);
+                        });
+
+                        const novoInputValorNota = tabela.querySelector('#valorNota:last-of-type');
+
+                        novoInputValorNota.addEventListener('keyup', function(e) {
+                            calcularTotal(); // Recalcula o total
+                        });
+
+                        aplicarMascara(novoInputValorNota);
                     }
                 }, 0);
             });
