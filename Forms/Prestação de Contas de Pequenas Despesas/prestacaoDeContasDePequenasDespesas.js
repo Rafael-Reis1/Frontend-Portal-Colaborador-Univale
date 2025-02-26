@@ -56,98 +56,102 @@ window.onload = function() {
         const aceitoDeclaracao =  document.getElementById('aceitoDeclaracao');
         const dataFim = document.getElementById('dataFim');
 
-        axios.post(baseURL + '/process/id', {   
-            tipoAtividade: tipoAtividadeApi,
-            processInstanceId: cardId,
-            processId: 'Prestação de Contas de Pequenas Despesas'
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Cache-Control': 'no-cache, no-store, must-revalidate'
-            }
-        })
-        .then(response => {
-            const processos = response.data;
-            if(processos.length == 0) {
-                window.location.replace(PrestacaoContas);
-            }
-            processos.forEach(processo => {
-                const formFields = processo.formFields;
-                
-                setTimeout(() => {
-                    function filtrarEOrdenarPorIndice(array, prefixo) {
-                        return array
-                        .filter(item => item.field.startsWith(prefixo))
-                        .sort((a, b) => {
-                            const indiceA = parseInt(a.field.split('___')[1], 10);
-                            const indiceB = parseInt(b.field.split('___')[1], 10);
-                            return indiceA - indiceB;
-                        });
-                    }
+        if(cardId) {
+            loadingFullScreen.style.display = 'flex';
+            document.documentElement.style.overflow = 'hidden';
+            
+            axios.post(baseURL + '/process/id', {   
+                tipoAtividade: tipoAtividadeApi,
+                processInstanceId: cardId,
+                processId: 'Prestação de Contas de Pequenas Despesas'
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Cache-Control': 'no-cache, no-store, must-revalidate'
+                }
+            })
+            .then(response => {
+                const processos = response.data;
+                if(processos.length == 0) {
+                    window.location.replace(PrestacaoContas);
+                }
+                processos.forEach(processo => {
+                    const formFields = processo.formFields;
                     
-                    nomeResponsavel.value = formFields.find(item => item.field.startsWith('nomeResponsavel'))?.value || '';
-                    departamentoAcessoria.value = formFields.find(item => item.field.startsWith('departamentoAcessoria'))?.value || '';
-                    nomeGestor.value = formFields.find(item => item.field.startsWith('nomeGestor'))?.value || '';
-                    dataInicio.value = formFields.find(item => item.field.startsWith('dataInicio'))?.value || '';
-                    limiteCartao.value = formFields.find(item => item.field.startsWith('limiteCartao'))?.value || '';
-                    valorUtilizado.value = formFields.find(item => item.field.startsWith('valorUtilizado'))?.value || '';
-                    totalGeral.value = formFields.find(item => item.field.startsWith('totalGeral'))?.value || '';
-                    dataFim.value = formFields.find(item => item.field.startsWith('dataFim'))?.value || '';
-                    if(formFields.find(item => item.field.startsWith('aceitoDeclaracao'))?.value || '' === 'checked') {
-                        aceitoDeclaracao.checked = true;
-                    }
-                    const numNotaFiscal = filtrarEOrdenarPorIndice(formFields, 'numNotaFiscal___');
-                    const dataCompra = filtrarEOrdenarPorIndice(formFields, 'dataCompra___');
-                    const itenAdquiridos = filtrarEOrdenarPorIndice(formFields, 'itenAdquiridos___');
-                    const quantidade = filtrarEOrdenarPorIndice(formFields, 'quantidade___');
-                    const valorNota = filtrarEOrdenarPorIndice(formFields, 'valorNota___');
-                    const justCompra = filtrarEOrdenarPorIndice(formFields, 'justCompra___');
-                    
-                    for (let i = 0; i < numNotaFiscal.length; i++) {
-                            const novaLinha = tableRows(
-                            numNotaFiscal[i]?.value || '',
-                            dataCompra[i]?.value || '',
-                            itenAdquiridos[i]?.value || '',
-                            quantidade[i]?.value || '',
-                            valorNota[i]?.value || '',
-                            justCompra[i]?.value || '',
-                            disabled,
-                            style
-                        );
-                        tabela.insertAdjacentHTML('beforeend', novaLinha);
-
-                        const novosInputsValorNota = document.querySelectorAll('#valorNota:not([data-listener-adicionado])'); // Seleciona apenas os inputs novos.
-                        novosInputsValorNota.forEach(input => {
-                            input.addEventListener('change', calcularTotal);
-                            input.setAttribute('data-listener-adicionado', 'true'); // Marca o input para não adicionar o listener novamente.
-                        });
-
-                        calcularTotal(); // Recalcula o total após adicionar a linha
-
-                        // Aplica a máscara aos inputs existentes
-                        const inputsExistentes = document.querySelectorAll('#valorNota');
-                        inputsExistentes.forEach(input => {
-                            aplicarMascara(input);
-                        });
-
-                        const novoInputValorNota = tabela.querySelector('#valorNota:last-of-type');
-
-                        novoInputValorNota.addEventListener('keyup', function(e) {
-                            calcularTotal(); // Recalcula o total
-                        });
-
-                        aplicarMascara(novoInputValorNota);
-                    }
-                }, 0);
+                    setTimeout(() => {
+                        function filtrarEOrdenarPorIndice(array, prefixo) {
+                            return array
+                            .filter(item => item.field.startsWith(prefixo))
+                            .sort((a, b) => {
+                                const indiceA = parseInt(a.field.split('___')[1], 10);
+                                const indiceB = parseInt(b.field.split('___')[1], 10);
+                                return indiceA - indiceB;
+                            });
+                        }
+                        
+                        nomeResponsavel.value = formFields.find(item => item.field.startsWith('nomeResponsavel'))?.value || '';
+                        departamentoAcessoria.value = formFields.find(item => item.field.startsWith('departamentoAcessoria'))?.value || '';
+                        nomeGestor.value = formFields.find(item => item.field.startsWith('nomeGestor'))?.value || '';
+                        dataInicio.value = formFields.find(item => item.field.startsWith('dataInicio'))?.value || '';
+                        limiteCartao.value = formFields.find(item => item.field.startsWith('limiteCartao'))?.value || '';
+                        valorUtilizado.value = formFields.find(item => item.field.startsWith('valorUtilizado'))?.value || '';
+                        totalGeral.value = formFields.find(item => item.field.startsWith('totalGeral'))?.value || '';
+                        dataFim.value = formFields.find(item => item.field.startsWith('dataFim'))?.value || '';
+                        if(formFields.find(item => item.field.startsWith('aceitoDeclaracao'))?.value || '' === 'checked') {
+                            aceitoDeclaracao.checked = true;
+                        }
+                        const numNotaFiscal = filtrarEOrdenarPorIndice(formFields, 'numNotaFiscal___');
+                        const dataCompra = filtrarEOrdenarPorIndice(formFields, 'dataCompra___');
+                        const itenAdquiridos = filtrarEOrdenarPorIndice(formFields, 'itenAdquiridos___');
+                        const quantidade = filtrarEOrdenarPorIndice(formFields, 'quantidade___');
+                        const valorNota = filtrarEOrdenarPorIndice(formFields, 'valorNota___');
+                        const justCompra = filtrarEOrdenarPorIndice(formFields, 'justCompra___');
+                        
+                        for (let i = 0; i < numNotaFiscal.length; i++) {
+                                const novaLinha = tableRows(
+                                numNotaFiscal[i]?.value || '',
+                                dataCompra[i]?.value || '',
+                                itenAdquiridos[i]?.value || '',
+                                quantidade[i]?.value || '',
+                                valorNota[i]?.value || '',
+                                justCompra[i]?.value || '',
+                                disabled,
+                                style
+                            );
+                            tabela.insertAdjacentHTML('beforeend', novaLinha);
+    
+                            const novosInputsValorNota = document.querySelectorAll('#valorNota:not([data-listener-adicionado])'); // Seleciona apenas os inputs novos.
+                            novosInputsValorNota.forEach(input => {
+                                input.addEventListener('change', calcularTotal);
+                                input.setAttribute('data-listener-adicionado', 'true'); // Marca o input para não adicionar o listener novamente.
+                            });
+    
+                            calcularTotal(); // Recalcula o total após adicionar a linha
+    
+                            // Aplica a máscara aos inputs existentes
+                            const inputsExistentes = document.querySelectorAll('#valorNota');
+                            inputsExistentes.forEach(input => {
+                                aplicarMascara(input);
+                            });
+    
+                            const novoInputValorNota = tabela.querySelector('#valorNota:last-of-type');
+    
+                            novoInputValorNota.addEventListener('keyup', function(e) {
+                                calcularTotal(); // Recalcula o total
+                            });
+    
+                            aplicarMascara(novoInputValorNota);
+                        }
+                    }, 0);
+                });
+    
+                loadingFullScreen.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            })
+            .catch(erro => {
+                console.error(erro);
             });
-
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        })
-        .catch(erro => {
-            console.error(erro);
-        });
-
+        }
 
         aplicarMascara(limiteCartao);
         aplicarMascara(valorUtilizado);
