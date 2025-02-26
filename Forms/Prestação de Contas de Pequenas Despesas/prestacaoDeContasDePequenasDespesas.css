@@ -383,6 +383,40 @@ tr:selected {
     width: 100%;
 }
 
+/*Especifico do formulário*/
+.subTitulo {
+    font-size: 1.5rem;
+    width: fit-content;
+}
+
+.linhaSubtitulo {
+    margin-top: 0.9375rem;
+    width: 110%;
+}
+
+.secaoForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 0.9375rem;
+}
+
+#nomeResponsavel {
+    width: 330px;
+}
+
+#departamentoAcessoria {
+    width: 20.625rem;
+}
+
+#nomeGestor {
+    width: 20.625rem;
+}
+
+#totalGeral {
+    width: 7.5rem;
+}
+
 @media (max-width: 762px) {
     th:nth-child(1) {
         width: auto;
@@ -417,38 +451,20 @@ tr:selected {
     #newForm {
         margin-right: 1.25rem;
     }
-}
 
-/*Especifico do formulário*/
-.subTitulo {
-    font-size: 1.5rem;
-    width: fit-content;
-}
+    .form-group {
+        width: 100%;
+    }
 
-.linhaSubtitulo {
-    margin-top: 0.9375rem;
-    width: 110%;
-}
+    #nomeResponsavel {
+        width: 100%;
+    }
 
-.secaoForm {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    margin-top: 0.9375rem;
-}
+    #departamentoAcessoria{
+        width: 100%;
+    }
 
-#nomeResponsavel {
-    width: 330px;
-}
-
-#departamentoAcessoria {
-    width: 20.625rem;
-}
-
-#nomeGestor {
-    width: 20.625rem;
-}
-
-#totalGeral {
-    width: 7.5rem;
+    #nomeGestor {
+        width: 100%;
+    }
 }
