@@ -467,4 +467,9 @@ tr:selected {
     #nomeGestor {
         width: 100%;
     }
+
+    .linhaSubtitulo {
+        margin-top: 0.9375rem;
+        width: 100%;
+    }
 }
