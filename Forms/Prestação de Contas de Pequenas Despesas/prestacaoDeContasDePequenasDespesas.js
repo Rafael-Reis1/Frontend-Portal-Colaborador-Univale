@@ -396,8 +396,8 @@ async function sendFormApi(tabela, somenteSalvar) {
         if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
             alert('O valor utilizado deve ser menor que o limite do cartão!');
         }
-        else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) > parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-            alert('O valor total dos itens deve ser menor que o valor utilizado do cartão!')
+        else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) != parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+            alert('O valor total dos itens deve ser igual ao valor utilizado do cartão!')
         }
         else {
             processStart(formIds, formData, textAreaData, somenteSalvar, token, 
@@ -409,8 +409,8 @@ async function sendFormApi(tabela, somenteSalvar) {
         if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
             alert('O valor utilizado deve ser menor que o limite do cartão!');
         }
-        else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) > parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-            alert('O valor total dos itens deve ser menor que o valor utilizado do cartão!')
+        else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) != parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+            alert('O valor total dos itens deve ser igual ao valor utilizado do cartão!')
         }
         else {
             processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
@@ -454,7 +454,8 @@ function loadCards() {
         const processos = response.data;
         cardsSkeleton.style.display = 'none';
         processos.forEach(processo => {
-            const activity = processo.activities;
+            const activity = processo.activity;
+            
             
             if (activity == 1) {
                 cardsRascunho.style.display = 'flex';
