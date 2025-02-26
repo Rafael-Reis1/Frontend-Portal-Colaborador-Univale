@@ -545,51 +545,48 @@ window.onload = function() {
             }
         })
         .then(response => {
-           
-          const processos = response.data;
-          cardsSkeleton.style.display = 'none';
-          processos.forEach(processo => {
-            const activities = processo.activities;
-            activities.sort((a, b) => b.movementSequence - a.movementSequence);
-            const ultimoMovimento = activities[0];
-            
-            if (ultimoMovimento.state.sequence == 4 && processo.active == true) {
-                cardsRascunho.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsRascunho', formOcorrenciasPonto);
-            }
-            if (ultimoMovimento.state.sequence == 78 && processo.active == true) {
-                cardsCorrecao.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsCorreção', formOcorrenciasPonto);
-            }
-            if (ultimoMovimento.state.sequence == 5 && processo.active == true) {
-                cardsAprovGestor.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsAprovGestor', formOcorrenciasPonto);
-            }
-            if (ultimoMovimento.state.sequence == 7 && processo.active == true) {
-                cardsAprovRH.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsAprovRH', formOcorrenciasPonto);
-            }
-            if (ultimoMovimento.state.sequence == 23 && processo.active == true) {
-                cardsAprovCoordenador.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsCoordenador', formOcorrenciasPonto);
-            }
-            if (ultimoMovimento.state.sequence == 34 && processo.active == true) {
-                cardsAprovSeplac.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsSeplac', formOcorrenciasPonto);
-            }
-            if (ultimoMovimento.state.sequence == 44 && processo.active == true) {
-                cardsAprovDiretoria.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsDiretoria', formOcorrenciasPonto);
-            }
-            if (ultimoMovimento.state.sequence == 50 && processo.active == true) {
-                cardsAprovProReitoria.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsProReitoria', formOcorrenciasPonto);
-            }
-            if (ultimoMovimento.state.sequence == 9) {
-                cardsAprovados.style.display = 'flex';
-                populateCards(ultimoMovimento, 'bodyCardsAprovados', formOcorrenciasPonto);
-            }            
-          });
+            const processos = response.data;
+            cardsSkeleton.style.display = 'none';
+            processos.forEach(processo => {
+                const activity = processo.activity;
+                
+                if (activity == 4) {
+                    cardsRascunho.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsRascunho', formOcorrenciasPonto);
+                }
+                if (activity == 78) {
+                    cardsCorrecao.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsCorreção', formOcorrenciasPonto);
+                }
+                if (activity == 5) {
+                    cardsAprovGestor.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsAprovGestor', formOcorrenciasPonto);
+                }
+                if (activity == 7) {
+                    cardsAprovRH.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsAprovRH', formOcorrenciasPonto);
+                }
+                if (activity == 23) {
+                    cardsAprovCoordenador.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsCoordenador', formOcorrenciasPonto);
+                }
+                if (activity == 34) {
+                    cardsAprovSeplac.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsSeplac', formOcorrenciasPonto);
+                }
+                if (activity == 44) {
+                    cardsAprovDiretoria.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsDiretoria', formOcorrenciasPonto);
+                }
+                if (activity == 50) {
+                    cardsAprovProReitoria.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsProReitoria', formOcorrenciasPonto);
+                }
+                if (activity == 9) {
+                    cardsAprovados.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsAprovados', formOcorrenciasPonto);
+                }            
+            });
         })
         .catch(erro => {
           console.error(erro);
