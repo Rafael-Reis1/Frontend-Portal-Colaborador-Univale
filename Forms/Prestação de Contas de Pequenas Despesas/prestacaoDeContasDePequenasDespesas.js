@@ -451,39 +451,36 @@ function loadCards() {
         }
     })
     .then(response => {
-       
-      const processos = response.data;
-      cardsSkeleton.style.display = 'none';
-      processos.forEach(processo => {
-        const activities = processo.activities;
-        activities.sort((a, b) => b.movementSequence - a.movementSequence);
-        const ultimoMovimento = activities[0];
-        
-        if (ultimoMovimento.state.sequence == 1 && processo.active == true) {
-            cardsRascunho.style.display = 'flex';
-            populateCards(ultimoMovimento, 'bodyCardsRascunho', formPrestacaoContas);
-        }
-        if (ultimoMovimento.state.sequence == 6 && processo.active == true) {
-            cardsCorrecao.style.display = 'flex';
-            populateCards(ultimoMovimento, 'bodyCardsCorreção', formPrestacaoContas);
-        }
-        if (ultimoMovimento.state.sequence == 2 && processo.active == true) {
-            cardsAprovGestor.style.display = 'flex';
-            populateCards(ultimoMovimento, 'bodyCardsAprovGestor', formPrestacaoContas);
-        }
-        if (ultimoMovimento.state.sequence == 10 && processo.active == true) {
-            cardsAprovFinanceiro.style.display = 'flex';
-            populateCards(ultimoMovimento, 'cardsAprovFinanceiro', formPrestacaoContas);
-        }  
-        if (ultimoMovimento.state.sequence == 13 && processo.active == true) {
-            cardsAprovControladoria.style.display = 'flex';
-            populateCards(ultimoMovimento, 'cardsAprovControladoria', formPrestacaoContas);
-        }     
-        if (ultimoMovimento.state.sequence == 16) {
-            cardsAprovados.style.display = 'flex';
-            populateCards(ultimoMovimento, 'bodyCardsAprovados', formOcorrenciasPonto);
-        } 
-      });
+        const processos = response.data;
+        cardsSkeleton.style.display = 'none';
+        processos.forEach(processo => {
+            const activity = processo.activities;
+            
+            if (activity == 1) {
+                cardsRascunho.style.display = 'flex';
+                populateCards(processo, 'bodyCardsRascunho', formPrestacaoContas);
+            }
+            if (activity == 6) {
+                cardsCorrecao.style.display = 'flex';
+                populateCards(processo, 'bodyCardsCorreção', formPrestacaoContas);
+            }
+            if (activity == 2) {
+                cardsAprovGestor.style.display = 'flex';
+                populateCards(processo, 'bodyCardsAprovGestor', formPrestacaoContas);
+            }
+            if (activity == 10) {
+                cardsAprovFinanceiro.style.display = 'flex';
+                populateCards(processo, 'cardsAprovFinanceiro', formPrestacaoContas);
+            }  
+            if (activity == 13) {
+                cardsAprovControladoria.style.display = 'flex';
+                populateCards(processo, 'cardsAprovControladoria', formPrestacaoContas);
+            }     
+            if (activity == 16) {
+                cardsAprovados.style.display = 'flex';
+                populateCards(processo, 'bodyCardsAprovados', formOcorrenciasPonto);
+            } 
+        });
     })
     .catch(erro => {
       console.error(erro);

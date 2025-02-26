@@ -1,5 +1,5 @@
-const baseURL = `http://127.0.0.1:3000`;
-//const baseURL = `http://192.168.218.26:3000`;
+//const baseURL = `http://127.0.0.1:3000`;
+const baseURL = `http://192.168.218.26:3000`;
 const formsPage = '/';
 const loginPage = '../../login.html';
 const ocorrenciasPonto = 'ocorrenciasPonto.html'
@@ -545,49 +545,48 @@ window.onload = function() {
             }
         })
         .then(response => {
-           
-          const processos = response.data;
-          cardsSkeleton.style.display = 'none';
-          processos.forEach(processo => {
-            const activity = processo.activity;
-            
-            if (activity == 4) {
-                cardsRascunho.style.display = 'flex';
-                populateCards(processo, 'bodyCardsRascunho', formOcorrenciasPonto);
-            }
-            if (activity == 78) {
-                cardsCorrecao.style.display = 'flex';
-                populateCards(processo, 'bodyCardsCorreção', formOcorrenciasPonto);
-            }
-            if (activity == 5) {
-                cardsAprovGestor.style.display = 'flex';
-                populateCards(processo, 'bodyCardsAprovGestor', formOcorrenciasPonto);
-            }
-            if (activity == 7) {
-                cardsAprovRH.style.display = 'flex';
-                populateCards(processo, 'bodyCardsAprovRH', formOcorrenciasPonto);
-            }
-            if (activity == 23) {
-                cardsAprovCoordenador.style.display = 'flex';
-                populateCards(processo, 'bodyCardsCoordenador', formOcorrenciasPonto);
-            }
-            if (activity == 34) {
-                cardsAprovSeplac.style.display = 'flex';
-                populateCards(processo, 'bodyCardsSeplac', formOcorrenciasPonto);
-            }
-            if (activity == 44) {
-                cardsAprovDiretoria.style.display = 'flex';
-                populateCards(processo, 'bodyCardsDiretoria', formOcorrenciasPonto);
-            }
-            if (activity == 50) {
-                cardsAprovProReitoria.style.display = 'flex';
-                populateCards(processo, 'bodyCardsProReitoria', formOcorrenciasPonto);
-            }
-            if (activity == 9) {
-                cardsAprovados.style.display = 'flex';
-                populateCards(processo, 'bodyCardsAprovados', formOcorrenciasPonto);
-            }            
-          });
+            const processos = response.data;
+            cardsSkeleton.style.display = 'none';
+            processos.forEach(processo => {
+                const activity = processo.activity;
+                
+                if (activity == 4) {
+                    cardsRascunho.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsRascunho', formOcorrenciasPonto);
+                }
+                if (activity == 78) {
+                    cardsCorrecao.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsCorreção', formOcorrenciasPonto);
+                }
+                if (activity == 5) {
+                    cardsAprovGestor.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsAprovGestor', formOcorrenciasPonto);
+                }
+                if (activity == 7) {
+                    cardsAprovRH.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsAprovRH', formOcorrenciasPonto);
+                }
+                if (activity == 23) {
+                    cardsAprovCoordenador.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsCoordenador', formOcorrenciasPonto);
+                }
+                if (activity == 34) {
+                    cardsAprovSeplac.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsSeplac', formOcorrenciasPonto);
+                }
+                if (activity == 44) {
+                    cardsAprovDiretoria.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsDiretoria', formOcorrenciasPonto);
+                }
+                if (activity == 50) {
+                    cardsAprovProReitoria.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsProReitoria', formOcorrenciasPonto);
+                }
+                if (activity == 9) {
+                    cardsAprovados.style.display = 'flex';
+                    populateCards(processo, 'bodyCardsAprovados', formOcorrenciasPonto);
+                }            
+            });
         })
         .catch(erro => {
           console.error(erro);
