@@ -226,6 +226,7 @@ window.onload = function() {
         }
 
         cancelForm.onclick = function() {
+            document.documentElement.scrollTop = 0;
             cancelFormPopup.style = 'flex';
             document.documentElement.style.overflow = 'hidden';
         }
@@ -249,6 +250,7 @@ window.onload = function() {
         }
 
         sendForm.onclick = function() {
+            document.documentElement.scrollTop = 0;
             sendFormPopup.style = 'flex';
             enviarPara.innerText = 'Enviar para: ' + nomeGestorApi;
             document.documentElement.style.overflow = 'hidden';
