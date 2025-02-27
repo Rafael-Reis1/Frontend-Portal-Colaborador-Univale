@@ -1,5 +1,5 @@
 //const baseURL = `http://127.0.0.1:3000`;
-const baseURL = `https://192.168.218.26:3000`;
+const baseURL = `https://portalcolaborador.univale.br:3000`;
 const formsPage = '/';
 const loginPage = '../../login.html';
 const ocorrenciasPonto = 'ocorrenciasPonto.html'
