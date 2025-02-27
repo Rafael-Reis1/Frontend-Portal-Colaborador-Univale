@@ -55,6 +55,7 @@ window.onload = function() {
         const totalGeral = document.getElementById('totalGeral');
         const aceitoDeclaracao =  document.getElementById('aceitoDeclaracao');
         const dataFim = document.getElementById('dataFim');
+        const cancel = document.getElementById('cancel');
 
         if(cardId) {
             loadingFullScreen.style.display = 'flex';
@@ -151,6 +152,17 @@ window.onload = function() {
             .catch(erro => {
                 console.error(erro);
             });
+            
+            cancel.onclick = function() {
+                localStorage.setItem('correcao', 'false');
+                localStorage.setItem('adicionar', 'true');
+                sendFormApi(tabela, false, true);
+            }
+        }
+        else {
+            cancel.onclick = function() {
+                history.back();
+            }
         }
 
         aplicarMascara(limiteCartao);
@@ -337,7 +349,7 @@ function tableRows(nomeResponsavel, departamentoAcessoria, nomeGestor, dataInici
     </tr>`;
 }
 
-async function sendFormApi(tabela, somenteSalvar) {
+async function sendFormApi(tabela, somenteSalvar, cancel) {
     const token = localStorage.getItem('token');
     const cardId = localStorage.getItem('cardId');
     const linhas = tabela.querySelectorAll('tr');
@@ -413,8 +425,15 @@ async function sendFormApi(tabela, somenteSalvar) {
     }
 
     let textAreaData = JSON.stringify(data);
+    let targetState;
 
-    let targetState = 2;
+    if(cancel) {
+        targetState = 19;
+    }
+    else {
+        targetState = 2;
+    }
+    
 
     if (cardId == null) {
         //Ids campos, dados campos, ids e dados textAreas, é somente salvar?, tokenUser

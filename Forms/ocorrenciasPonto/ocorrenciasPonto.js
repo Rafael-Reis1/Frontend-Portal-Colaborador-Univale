@@ -59,6 +59,7 @@ window.onload = function() {
         const btnConfirmarAttachment = document.getElementById('btnConfirmarAttachment');
         const attachmentsQTDEicon = document.getElementById('attachmentsQTDEicon');
         const aceitoAlterarPonto = document.getElementById('aceitoAlterarPonto');
+        const cancel = document.getElementById('cancel');
 
         attachmentsQTDEicon.innerHTML = attachmentsQTDE;
 
@@ -137,7 +138,18 @@ window.onload = function() {
             })
             .catch(erro => {
                 console.error(erro);
-            });            
+            });  
+            
+            cancel.onclick = function() {
+                localStorage.setItem('correcao', 'false');
+                localStorage.setItem('adicionar', 'true');
+                sendFormApi(tabela, false, true);
+            }
+        }
+        else {
+            cancel.onclick = function() {
+                history.back();
+            }
         }
 
         cancelForm.onclick = function() {
@@ -289,7 +301,7 @@ window.onload = function() {
     }
 
     //Formata os dados do formulário para serem enviados ao Fluig
-    async function sendFormApi(tabela, somenteSalvar) {
+    async function sendFormApi(tabela, somenteSalvar, cancel) {
         const token = localStorage.getItem('token');
         const linhas = tabela.querySelectorAll('tr');
         const nome = document.getElementById('nome');
@@ -372,13 +384,18 @@ window.onload = function() {
 
         let targetState;
 
-        if (tipoAtividadeApi == 'PTA') {
-            targetState = 5;
+        if(cancel) {
+            targetState = 12;
         }
-        else if (tipoAtividadeApi == 'PROFESSOR') {
-            targetState = 23;
+        else {
+            if (tipoAtividadeApi == 'PTA') {
+                targetState = 5;
+            }
+            else if (tipoAtividadeApi == 'PROFESSOR') {
+                targetState = 23;
+            }
         }
-
+        
         if (cardId == null) {
             //Ids campos, dados campos, ids e dados textAreas, é somente salvar?, tokenUser
             //Proxima atividade, nome formulário, cpf do gestor, nome do gestor
