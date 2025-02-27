@@ -349,6 +349,7 @@ async function sendFormApi(tabela, somenteSalvar) {
     const limiteCartao = document.getElementById('limiteCartao');
     const valorUtilizado = document.getElementById('valorUtilizado');
     const totalGeral = document.getElementById('totalGeral');
+    const loadingFullScreen = document.getElementById('loadingFullScreen');
 
     let formIds = [];
     let formData = [];
@@ -421,9 +422,13 @@ async function sendFormApi(tabela, somenteSalvar) {
         //tipo atividade pta/professor, passar para proxima atividade?, tipo setor, proxima pagina
         if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
             alert('O valor utilizado deve ser menor que o limite do cartão!');
+            loadingFullScreen.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
         else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) != parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-            alert('O valor total dos itens deve ser igual ao valor utilizado do cartão!')
+            alert('O valor total dos itens deve ser igual ao valor utilizado do cartão!');
+            loadingFullScreen.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
         else {
             processStart(formIds, formData, textAreaData, somenteSalvar, token, 
@@ -434,9 +439,13 @@ async function sendFormApi(tabela, somenteSalvar) {
     else if (cardId != null) {
         if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
             alert('O valor utilizado deve ser menor que o limite do cartão!');
+            loadingFullScreen.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
         else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) != parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-            alert('O valor total dos itens deve ser igual ao valor utilizado do cartão!')
+            alert('O valor total dos itens deve ser igual ao valor utilizado do cartão!');
+            loadingFullScreen.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
         else {
             processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
