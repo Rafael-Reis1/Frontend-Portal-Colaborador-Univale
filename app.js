@@ -1,5 +1,8 @@
 //const baseURL = `http://127.0.0.1:3000`;
 const baseURL = `https://192.168.218.26:3000`;
+const httpsAgent = new https.Agent({
+    rejectUnauthorized: false
+});
 const formsPage = '/';
 const loginPage = 'login.html';
 const ocorrenciasPontoPage = 'Forms/ocorrenciasPonto/ocorrenciasPonto.html';
@@ -66,6 +69,8 @@ function login(cpf, senha){
             axios.post(baseURL + `/login`, {
                 cpf: cpf.value,
                 password: senha.value
+            }, {
+                httpsAgent: httpsAgent
             })
             .then(response => {
                 loading.style.display = 'none';
