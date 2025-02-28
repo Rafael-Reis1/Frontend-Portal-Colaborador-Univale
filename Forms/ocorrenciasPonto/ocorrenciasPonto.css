@@ -77,7 +77,6 @@ body {
 
 hr {
     height: 0.125rem;
-    background-color: var(--th-background-color);
     margin: 3.75rem 0px 1.25rem 0px;
 }
 
