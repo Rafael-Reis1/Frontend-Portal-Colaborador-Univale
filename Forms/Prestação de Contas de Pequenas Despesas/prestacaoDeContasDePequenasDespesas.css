@@ -385,12 +385,14 @@ tr:selected {
 
 /*Especifico do formulário*/
 .subTitulo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3125rem;
     font-size: 1.5rem;
     width: fit-content;
 }
 
 .linhaSubtitulo {
-    margin-top: 0.9375rem;
     width: 110%;
 }
 
