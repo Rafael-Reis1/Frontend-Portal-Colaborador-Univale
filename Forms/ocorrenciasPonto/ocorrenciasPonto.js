@@ -404,7 +404,7 @@ window.onload = function() {
             //tipo atividade pta/professor, passar para proxima atividade?, tipo setor, proxima pagina
             processStart(formIds, formData, textAreaData, somenteSalvar, token, 
                 targetState, 'Ocorrências de ponto', cpfGestorApi, nomeGestorApi, 
-                tipoAtividadeApi, 'false', 'RH', ocorrenciasPonto);
+                tipoAtividadeApi, 'false', 'RH', ocorrenciasPonto, 4);
         }
         else if (cardId != null) {
             processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
