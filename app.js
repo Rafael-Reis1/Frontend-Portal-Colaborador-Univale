@@ -143,7 +143,7 @@ function authentication() {
                 }
             });
             
-            filtraCards(tipoAtividade[0], Estagiario, response.data.nome);
+            filtraCards(tipoAtividade[0], Estagiario, selectCursoSetor.value, response.data.nome);
         }
         if(cursoSetor.length > 1 && selectCursoSetorSessionStorage === null) {
             if(sessionStorage.getItem('selectCursoSetor')) {
@@ -157,7 +157,7 @@ function authentication() {
                 selectCursoSetor.value = sessionStorage.getItem('selectCursoSetor');  
             }
             setorCurso.innerText = 'Setor/Curso: ' + sessionStorage.getItem('selectCursoSetor'); 
-            filtraCards(tipoAtividadelocalStorage, Estagiario, response.data.nome);
+            filtraCards(tipoAtividadelocalStorage, Estagiario, sessionStorage.getItem('selectCursoSetor'), response.data.nome);
         }
 
         defineTamanhoDivNomeUser(containerUser, nomeUser);
@@ -171,14 +171,20 @@ function authentication() {
     });
 }
 
-function filtraCards(tipoAtividade, Estagiario, nome) {
+function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome) {
     const ocorrenciasPonto = document.getElementById('ocorrenciasPonto');
     const pequenasDespesas = document.getElementById('pequenasDespesas');
 
     if(!Estagiario) {
         if(tipoAtividade == 'PTA') {
             ocorrenciasPonto.style.display = 'flex';
-            pequenasDespesas.style.display = 'flex'
+
+            if(cursoSetor == 'REITORIA' || cursoSetor == 'DIRETORIA EXECUTIVA FPF'
+                || cursoSetor == 'PRO-REITORIA' || cursoSetor == 'DEPARTAMENTO LOGÍSTICO - DLOG'
+                || cursoSetor == 'CENTRO MEDICO VETERINARIO GRANDES ANIMAIS' || cursoSetor == 'CENTRO MEDICO VETERINARIO PEQUENOS ANIMAIS'
+            ) {
+                pequenasDespesas.style.display = 'flex';
+            }
         }
     
         else if(tipoAtividade == 'PROFESSOR') {
@@ -186,9 +192,9 @@ function filtraCards(tipoAtividade, Estagiario, nome) {
         }
     }
 
-    if(nome === "RAFAEL REIS DA SILVEIRA") {
+    if(nome === 'RAFAEL REIS DA SILVEIRA' || nome === 'TAINARA DE OLIVEIRA') {
         ocorrenciasPonto.style.display = 'flex';
-        pequenasDespesas.style.display = 'flex'
+        pequenasDespesas.style.display = 'flex';
     }
 }
 
