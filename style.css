@@ -491,6 +491,7 @@ hr {
 
 #divFormPaper {
     width: 100%;
+    max-width: 87.5rem;
     padding-bottom: 50px;
 }
 
