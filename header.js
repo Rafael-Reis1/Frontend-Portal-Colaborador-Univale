@@ -152,10 +152,13 @@ function selecionaSetorCurso(setorCurso, selectTipoAtividade, selectCursoSetor) 
     tipoAtividadeApi = selectedOption.getAttribute('data-tipo');
     cpfGestorApi = selectedOption.getAttribute('data-cpfgestor');
     nomeGestorApi = selectedOption.getAttribute('data-nomegestor');
+    tipoFuncApi = selectedOption.getAttribute('data-tipoFunc');
+    
     sessionStorage.setItem('tipoAtividade', tipoAtividadeApi);
     sessionStorage.setItem('cpfGestor', cpfGestorApi);
     sessionStorage.setItem('nomeGestor', nomeGestorApi);
     sessionStorage.setItem('selectCursoSetor', selectCursoSetor.value);
+    sessionStorage.setItem('tipoFunc', tipoFuncApi);
     selectTipoAtividade.style.display = 'none';
     document.body.style.overflow = 'auto';
     location.reload(true);

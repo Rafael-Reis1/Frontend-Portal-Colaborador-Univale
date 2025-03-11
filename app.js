@@ -118,6 +118,7 @@ function authentication() {
         const tipoAtividade = response.data.tipoAtividade;
         const cpfGestor = response.data.cpfGestor;
         const nomeGestor = response.data.nomeGestor;
+        const tipoFuncionario = response.data.tipoFuncionario;
         let i = 0;
 
         if(cursoSetor.length == 0) {
@@ -127,7 +128,7 @@ function authentication() {
         }
         
         cursoSetor.forEach(cursoSetor => {
-            selectCursoSetor.innerHTML += `<option value="${cursoSetor}" data-tipo="${tipoAtividade[i]}" data-cpfGestor="${cpfGestor[i]}" data-nomeGestor="${nomeGestor[i]}">${cursoSetor}</option>`;
+            selectCursoSetor.innerHTML += `<option value="${cursoSetor}" data-tipo="${tipoAtividade[i]}" data-cpfGestor="${cpfGestor[i]}" data-nomeGestor="${nomeGestor[i]}" data-tipoFunc="${tipoFuncionario[i]}">${cursoSetor}</option>`;
             i++;
         });
         
@@ -136,6 +137,7 @@ function authentication() {
             sessionStorage.setItem('tipoAtividade', tipoAtividade[0]);
             sessionStorage.setItem('cpfGestor', cpfGestor[0]);
             sessionStorage.setItem('nomeGestor', nomeGestor[0]);
+            sessionStorage.setItem('tipoFunc', tipoFuncionario[0]);
 
             response.data.tipoFuncionario.forEach(tipoFuncionario => {
                 if(tipoFuncionario == 'ESTAGIARIO') {
