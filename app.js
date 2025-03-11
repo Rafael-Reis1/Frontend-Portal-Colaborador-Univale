@@ -33,7 +33,17 @@ window.onload = function() {
         loginEntrar.onclick = function() {
             login(cpfLogin, senhaLogin);
         }
-                
+         
+        const containerLogin = document.getElementById('containerLogin');
+        let originalHeight = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            if (window.innerHeight < originalHeight) {
+                containerLogin.classList.add('keyboard-active');
+            } else {
+                containerLogin.classList.remove('keyboard-active');
+            }
+        });
     }
     //Home com os cards de formularios
     if (document.title == 'Forms home') {

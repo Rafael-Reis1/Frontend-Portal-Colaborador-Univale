@@ -754,6 +754,11 @@ input[type=number] {
     margin: 0;
 }
 
+#containerLogin.keyboard-active {
+    transform: translateY(-20%);
+    transition: transform 0.3s ease;
+}
+
 @media (max-width: 762px) {
 
     .formTitle {
