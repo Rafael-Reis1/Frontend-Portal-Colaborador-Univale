@@ -582,13 +582,14 @@ function authentication() {
         nomeUser.innerHTML = response.data.nome;
         const cursoSetor = response.data.cursoSetor;
         const tipoAtividade = response.data.tipoAtividade;
+        const tipoFuncionario = response.data.tipoFuncionario;
         const cpfGestor = response.data.cpfGestor;
         const nomeGestor = response.data.nomeGestor;
        
         let i = 0;
          
         cursoSetor.forEach(cursoSetor => {
-            selectCursoSetor.innerHTML += `<option value="${cursoSetor}" data-tipo="${tipoAtividade[i]}" data-cpfgestor="${cpfGestor[i]}" data-nomegestor="${nomeGestor[i]}">${cursoSetor}</option>`;
+            selectCursoSetor.innerHTML += `<option value="${cursoSetor}" data-tipo="${tipoAtividade[i]}" data-cpfgestor="${cpfGestor[i]}" data-nomegestor="${nomeGestor[i]}" data-tipoFunc="${tipoFuncionario[i]}">${cursoSetor}</option>`;
             i++;
         });
         
@@ -637,8 +638,8 @@ function authentication() {
                 sendForm.style.display = 'block';
                 somenteSalvar.style.display = 'block'
                 nomeResponsavel.value = nomeUser.innerHTML;
-                departamentoAcessoria.value = cursoSetor;
-                nomeGestorForm.value = nomeGestor;
+                departamentoAcessoria.value = selectCursoSetor.value;
+                nomeGestorForm.value = nomeGestorApi;
             }
         }
 

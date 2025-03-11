@@ -7,6 +7,7 @@ const formOcorrenciasPonto = 'formOcorrenciasPonto.html';
 var tipoAtividadeApi = sessionStorage.getItem('tipoAtividade');
 var cpfGestorApi = sessionStorage.getItem('cpfGestor');
 var nomeGestorApi = sessionStorage.getItem('nomeGestor');
+var tipoFuncApi = sessionStorage.getItem('tipoFunc');
 let disabled = '';
 let style = '';
 let attachmentsQTDE = 0;
@@ -454,7 +455,7 @@ window.onload = function() {
             let i = 0;
              
             cursoSetor.forEach(cursoSetor => {
-                selectCursoSetor.innerHTML += `<option value="${cursoSetor}" data-tipo="${tipoAtividade[i]}" data-cpfgestor="${cpfGestor[i]}" data-nomegestor="${nomeGestor[i]}">${cursoSetor}</option>`;
+                selectCursoSetor.innerHTML += `<option value="${cursoSetor}" data-tipo="${tipoAtividade[i]}" data-cpfgestor="${cpfGestor[i]}" data-nomegestor="${nomeGestor[i]}" data-tipoFunc="${tipoFuncionario[i]}">${cursoSetor}</option>`;
                 i++;
             });
             
@@ -463,6 +464,7 @@ window.onload = function() {
                 sessionStorage.setItem('tipoAtividade', tipoAtividade[0]);
                 sessionStorage.setItem('cpfGestor', cpfGestor[0]);
                 sessionStorage.setItem('nomeGestor', nomeGestor[0]);
+                sessionStorage.setItem('tipoFunc', tipoFuncionario[0]);
             }
             else if(cursoSetor.length > 1 && selectCursoSetor === null) {
                 if(sessionStorage.getItem('selectCursoSetor')) {
@@ -505,9 +507,9 @@ window.onload = function() {
                     sendForm.style.display = 'block';
                     somenteSalvar.style.display = 'block'
                     deleteTh.style.display = 'table-cell';
-                    cursoSetorForm.value = cursoSetor;
+                    cursoSetorForm.value = selectCursoSetor.value;
                     nome.value = nomeUser.innerHTML;
-                    funcao.value = tipoFuncionario;
+                    funcao.value = tipoFuncApi;
                 }
             }
 
