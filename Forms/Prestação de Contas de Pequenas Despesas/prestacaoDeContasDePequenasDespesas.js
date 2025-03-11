@@ -56,6 +56,7 @@ window.onload = function() {
         const aceitoDeclaracao =  document.getElementById('aceitoDeclaracao');
         const dataFim = document.getElementById('dataFim');
         const cancel = document.getElementById('cancel');
+        const tipoAtividade = sessionStorage.getItem('tipoAtividade');
 
         if(cardId) {
             loadingFullScreen.style.display = 'flex';
@@ -75,6 +76,9 @@ window.onload = function() {
                 const processos = response.data;
                 if(processos.length == 0) {
                     window.location.replace(PrestacaoContas);
+                }
+                if(tipoAtividade != 'PTA') {
+                    window.location.replace(formsPage);
                 }
                 processos.forEach(processo => {
                     const formFields = processo.formFields;
