@@ -2,8 +2,8 @@
 const baseURL = `https://portalcolaborador.univale.br:3000`;
 const formsPage = '/';
 const loginPage = '../../login.html';
-const PrestacaoContas = 'prestacaoDeContasDePequenasDespesas.html'
-const formPrestacaoContas = 'formPrestacaoDeContasDePequenasDespesas.html';
+const template = 'template.html'
+const formTemplate = 'formTemplate.html';
 var tipoAtividadeApi = sessionStorage.getItem('tipoAtividade');
 var cpfGestorApi = sessionStorage.getItem('cpfGestor');
 var nomeGestorApi = sessionStorage.getItem('nomeGestor');
@@ -26,7 +26,7 @@ window.onload = function() {
             localStorage.removeItem('cardId');
             localStorage.setItem('correcao', 'false');
             localStorage.setItem('adicionar', 'true');
-            document.location.href = formPrestacaoContas;
+            document.location.href = formTemplate;
         }
     }
     if (document.title == 'Form') {
@@ -56,7 +56,6 @@ window.onload = function() {
         const aceitoDeclaracao =  document.getElementById('aceitoDeclaracao');
         const dataFim = document.getElementById('dataFim');
         const cancel = document.getElementById('cancel');
-        const tipoAtividade = sessionStorage.getItem('tipoAtividade');
 
         if(cardId) {
             loadingFullScreen.style.display = 'flex';
@@ -75,10 +74,7 @@ window.onload = function() {
             .then(response => {
                 const processos = response.data;
                 if(processos.length == 0) {
-                    window.location.replace(PrestacaoContas);
-                }
-                if(tipoAtividade != 'PTA') {
-                    window.location.replace(formsPage);
+                    window.location.replace(template);
                 }
                 processos.forEach(processo => {
                     const formFields = processo.formFields;
@@ -458,7 +454,7 @@ async function sendFormApi(tabela, somenteSalvar, cancel) {
         else {
             processStart(formIds, formData, textAreaData, somenteSalvar, token, 
                 targetState, 'Prestação de Contas de Pequenas Despesas', cpfGestorApi, nomeGestorApi, 
-                tipoAtividadeApi, 'false', 'RH', PrestacaoContas, 1);
+                tipoAtividadeApi, 'false', 'RH', template, 1);
         }
     }
     else if (cardId != null) {
@@ -474,7 +470,7 @@ async function sendFormApi(tabela, somenteSalvar, cancel) {
         }
         else {
             processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
-                cpfGestorApi, 8, 'Prestação de Contas de Pequenas Despesas', 'RH', targetState, PrestacaoContas);
+                cpfGestorApi, 8, 'Prestação de Contas de Pequenas Despesas', 'RH', targetState, template);
         }
     }
 }
@@ -519,23 +515,23 @@ function loadCards() {
             
             if (activity == 1) {
                 cardsRascunho.style.display = 'flex';
-                populateCards(processo, 'bodyCardsRascunho', formPrestacaoContas);
+                populateCards(processo, 'bodyCardsRascunho', formTemplate);
             }
             if (activity == 6) {
                 cardsCorrecao.style.display = 'flex';
-                populateCards(processo, 'bodyCardsCorreção', formPrestacaoContas);
+                populateCards(processo, 'bodyCardsCorreção', formTemplate);
             }
             if (activity == 2) {
                 cardsAprovGestor.style.display = 'flex';
-                populateCards(processo, 'bodyCardsAprovGestor', formPrestacaoContas);
+                populateCards(processo, 'bodyCardsAprovGestor', formTemplate);
             }
             if (activity == 10) {
                 cardsAprovFinanceiro.style.display = 'flex';
-                populateCards(processo, 'cardsAprovFinanceiro', formPrestacaoContas);
+                populateCards(processo, 'cardsAprovFinanceiro', formTemplate);
             }  
             if (activity == 13) {
                 cardsAprovControladoria.style.display = 'flex';
-                populateCards(processo, 'cardsAprovControladoria', formPrestacaoContas);
+                populateCards(processo, 'cardsAprovControladoria', formTemplate);
             }     
             if (activity == 16) {
                 cardsAprovados.style.display = 'flex';
