@@ -3,7 +3,11 @@ const baseURL = `https://portalcolaborador.univale.br:3000`;
 const formsPage = '/';
 const loginPage = 'login.html';
 const ocorrenciasPontoPage = 'Forms/ocorrenciasPonto/ocorrenciasPonto.html';
-const pequenasDespesasPage = 'Forms/Prestação de Contas de Pequenas Despesas/prestacaoDeContasDePequenasDespesas.html'
+const pequenasDespesasPage = 'Forms/Prestação de Contas de Pequenas Despesas/prestacaoDeContasDePequenasDespesas.html';
+const gedPage = 'https://fluig.univale.br:8443/portal/p/001/ecmnavigation';
+const aberturaVagasPTAPage = 'https://fluig.univale.br:8443/portal/p/001/pageworkflowview?processID=Solicita%C3%A7%C3%A3o%20de%20abertura%20de%20vaga%20-%20RH';
+const pagamentoReuniaoNDEPage = 'https://fluig.univale.br:8443/portal/p/001/pageworkflowview?processID=Pgt%20de%20Reuni%C3%B5es%20do%20NDE%20Coleg%20ou%20Rep%20em%20Entidad';
+const tarefasPage = 'https://fluig.univale.br:8443/portal/p/001/pagecentraltask';
 var tipoAtividadeApi = sessionStorage.getItem('tipoAtividade');
 var cpfGestorApi = sessionStorage.getItem('cpfGestor');
 var nomeGestorApi = sessionStorage.getItem('nomeGestor');
@@ -38,6 +42,10 @@ window.onload = function() {
     if (document.title == 'Forms home') {
         const ocorrenciasPonto = document.getElementById('ocorrenciasPonto');
         const pequenasDespesas = document.getElementById('pequenasDespesas');
+        const ged =  document.getElementById('ged');
+        const minhasTarefas = document.getElementById('minhasTarefas');
+        const aberturaVagasPTA = document.getElementById('aberturaVagasPTA');
+        const pagamentoReuniaoNDE = document.getElementById('pagamentoReuniaoNDE');
 
         authentication();
 
@@ -51,6 +59,22 @@ window.onload = function() {
 
         pequenasDespesas.onclick = function() {
             document.location.href = pequenasDespesasPage;
+        }
+
+        ged.onclick = function() {
+            window.open(gedPage, '_blank');
+        }
+
+        minhasTarefas.onclick = function() {
+            window.open(tarefasPage, '_blank');
+        }
+
+        aberturaVagasPTA.onclick = function() {
+            window.open(aberturaVagasPTAPage, '_blank');
+        }
+
+        pagamentoReuniaoNDE.onclick = function() {
+            window.open(pagamentoReuniaoNDEPage, '_blank');
         }
     }
 }
@@ -120,45 +144,45 @@ function authentication() {
         const tipoFuncionario = response.data.tipoFuncionario;
         let i = 0;
 
-        if(cursoSetor.length == 0) {
-            alert('Você deve estar ativo em pelo menos 1 setor!');
-    
-            document.location.replace(loginPage);
-        }
-        
-        cursoSetor.forEach(cursoSetor => {
-            selectCursoSetor.innerHTML += `<option value="${cursoSetor}" data-tipo="${tipoAtividade[i]}" data-cpfGestor="${cpfGestor[i]}" data-nomeGestor="${nomeGestor[i]}" data-tipoFunc="${tipoFuncionario[i]}">${cursoSetor}</option>`;
-            i++;
-        });
-        
-        if(cursoSetor.length == 1) {
-            setorCurso.innerText = 'Setor/Curso: ' + selectCursoSetor.value;
-            sessionStorage.setItem('tipoAtividade', tipoAtividade[0]);
-            sessionStorage.setItem('cpfGestor', cpfGestor[0]);
-            sessionStorage.setItem('nomeGestor', nomeGestor[0]);
-            sessionStorage.setItem('tipoFunc', tipoFuncionario[0]);
-
-            response.data.tipoFuncionario.forEach(tipoFuncionario => {
-                if(tipoFuncionario == 'ESTAGIARIO') {
-                    Estagiario = true;
-                }
+        if(cursoSetor.length > 0) {
+            cursoSetor.forEach(cursoSetor => {
+                selectCursoSetor.innerHTML += `<option value="${cursoSetor}" data-tipo="${tipoAtividade[i]}" data-cpfGestor="${cpfGestor[i]}" data-nomeGestor="${nomeGestor[i]}" data-tipoFunc="${tipoFuncionario[i]}">${cursoSetor}</option>`;
+                i++;
             });
             
-            filtraCards(tipoAtividade[0], Estagiario, selectCursoSetor.value, response.data.nome);
-        }
-        if(cursoSetor.length > 1 && selectCursoSetorSessionStorage === null) {
-            if(sessionStorage.getItem('selectCursoSetor')) {
-                selectCursoSetor.value = sessionStorage.getItem('selectCursoSetor');  
+            if(cursoSetor.length == 1) {
+                setorCurso.innerText = 'Setor/Curso: ' + selectCursoSetor.value;
+                sessionStorage.setItem('tipoAtividade', tipoAtividade[0]);
+                sessionStorage.setItem('cpfGestor', cpfGestor[0]);
+                sessionStorage.setItem('nomeGestor', nomeGestor[0]);
+                sessionStorage.setItem('tipoFunc', tipoFuncionario[0]);
+    
+                response.data.tipoFuncionario.forEach(tipoFuncionario => {
+                    if(tipoFuncionario == 'ESTAGIARIO') {
+                        Estagiario = true;
+                    }
+                });
+                
+                filtraCards(tipoAtividade[0], Estagiario, selectCursoSetor.value, response.data.nome, response.data.isGestor);
             }
-            selectTipoAtividade.style.display = 'flex';
-            document.documentElement.style.overflow = 'hidden';
-        }
-        else if(cursoSetor.length > 1 && selectCursoSetor != null) {
-            if(sessionStorage.getItem('selectCursoSetor')) {
-                selectCursoSetor.value = sessionStorage.getItem('selectCursoSetor');  
+            if(cursoSetor.length > 1 && selectCursoSetorSessionStorage === null) {
+                if(sessionStorage.getItem('selectCursoSetor')) {
+                    selectCursoSetor.value = sessionStorage.getItem('selectCursoSetor');  
+                }
+                selectTipoAtividade.style.display = 'flex';
+                document.documentElement.style.overflow = 'hidden';
             }
-            setorCurso.innerText = 'Setor/Curso: ' + sessionStorage.getItem('selectCursoSetor'); 
-            filtraCards(tipoAtividadelocalStorage, Estagiario, sessionStorage.getItem('selectCursoSetor'), response.data.nome);
+            else if(cursoSetor.length > 1 && selectCursoSetor != null) {
+                if(sessionStorage.getItem('selectCursoSetor')) {
+                    selectCursoSetor.value = sessionStorage.getItem('selectCursoSetor');  
+                }
+                setorCurso.innerText = 'Setor/Curso: ' + sessionStorage.getItem('selectCursoSetor'); 
+                filtraCards(tipoAtividadelocalStorage, Estagiario, sessionStorage.getItem('selectCursoSetor'), response.data.nome, response.data.isGestor);
+            }
+        }
+        else {
+            setorCurso.style.display = 'none';
+            filtraCards(tipoAtividadelocalStorage, Estagiario, sessionStorage.getItem('selectCursoSetor'), response.data.nome, response.data.isGestor);
         }
 
         defineTamanhoDivNomeUser(containerUser, nomeUser);
@@ -172,9 +196,13 @@ function authentication() {
     });
 }
 
-function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome) {
+function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, isGestor) {
     const ocorrenciasPonto = document.getElementById('ocorrenciasPonto');
     const pequenasDespesas = document.getElementById('pequenasDespesas');
+    const ged =  document.getElementById('ged');
+    const minhasTarefas = document.getElementById('minhasTarefas');
+    const aberturaVagasPTA = document.getElementById('aberturaVagasPTA');
+    const pagamentoReuniaoNDE = document.getElementById('pagamentoReuniaoNDE');
 
     if(!Estagiario) {
         if(tipoAtividade == 'PTA') {
@@ -193,9 +221,20 @@ function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome) {
         }
     }
 
+    if(isGestor) {
+        ged.style.display = 'flex';
+        minhasTarefas.style.display = 'flex';
+        aberturaVagasPTA.style.display = 'flex';
+        pagamentoReuniaoNDE.style.display = 'flex';
+    }
+
     if(nome === 'RAFAEL REIS DA SILVEIRA' || nome === 'TAINARA DE OLIVEIRA') {
         ocorrenciasPonto.style.display = 'flex';
         pequenasDespesas.style.display = 'flex';
+        ged.style.display = 'flex';
+        minhasTarefas.style.display = 'flex';
+        aberturaVagasPTA.style.display = 'flex';
+        pagamentoReuniaoNDE.style.display = 'flex';
     }
 }
 
