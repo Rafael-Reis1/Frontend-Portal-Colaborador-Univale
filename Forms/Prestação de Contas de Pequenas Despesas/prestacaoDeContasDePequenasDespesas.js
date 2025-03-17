@@ -614,9 +614,6 @@ function authentication() {
         }
 
         if(document.title == 'Form') {
-
-            loadAnexos();
-
             if(correcaoStorage == 'false' && adicionarlocalStorage == 'false') {
                 returnToProcessCards.style.display = 'block';
                 nomeResponsavel.disabled = true;
