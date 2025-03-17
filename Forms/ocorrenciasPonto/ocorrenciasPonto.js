@@ -481,9 +481,6 @@ window.onload = function() {
             }
 
             if(document.title == 'Form') {
-
-                loadAnexos();
-
                 if(correcaoStorage == 'false' && adicionarlocalStorage == 'false') {
                     nome.disabled = true;
                     funcao.disabled = true;
@@ -493,6 +490,7 @@ window.onload = function() {
                     returnToProcessCards.style.display = 'block'
                     fileUploadArea.style.display = 'none';
                     aceitoAlterarPonto.disabled = true;
+                    loadAnexos(5, false);
                     
                     disabled = 'disabled';
                     style = 'style="display: none;'
@@ -510,6 +508,7 @@ window.onload = function() {
                     cursoSetorForm.value = selectCursoSetor.value;
                     nome.value = nomeUser.innerHTML;
                     funcao.value = tipoFuncApi;
+                    loadAnexos(5, true);
                 }
             }
 

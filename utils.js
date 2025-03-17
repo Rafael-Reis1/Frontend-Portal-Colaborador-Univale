@@ -241,7 +241,7 @@ function search() {
 }
 
 
-function loadAnexos() {
+function loadAnexos(targetState, deleteIcon) {
     const token = localStorage.getItem('token');
     const cardId = localStorage.getItem('cardId');
     const fileListContainer = document.getElementById('file-list');
@@ -255,7 +255,7 @@ function loadAnexos() {
     .then(response => {
         if(response.data.length > 0) {
             response.data.forEach(item => {
-                criaListaAttachment(fileListContainer, '', 'api', item.documentDescription, item.fileUrl);
+                criaListaAttachment(fileListContainer, '', 'api', item.documentDescription, item.fileUrl, item, cardId, targetState, deleteIcon);
             });
         } 
     })
@@ -306,7 +306,7 @@ function adicionarAttachments(fileInput) {
 }
 
 //Logica para definir se é um arquivo que foi buscado da api ou do armazenamento + criar a lista
-function criaListaAttachment(fileListContainer, file, source, documentDescription, fileUrl) {
+function criaListaAttachment(fileListContainer, file, source, documentDescription, fileUrl, item, processInstanceId, targetState, deleteIcon) {
     const attachmentsQTDEicon = document.getElementById('attachmentsQTDEicon');
 
     // Cria o item de lista com ícone
@@ -321,6 +321,7 @@ function criaListaAttachment(fileListContainer, file, source, documentDescriptio
     fileName.classList.add('file-name');
 
     let actionIcon; // Ícone de ação (excluir ou baixar)
+    let actionIconDelete;
     if (source === 'upload') {
         hasAttachments = true;
         // Nome do arquivo
@@ -352,17 +353,64 @@ function criaListaAttachment(fileListContainer, file, source, documentDescriptio
             window.open(fileUrl, '_blank');
         });
 
-        // Adicionar o ícone ao DOM
-        document.body.appendChild(actionIcon);
+        if(deleteIcon) {
+            actionIconDelete = document.createElement('span');
+            actionIconDelete.classList.add('remove-icon');
+            actionIconDelete.textContent = '❌';
+            actionIconDelete.addEventListener('click', function () {
+                if (confirm("Tem certeza que deseja excluir este anexo?")) {
+                    deleteAttachment(processInstanceId, targetState, item.documentId, item.version)
+                    selectedFiles.delete(file.name); // Remove o arquivo do Map
+                    attachmentsQTDE--;
+                    if(attachmentsQTDE == 0) {
+                        hasAttachments = false;
+                        semAnexo.style.display = 'inline';
+                    }
+                    attachmentsQTDEicon.innerHTML = attachmentsQTDE;
+                    li.remove(); // Remove o elemento da lista
+                }
+            });
+        }
     }
 
     li.appendChild(icon);
     li.appendChild(fileName);
     li.appendChild(actionIcon);
+    if(actionIconDelete) {
+        li.appendChild(actionIconDelete);
+    }
 
     semAnexo.style.display = 'none';
     attachmentsQTDE++;
     attachmentsQTDEicon.innerHTML = attachmentsQTDE;
 
     fileListContainer.appendChild(li);
+}
+
+function deleteAttachment(processInstanceId, targetState, documentId, documentVersion) {
+    const token = localStorage.getItem('token');
+    const loadingFullScreen = document.getElementById('loadingFullScreen');
+
+    loadingFullScreen.style.display = 'flex';
+    document.documentElement.style.overflow = 'hidden';
+    axios.put(baseURL + `/process/deleteAttachment`, {
+        processInstanceId: processInstanceId,
+        targetState: targetState,
+        documentId: documentId,
+        documentVersion: documentVersion
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        loadingFullScreen.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        return true;
+    })
+    .catch(error =>{
+        loadingFullScreen.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        alert(error.message);
+    });
 }
