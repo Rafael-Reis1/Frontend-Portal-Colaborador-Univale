@@ -4,7 +4,7 @@ let hasAttachments;
 //Inicia um novo processo no Fluig
 function processStart(formIds, formData, textAreaData, somenteSalvar, token, 
     targetState, processId, cpfGestorApi, nomeGestorApi, tipoAtividadeApi, 
-    completeTask, processSector, nextPage, inicialActivity) {
+    completeTask, processSector, nextPage, initialActivity) {
     const loadingFullScreen = document.getElementById('loadingFullScreen');
 
     loadingFullScreen.style.display = 'flex';
@@ -21,7 +21,7 @@ function processStart(formIds, formData, textAreaData, somenteSalvar, token,
         formData: formData,
         textAreaData,
         completeTask: completeTask,
-        activity: inicialActivity
+        activity: initialActivity
     }, {
         headers: {
             Authorization: `Bearer ${token}`
