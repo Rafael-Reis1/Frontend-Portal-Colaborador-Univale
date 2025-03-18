@@ -265,6 +265,17 @@ function search() {
 
 function selectFiltraCard(filtroCards) {
     const cards = document.querySelectorAll('.formCard');
+    const filtroSelec = filtroCards.value;
+
+    setTimeout(() => {
+        cards.forEach(card => {
+            if (filtroSelec === 'todos' || card.classList.contains(filtroSelec)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }, 10);
 
     filtroCards.addEventListener('change', function() {
         const filtroSelecionado = this.value;
