@@ -268,6 +268,7 @@ function loadAnexos(targetState, deleteIcon) {
 function adicionarAttachments(fileInput) {
     const fileListContainer = document.getElementById('file-list');
     const fileUploadArea = document.getElementById('file-upload');
+    const root = document.documentElement;
 
     // Função para adicionar arquivos à lista
     function addFileToList(file) {
@@ -287,22 +288,57 @@ function adicionarAttachments(fileInput) {
         fileInput.value = ''; // Limpa o input para permitir nova seleção
     });
 
-    // Evento de arraste para dentro da área de upload
-    fileUploadArea.addEventListener('dragover', function (event) {
-        event.preventDefault(); // Impede o comportamento padrão
-        fileUploadArea.style.backgroundColor = '#e0f7e0'; // Indica que o arquivo pode ser solto
-    });
-
-    fileUploadArea.addEventListener('dragleave', function () {
-        fileUploadArea.style.backgroundColor = '#f9f9f9'; // Volta ao estilo original
-    });
-
     // Quando o arquivo é solto
     fileUploadArea.addEventListener('drop', function (event) {
         event.preventDefault(); // Impede o comportamento padrão
         Array.from(event.dataTransfer.files).forEach(file => addFileToList(file)); // Processa todos os arquivos arrastados
-        fileUploadArea.style.backgroundColor = '#f9f9f9'; // Volta ao estilo original
     });
+    
+    updateUploadAreaColor();
+}
+
+function updateUploadAreaColor() {
+    const fileUploadArea = document.getElementById('file-upload');
+    const root = document.documentElement;
+
+    if(document.body.classList.contains("dark-mode")) {
+        fileUploadArea.style.backgroundColor = '#000629';
+        
+        // Evento de arraste para dentro da área de upload
+        fileUploadArea.addEventListener('dragover', function (event) {
+            event.preventDefault(); // Impede o comportamento padrão
+            fileUploadArea.style.backgroundColor = '#001175'; // Indica que o arquivo pode ser solto
+        });
+
+        fileUploadArea.addEventListener('dragleave', function () {
+            fileUploadArea.style.backgroundColor = '#000629'; // Volta ao estilo original
+        });
+
+        // Quando o arquivo é solto
+        fileUploadArea.addEventListener('drop', function (event) {
+            event.preventDefault(); // Impede o comportamento padrão
+            fileUploadArea.style.backgroundColor = '#000629'; // Volta ao estilo original
+        });
+    }
+    else {
+        fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--background-color');
+
+        // Evento de arraste para dentro da área de upload
+        fileUploadArea.addEventListener('dragover', function (event) {
+            event.preventDefault(); // Impede o comportamento padrão
+            fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--drag-over-background-color'); // Indica que o arquivo pode ser solto
+        });
+
+        fileUploadArea.addEventListener('dragleave', function () {
+            fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--background-color'); // Volta ao estilo original
+        });
+
+        // Quando o arquivo é solto
+        fileUploadArea.addEventListener('drop', function (event) {
+            event.preventDefault(); // Impede o comportamento padrão
+            fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--background-color'); // Volta ao estilo original
+        });
+    }
 }
 
 //Logica para definir se é um arquivo que foi buscado da api ou do armazenamento + criar a lista
