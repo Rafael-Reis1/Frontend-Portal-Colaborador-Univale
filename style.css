@@ -97,6 +97,17 @@ hr {
     font-family: Inter;
 }
 
+.generalImput {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    color: var(--font-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: Inter;
+}
+
 #divCpfLogin {
     width: 21.875rem;
 }
@@ -359,7 +370,7 @@ hr {
     color: white;
     border-radius: 8px;
     font-family: Inter;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: bold;
     text-align: center;
     padding: 0.625rem;
@@ -515,6 +526,7 @@ hr {
     display: flex;
     flex-wrap: wrap;
     gap: 1.25rem;
+    background-color: var(--background-color);
     padding: 0rem 3.75rem 3.125rem 3.75rem;
 }
 
@@ -896,5 +908,9 @@ input[type=number] {
     #searchForms {
         width: 100%;
         max-width: 21.875rem;
+    }
+
+    .mainSearch {
+        gap: 0.625rem;
     }
 }

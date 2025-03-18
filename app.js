@@ -241,6 +241,7 @@ function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, isGestor) {
 function search() {
     const searchInput = document.getElementById('searchForms');
     const cards = document.querySelectorAll('.formCard');
+    const filtroCards = document.getElementById('filtroCards');
 
     // Adiciona o evento de input ao campo de pesquisa
     searchInput.addEventListener('input', () => {
@@ -255,5 +256,25 @@ function search() {
           card.style.display = 'none'; // Oculta o card
         }
       });
+
+      filtroCards.value = 'todos';
+    });
+
+    selectFiltraCard(filtroCards);
+}
+
+function selectFiltraCard(filtroCards) {
+    const cards = document.querySelectorAll('.formCard');
+
+    filtroCards.addEventListener('change', function() {
+        const filtroSelecionado = this.value;
+
+        cards.forEach(card => {
+            if (filtroSelecionado === 'todos' || card.classList.contains(filtroSelecionado)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     });
 }
