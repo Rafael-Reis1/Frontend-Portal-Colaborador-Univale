@@ -110,12 +110,13 @@ function header() {
         const formPaper = document.getElementById('formPaper');
         const FormInputs = document.getElementById('FormInputs');
         const formBackground = document.getElementById('formBackground');
+        const fileUploadArea = document.getElementById('file-upload');
     
         document.body.classList.toggle("dark-mode");
     
         // Lista de elementos
         const elements = [mainContainer, inputSearch, cardSituation, cardsSituation,
-                containerUser, logoHeader, whiteButton, formPaper, FormInputs, formBackground];
+                containerUser, logoHeader, whiteButton, formPaper, FormInputs, formBackground, fileUploadArea];
     
         // Aplica a transição apenas nos elementos que existem
         elements.forEach(el => el && (el.style.transition = 'ease 275ms'));
@@ -135,6 +136,8 @@ function header() {
         setTimeout(() => {
             elements.forEach(el => el && (el.style.transition = ''));
         }, 1000);
+
+        updateUploadAreaColor();
     };
     
 }

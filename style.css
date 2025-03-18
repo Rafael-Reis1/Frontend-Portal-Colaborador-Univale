@@ -13,11 +13,7 @@
     --form-paper-background-color: white;
     --popup-background-color: white;
     --logos-background: white;
-}
-
-::selection {
-    background-color: var(--base-color);
-    color: #F5F5F5;
+    --drag-over-background-color: #e0f7e0;
 }
 
 .dark-mode{
@@ -35,6 +31,11 @@
     --form-paper-background-color: #262728;
     --popup-background-color: #000629;
     --logos-background: #cccccc;
+}
+
+::selection {
+    background-color: var(--base-color);
+    color: #F5F5F5;
 }
 
 * {
