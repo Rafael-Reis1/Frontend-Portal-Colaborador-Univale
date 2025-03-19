@@ -131,7 +131,12 @@ function enviarAttachment(processInstanceId, formIds, formDataJson,
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
             'Cache-Control': 'no-cache, no-store, must-revalidate',
-        },
+        }, 
+        onUploadProgress: (progressEvent) => {
+            if (progressEvent.lengthComputable) {
+                console.log(`${(progressEvent.loaded / progressEvent.total) * 100}%`);
+            }
+        }
     })
     .then(response => {
         formIds.push('attachmentId');
