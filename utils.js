@@ -268,7 +268,6 @@ function loadAnexos(targetState, deleteIcon) {
 function adicionarAttachments(fileInput) {
     const fileListContainer = document.getElementById('file-list');
     const fileUploadArea = document.getElementById('file-upload');
-    const root = document.documentElement;
 
     // Função para adicionar arquivos à lista
     function addFileToList(file) {
