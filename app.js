@@ -266,6 +266,7 @@ function search() {
 function selectFiltraCard(filtroCards) {
     const cards = document.querySelectorAll('.formCard');
     const filtroSelec = filtroCards.value;
+    const searchForms = document.getElementById('searchForms');
 
     setTimeout(() => {
         cards.forEach(card => {
@@ -279,6 +280,7 @@ function selectFiltraCard(filtroCards) {
 
     filtroCards.addEventListener('change', function() {
         const filtroSelecionado = this.value;
+        searchForms.value = '';
 
         cards.forEach(card => {
             if (filtroSelecionado === 'todos' || card.classList.contains(filtroSelecionado)) {

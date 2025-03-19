@@ -137,7 +137,9 @@ function header() {
             elements.forEach(el => el && (el.style.transition = ''));
         }, 1000);
 
-        updateUploadAreaColor();
+        if (typeof updateUploadAreaColor === 'function') {
+            updateUploadAreaColor();
+        }
     };
     
 }
