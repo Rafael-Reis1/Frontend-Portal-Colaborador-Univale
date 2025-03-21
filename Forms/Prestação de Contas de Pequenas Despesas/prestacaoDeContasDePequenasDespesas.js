@@ -368,115 +368,189 @@ async function sendFormApi(tabela, somenteSalvar, cancel) {
     const valorUtilizado = document.getElementById('valorUtilizado');
     const totalGeral = document.getElementById('totalGeral');
     const loadingFullScreen = document.getElementById('loadingFullScreen');
+    const btnADD = document.getElementById('btnADD');
 
-    let formIds = [];
-    let formData = [];
-
-    formIds.push('nomeResponsavel');
-    formData.push(nomeResponsavel.value);
-    formIds.push('departamentoAcessoria');
-    formData.push(departamentoAcessoria.value);
-    formIds.push('nomeGestor');
-    formData.push(nomeGestor.value);
-    formIds.push('dataInicio');
-    formData.push(dataInicio.value);
-    formIds.push('dataFim');
-    formData.push(dataFim.value);
-    formIds.push('limiteCartao');
-    formData.push(limiteCartao.value);
-    formIds.push('valorUtilizado');
-    formData.push(valorUtilizado.value);
-    formIds.push('totalGeral');
-    formData.push(totalGeral.value);
-    let data = {}
-    
-    let col = -1;
-    linhas.forEach(linha => {
-        col++;
-        const colunas = linha.querySelectorAll('td');
-        const inputs = linha.querySelectorAll('input');
-        const textareas = linha.querySelectorAll('textarea');
-
-        colunas.forEach((coluna, index) => {
-            if (index != 6) {
-                if (index == 0) {
-                    formIds.push('numNotaFiscal___' + col);
-                    formData.push(inputs[0].value);
-                }
-                if (index == 1) {
-                    formIds.push('dataCompra___' + col);
-                    formData.push(inputs[1].value);
-                }
-                if (index == 2) {
-                    data[`itenAdquiridos___${col}`] = textareas[0].value;
-                }
-                if (index == 3) {
-                    formIds.push('quantidade___' + col);
-                    formData.push(inputs[2].value);
-                }
-                if (index == 4) {
-                    formIds.push('valorNota___' + col);
-                    formData.push(inputs[3].value);
-                }
-                if (index == 5) {
-                    data[`justCompra___${col}`] = textareas[1].value;
-                }
-            }
-              
-        });
-    });
-
-    if (Object.keys(data).length === 0) {
-        data.vazio = 'vazio';
-    }
-
-    let textAreaData = JSON.stringify(data);
-    let targetState;
-
-    if(cancel) {
-        targetState = 19;
+    if(somenteSalvar) {
+        formataRequisicao();
     }
     else {
-        targetState = 2;
-    }
-    
-
-    if (cardId == null) {
-        //Ids campos, dados campos, ids e dados textAreas, é somente salvar?, tokenUser
-        //Proxima atividade, nome formulário, cpf do gestor, nome do gestor
-        //tipo atividade pta/professor, passar para proxima atividade?, tipo setor, proxima pagina
-        if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-            alert('O valor utilizado deve ser menor que o limite do cartão!');
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) != parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-            alert('O valor total dos itens deve ser igual ao valor utilizado do cartão!');
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
+        if(validateForm(linhas, nomeResponsavel, departamentoAcessoria, nomeGestor, dataInicio, dataFim, limiteCartao, valorUtilizado,
+            totalGeral, btnADD
+        )) {
+            formataRequisicao();
         }
         else {
+            sendFormPopup.style.opacity = 0;
+
+            setTimeout(() => {
+                sendFormPopup.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 200);
+            return false;
+        }
+    }
+
+    function formataRequisicao() {
+        let formIds = [];
+        let formData = [];
+    
+        formIds.push('nomeResponsavel');
+        formData.push(nomeResponsavel.value);
+        formIds.push('departamentoAcessoria');
+        formData.push(departamentoAcessoria.value);
+        formIds.push('nomeGestor');
+        formData.push(nomeGestor.value);
+        formIds.push('dataInicio');
+        formData.push(dataInicio.value);
+        formIds.push('dataFim');
+        formData.push(dataFim.value);
+        formIds.push('limiteCartao');
+        formData.push(limiteCartao.value);
+        formIds.push('valorUtilizado');
+        formData.push(valorUtilizado.value);
+        formIds.push('totalGeral');
+        formData.push(totalGeral.value);
+        let data = {}
+        
+        let col = -1;
+        linhas.forEach(linha => {
+            col++;
+            const colunas = linha.querySelectorAll('td');
+            const inputs = linha.querySelectorAll('input');
+            const textareas = linha.querySelectorAll('textarea');
+    
+            colunas.forEach((coluna, index) => {
+                if (index != 6) {
+                    if (index == 0) {
+                        formIds.push('numNotaFiscal___' + col);
+                        formData.push(inputs[0].value);
+                    }
+                    if (index == 1) {
+                        formIds.push('dataCompra___' + col);
+                        formData.push(inputs[1].value);
+                    }
+                    if (index == 2) {
+                        data[`itenAdquiridos___${col}`] = textareas[0].value;
+                    }
+                    if (index == 3) {
+                        formIds.push('quantidade___' + col);
+                        formData.push(inputs[2].value);
+                    }
+                    if (index == 4) {
+                        formIds.push('valorNota___' + col);
+                        formData.push(inputs[3].value);
+                    }
+                    if (index == 5) {
+                        data[`justCompra___${col}`] = textareas[1].value;
+                    }
+                }
+                  
+            });
+        });
+    
+        if (Object.keys(data).length === 0) {
+            data.vazio = 'vazio';
+        }
+    
+        let textAreaData = JSON.stringify(data);
+        let targetState;
+    
+        if(cancel) {
+            targetState = 19;
+        }
+        else {
+            targetState = 2;
+        }
+        
+    
+        if (cardId == null) {
+            //Ids campos, dados campos, ids e dados textAreas, é somente salvar?, tokenUser
+            //Proxima atividade, nome formulário, cpf do gestor, nome do gestor
+            //tipo atividade pta/professor, passar para proxima atividade?, tipo setor, proxima pagina
             processStart(formIds, formData, textAreaData, somenteSalvar, token, 
                 targetState, 'Prestação de Contas de Pequenas Despesas', cpfGestorApi, nomeGestorApi, 
                 tipoAtividadeApi, 'false', 'RH', PrestacaoContas, 1);
         }
-    }
-    else if (cardId != null) {
-        if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-            alert('O valor utilizado deve ser menor que o limite do cartão!');
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) != parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-            alert('O valor total dos itens deve ser igual ao valor utilizado do cartão!');
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        else {
+        else if (cardId != null) {
             processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
                 cpfGestorApi, 8, 'Prestação de Contas de Pequenas Despesas', 'RH', targetState, PrestacaoContas);
         }
     }
+}
+
+function validateForm(linhas, nomeResponsavel, departamentoAcessoria, nomeGestor, dataInicio, dataFim, limiteCartao, valorUtilizado,
+    totalGeral, btnADD
+) {
+    let i = 0;
+    for (let j = 0; j < linhas.length; j++) {
+        i++;
+    }
+    if (i < 2) {
+        alert('Deve preencher ao menos uma despesa!');
+        btnADD.focus();
+        return false;
+    }
+    if(nomeResponsavel.value == '') {
+        alert('Deve preencher seu nome!');
+        nomeResponsavel.style.background = 'red';
+        nomeResponsavel.focus();
+        return false;
+    }
+    if(departamentoAcessoria.value == '') {
+        alert('Deve preencher seu departamento/assessoria!');
+        departamentoAcessoria.style.background = 'red';
+        departamentoAcessoria.focus();
+        return false;
+    }
+    if(nomeGestor.value == '') {
+        alert('Deve preencher o nome do gestor!');
+        nomeGestor.style.background = 'red';
+        nomeGestor.focus();
+        return false;
+    }
+    if(dataInicio.value == '') {
+        alert('Deve selecionar a data de início!');
+        dataInicio.style.background = 'red';
+        dataInicio.focus();
+        return false;
+    }
+    if(dataFim.value == '') {
+        alert('Deve selecionar a data de fim!');
+        dataFim.style.background = 'red';
+        dataFim.focus();
+        return false;
+    }
+    if(limiteCartao.value == 'R$ ') {
+        alert('Deve preencher o limite do cartão!');
+        limiteCartao.style.background = 'red';
+        limiteCartao.focus();
+        return false;
+    }
+    if(valorUtilizado.value == 'R$ ') {
+        alert('Deve preencher o valor utilizado!');
+        valorUtilizado.style.background = 'red';
+        valorUtilizado.focus();
+        return false;
+    }
+    if(totalGeral.value == '') {
+        alert('Deve preencher o total!');
+        totalGeral.style.background = 'red';
+        totalGeral.focus();
+        return false;
+    }
+    if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+        alert('O valor utilizado deve ser menor que o limite do cartão!');
+        valorUtilizado.style.background = 'red';
+        valorUtilizado.focus();
+        return false;
+    }
+    else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) != parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+        alert('O valor total dos itens deve ser igual ao valor utilizado do cartão!');
+        btnADD.focus();
+        return false;
+    }
+
+    return true;
 }
 
 function loadCards() {
