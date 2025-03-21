@@ -315,7 +315,9 @@ window.onload = function() {
         const aceitoAlterarPonto = document.getElementById('aceitoAlterarPonto');
         const sendFormPopup = document.getElementById('sendFormPopup');
         const btnADD = document.getElementById('btnADD');
-
+        const radioButtons = document.querySelectorAll('#radioButtonsTipoJus input[type="radio"]');
+        let valorSelecionado;
+        
         if(somenteSalvar) {
             formataRequisicao();
         }
@@ -335,9 +337,6 @@ window.onload = function() {
         }
 
         function formataRequisicao() {
-            const radioButtons = document.querySelectorAll('#radioButtonsTipoJus input[type="radio"]');
-            let valorSelecionado;
-
             radioButtons.forEach(radio => {
                 if (radio.checked) {
                     valorSelecionado = radio.value;
@@ -474,11 +473,16 @@ window.onload = function() {
             aceitoAlterarPonto.focus();
             return false;
         }
-        radioButtons.forEach(radio => {
-            if(!radio.checked) {
-                alert('Deve selecionar o tipo de ocorrência!')            
+        let radioSelecionado = false;
+        for (let i = 0; i < radioButtons.length; i++) {
+            if (radioButtons[i].checked) {
+                radioSelecionado = true;
+                break;
             }
-        });
+        }
+        if (!radioSelecionado) {
+            alert('Deve selecionar o tipo de ocorrência!');
+        }
 
         return true;
     }

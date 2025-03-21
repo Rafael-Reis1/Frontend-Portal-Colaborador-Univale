@@ -7,6 +7,8 @@ function processStart(formIds, formData, textAreaData, somenteSalvar, token,
     completeTask, processSector, nextPage, initialActivity) {
     const loadingFullScreen = document.getElementById('loadingFullScreen');
 
+    adicionarTextoLoading('Salvando formulário!');
+
     loadingFullScreen.style.display = 'flex';
     document.documentElement.style.overflow = 'hidden';
     
@@ -67,6 +69,8 @@ function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, t
     cpfGestorApi, formFolderId, processId, processSector, targetState, nextPage) {
     const loadingFullScreen = document.getElementById('loadingFullScreen');
 
+    adicionarTextoLoading('Salvando formulário!');
+
     loadingFullScreen.style.display = 'flex';
     document.documentElement.style.overflow = 'hidden';
 
@@ -112,6 +116,8 @@ function enviarAttachment(processInstanceId, formIds, formDataJson,
     const formData = new FormData();
     const token = localStorage.getItem('token');
 
+    adicionarTextoLoading('Estamos enviando seus anexos. <br>Este processo pode levar alguns minutos. Por favor, aguarde!');
+
     // Adicionar todos os arquivos de `selectedFiles` ao FormData
     selectedFiles.forEach(file => {
         formData.append('files', file);
@@ -155,6 +161,8 @@ function moveRequest(processInstanceId, formIds, formData, textAreaData,
     const token = localStorage.getItem('token');
     const cardId = localStorage.getItem('cardId');
     const loadingFullScreen = document.getElementById('loadingFullScreen');
+
+    adicionarTextoLoading('Enviando formulário para aprovação!');
 
     loadingFullScreen.style.display = 'flex';
     document.documentElement.style.overflow = 'hidden';
@@ -453,4 +461,17 @@ function deleteAttachment(processInstanceId, targetState, documentId, documentVe
         document.body.style.overflow = 'auto';
         alert(error.message);
     });
+}
+
+function adicionarTextoLoading(text) {
+    const textLoading = document.getElementById('textLoading');
+
+    if(textLoading)  {
+        textLoading.style.opacity = 0;
+
+        setTimeout(() => {
+            textLoading.innerHTML = text;
+            textLoading.style.opacity = 1;
+        }, 500);
+    }
 }
