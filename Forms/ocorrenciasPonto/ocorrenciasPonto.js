@@ -313,104 +313,174 @@ window.onload = function() {
         const obs = document.getElementById('obs');
         const cardId = localStorage.getItem('cardId');
         const aceitoAlterarPonto = document.getElementById('aceitoAlterarPonto');
+        const sendFormPopup = document.getElementById('sendFormPopup');
+        const btnADD = document.getElementById('btnADD');
 
-        const radioButtons = document.querySelectorAll('#radioButtonsTipoJus input[type="radio"]');
-        let valorSelecionado;
-
-        radioButtons.forEach(radio => {
-            if (radio.checked) {
-                valorSelecionado = radio.value;
-            }
-        });
-
-        let formIds = [];
-        let formData = [];
-    
-        formIds.push('nome');
-        formData.push(nome.value);
-        formIds.push('funcao');
-        formData.push(funcao.value);
-        formIds.push('cursoSetor');
-        formData.push(cursoSetor.value);
-        formIds.push('aceitoAlterarPonto');
-        if(aceitoAlterarPonto.checked) {
-            formData.push('checked');
+        if(somenteSalvar) {
+            formataRequisicao();
         }
         else {
-            formData.push('');
+            if(validateForm(linhas, nome, funcao, cursoSetor, obs, aceitoAlterarPonto, radioButtons, btnADD)) {
+                formataRequisicao();
+            }
+            else {
+                sendFormPopup.style.opacity = 0;
+
+                setTimeout(() => {
+                    sendFormPopup.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }, 200);
+                return false;
+            }
         }
-        let data = {
-            obs: obs.value
-        }
-        let textAreaData = JSON.stringify(data);
-        formIds.push('radioTypes');
-        if(valorSelecionado == undefined) {
-            valorSelecionado = '';
-        }
-        formData.push(valorSelecionado);
-    
-        let col = -1;
-        linhas.forEach(linha => {
-            col++;
-            const colunas = linha.querySelectorAll('td');
-            const inputs = linha.querySelectorAll('input');
-           
-            colunas.forEach((coluna, index) => {
-                if (index != 6) {
-                    if (index == 0) {
-                        formIds.push('dataOcorrencia___' + col);
-                        formData.push(inputs[0].value);
-                    }
-                    if (index == 1) {
-                        formIds.push('atividade___' + col);
-                        formData.push(inputs[1].value);
-                    }
-                    if (index == 2) {
-                        formIds.push('entrada___' + col);
-                        formData.push(inputs[2].value);
-                    }
-                    if (index == 3) {
-                        formIds.push('saidaIntervalo___' + col);
-                        formData.push(inputs[3].value);
-                    }
-                    if (index == 4) {
-                        formIds.push('entradaIntervalo___' + col);
-                        formData.push(inputs[4].value);
-                    }
-                    if (index == 5) {
-                        formIds.push('saida___' + col);
-                        formData.push(inputs[5].value);
-                    }
+
+        function formataRequisicao() {
+            const radioButtons = document.querySelectorAll('#radioButtonsTipoJus input[type="radio"]');
+            let valorSelecionado;
+
+            radioButtons.forEach(radio => {
+                if (radio.checked) {
+                    valorSelecionado = radio.value;
                 }
             });
+    
+            let formIds = [];
+            let formData = [];
+        
+            formIds.push('nome');
+            formData.push(nome.value);
+            formIds.push('funcao');
+            formData.push(funcao.value);
+            formIds.push('cursoSetor');
+            formData.push(cursoSetor.value);
+            formIds.push('aceitoAlterarPonto');
+            if(aceitoAlterarPonto.checked) {
+                formData.push('checked');
+            }
+            else {
+                formData.push('');
+            }
+            let data = {
+                obs: obs.value
+            }
+            let textAreaData = JSON.stringify(data);
+            formIds.push('radioTypes');
+            if(valorSelecionado == undefined) {
+                valorSelecionado = '';
+            }
+            formData.push(valorSelecionado);
+        
+            let col = -1;
+            linhas.forEach(linha => {
+                col++;
+                const colunas = linha.querySelectorAll('td');
+                const inputs = linha.querySelectorAll('input');
+               
+                colunas.forEach((coluna, index) => {
+                    if (index != 6) {
+                        if (index == 0) {
+                            formIds.push('dataOcorrencia___' + col);
+                            formData.push(inputs[0].value);
+                        }
+                        if (index == 1) {
+                            formIds.push('atividade___' + col);
+                            formData.push(inputs[1].value);
+                        }
+                        if (index == 2) {
+                            formIds.push('entrada___' + col);
+                            formData.push(inputs[2].value);
+                        }
+                        if (index == 3) {
+                            formIds.push('saidaIntervalo___' + col);
+                            formData.push(inputs[3].value);
+                        }
+                        if (index == 4) {
+                            formIds.push('entradaIntervalo___' + col);
+                            formData.push(inputs[4].value);
+                        }
+                        if (index == 5) {
+                            formIds.push('saida___' + col);
+                            formData.push(inputs[5].value);
+                        }
+                    }
+                });
+            });
+    
+            let targetState;
+    
+            if(cancel) {
+                targetState = 12;
+            }
+            else {
+                if (tipoAtividadeApi == 'PTA') {
+                    targetState = 5;
+                }
+                else if (tipoAtividadeApi == 'PROFESSOR') {
+                    targetState = 23;
+                }
+            }
+            
+            if (cardId == null) {
+                //Ids campos, dados campos, ids e dados textAreas, é somente salvar?, tokenUser
+                //Proxima atividade, nome formulário, cpf do gestor, nome do gestor
+                //tipo atividade pta/professor, passar para proxima atividade?, tipo setor, proxima pagina
+                processStart(formIds, formData, textAreaData, somenteSalvar, token, 
+                    targetState, 'Ocorrências de ponto', cpfGestorApi, nomeGestorApi, 
+                    tipoAtividadeApi, 'false', 'RH', ocorrenciasPonto, 4);
+            }
+            else if (cardId != null) {
+                processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
+                    cpfGestorApi, 8, 'Ocorrências de ponto', 'RH', targetState, ocorrenciasPonto);
+            }
+        }
+    }
+
+    function validateForm(linhas, nome, funcao, cursoSetor, obs, aceitoAlterarPonto, radioButtons, btnADD) {
+        let i = 0;
+        for (let j = 0; j < linhas.length; j++) {
+            i++;
+        }
+        if (i < 2) {
+            alert('Deve preencher ao menos uma ocorrência!');
+            btnADD.focus();
+            return false;
+        }
+        if(nome.value == '') {
+            alert('Deve preencher seu nome!');
+            nome.style.background = 'red';
+            nome.focus();
+            return false;
+        }
+        if(funcao.value == '') {
+            alert('Deve preencher sua função!');
+            funcao.style.background = 'red';
+            funcao.focus();
+            return false;
+        }
+        if(cursoSetor.value == '') {
+            alert('Deve preencher o seu curso/setor');
+            cursoSetor.style.background = 'red';
+            cursoSetor.focus();
+            return false;
+        }
+        if(obs.value == '') {
+            alert('Deve descrever o motivo!');
+            obs.style.background = 'red';
+            obs.focus();
+            return false;
+        }
+        if(!aceitoAlterarPonto.checked) {
+            alert('Deve aceitar a alteração de ponto');
+            aceitoAlterarPonto.focus();
+            return false;
+        }
+        radioButtons.forEach(radio => {
+            if(!radio.checked) {
+                alert('Deve selecionar o tipo de ocorrência!')            
+            }
         });
 
-        let targetState;
-
-        if(cancel) {
-            targetState = 12;
-        }
-        else {
-            if (tipoAtividadeApi == 'PTA') {
-                targetState = 5;
-            }
-            else if (tipoAtividadeApi == 'PROFESSOR') {
-                targetState = 23;
-            }
-        }
-        
-        if (cardId == null) {
-            //Ids campos, dados campos, ids e dados textAreas, é somente salvar?, tokenUser
-            //Proxima atividade, nome formulário, cpf do gestor, nome do gestor
-            //tipo atividade pta/professor, passar para proxima atividade?, tipo setor, proxima pagina
-            processStart(formIds, formData, textAreaData, somenteSalvar, token, 
-                targetState, 'Ocorrências de ponto', cpfGestorApi, nomeGestorApi, 
-                tipoAtividadeApi, 'false', 'RH', ocorrenciasPonto, 4);
-        }
-        else if (cardId != null) {
-            processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
-                cpfGestorApi, 8, 'Ocorrências de ponto', 'RH', targetState, ocorrenciasPonto);
-        }
+        return true;
     }
 
     //Faz a pagina ser uma pagina que so pode ter acesso por autenticação desabilita alguns campos 
