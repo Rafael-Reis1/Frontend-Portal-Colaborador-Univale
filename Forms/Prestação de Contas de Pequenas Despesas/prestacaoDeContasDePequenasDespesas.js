@@ -336,7 +336,7 @@ function tableRows(nomeResponsavel, departamentoAcessoria, nomeGestor, dataInici
         </td>
         <td>
             <label for="itenAdquiridos" class="tableLabels" style="display: none;">Itens Adquiridos</label>
-            <textarea type="text" name="itenAdquiridos" id="itenAdquiridos" class="FormInputs" placeholder="Itens Adquiridos" rows="1" ${disabled}>${nomeGestor}</textarea>
+            <textarea type="text" name="itenAdquiridos" id="itenAdquiridos" class="FormInputs" placeholder="Itens Adquiridos" rows="1" ${disabled} style="max-width: 12.5rem; min-width: 12.5rem">${nomeGestor}</textarea>
         </td>
         <td>
             <label for="quantidade" class="tableLabels" style="display: none;">Saída para o Intervalo</label>
@@ -348,7 +348,7 @@ function tableRows(nomeResponsavel, departamentoAcessoria, nomeGestor, dataInici
         </td>
         <td>
             <label for="justCompra" class="tableLabels" style="display: none;">Justificativa da Compra</label>
-            <textarea type="text" name="justCompra" id="justCompra" class="FormInputs" placeholder="Justificativa da Compra" rows="1" ${disabled}>${totalGeral}</textarea>
+            <textarea type="text" name="justCompra" id="justCompra" class="FormInputs" placeholder="Justificativa da Compra" rows="1" ${disabled} style="max-width: 18.75rem; min-width: 18.75rem">${totalGeral}</textarea>
         </td>
         <td ${style}><button class="btnDelete">Delete</button></td>
     </tr>`;

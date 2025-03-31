@@ -331,7 +331,7 @@ hr {
     align-items: center;
     display: flex;
     padding: 1.875rem 3.75rem;
-    gap: 3.125rem;
+    gap: 1.25rem;
 }
 
 .inputSearch {
