@@ -191,27 +191,27 @@ window.onload = function() {
         btnADD.onclick = function() {
             const novaLinha = tableRows('', '', '', '', '', '', '', '');
             tabela.insertAdjacentHTML('beforeend', novaLinha);
-
+        
             const novosInputsValorNota = document.querySelectorAll('#valorNota:not([data-listener-adicionado])'); // Seleciona apenas os inputs novos.
             novosInputsValorNota.forEach(input => {
-                input.addEventListener('change', calcularTotal);
+                input.addEventListener('input', calcularTotal); // Usando 'input' em vez de 'change'
                 input.setAttribute('data-listener-adicionado', 'true'); // Marca o input para não adicionar o listener novamente.
             });
-
+        
             calcularTotal(); // Recalcula o total após adicionar a linha
-
+        
             // Aplica a máscara aos inputs existentes
             const inputsExistentes = document.querySelectorAll('#valorNota');
             inputsExistentes.forEach(input => {
                 aplicarMascara(input);
             });
-
+        
             const novoInputValorNota = tabela.querySelector('#valorNota:last-of-type');
-
-            novoInputValorNota.addEventListener('keyup', function(e) {
+        
+            novoInputValorNota.addEventListener('input', function(e) { // Usando 'input' em vez de 'keyup'
                 calcularTotal(); // Recalcula o total
             });
-
+        
             aplicarMascara(novoInputValorNota);
         }
 
