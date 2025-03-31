@@ -51,7 +51,6 @@ window.onload = function() {
         const departamentoAcessoria = document.getElementById('departamentoAcessoria');
         const nomeGestor = document.getElementById('nomeGestor');
         const dataInicio = document.getElementById('dataInicio');
-        const totalGeral = document.getElementById('totalGeral');
         const aceitoDeclaracao =  document.getElementById('aceitoDeclaracao');
         const dataFim = document.getElementById('dataFim');
         const cancel = document.getElementById('cancel');
@@ -99,7 +98,6 @@ window.onload = function() {
                         dataInicio.value = formFields.find(item => item.field.startsWith('dataInicio'))?.value || '';
                         limiteCartao.value = formFields.find(item => item.field.startsWith('limiteCartao'))?.value || '';
                         valorUtilizado.value = formFields.find(item => item.field.startsWith('valorUtilizado'))?.value || '';
-                        totalGeral.value = formFields.find(item => item.field.startsWith('totalGeral'))?.value || '';
                         dataFim.value = formFields.find(item => item.field.startsWith('dataFim'))?.value || '';
                         if(formFields.find(item => item.field.startsWith('aceitoDeclaracao'))?.value || '' === 'checked') {
                             aceitoDeclaracao.checked = true;
@@ -308,15 +306,15 @@ window.onload = function() {
               currency: 'BRL'
             }).format(total);
           
-            if (total > parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-                document.getElementById('totalGeral').style.border = '1px solid red';
-                document.getElementById('totalGeral').style.background = 'red';
+            if (total > parseFloat(document.getElementById('limiteCartao').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
+                document.getElementById('valorUtilizado').style.border = '1px solid red';
+                document.getElementById('valorUtilizado').style.background = 'red';
             }
             else {
-                document.getElementById('totalGeral').style.border = '1px solid var(--border-color)';
-                document.getElementById('totalGeral').style.background = 'var(--form-paper-background-color)';
+                document.getElementById('valorUtilizado').style.border = '1px solid var(--border-color)';
+                document.getElementById('valorUtilizado').style.background = 'var(--form-paper-background-color)';
             }
-            document.getElementById('totalGeral').value = formattedTotal;
+            document.getElementById('valorUtilizado').value = formattedTotal;
         }
         
         // Chama a função calcularTotal() inicialmente.
@@ -324,7 +322,7 @@ window.onload = function() {
     }
 }
 
-function tableRows(nomeResponsavel, departamentoAcessoria, nomeGestor, dataInicio, valorUtilizado, totalGeral, disabled, style) {
+function tableRows(nomeResponsavel, departamentoAcessoria, nomeGestor, dataInicio, valorUtilizado, justCompra, disabled, style) {
     return `<tr>
         <td>
             <label for="numNotaFiscal" class="tableLabels" style="display: none;">N° da Nota Fiscal/Cupom</label>
@@ -348,7 +346,7 @@ function tableRows(nomeResponsavel, departamentoAcessoria, nomeGestor, dataInici
         </td>
         <td>
             <label for="justCompra" class="tableLabels" style="display: none;">Justificativa da Compra</label>
-            <textarea type="text" name="justCompra" id="justCompra" class="FormInputs" placeholder="Justificativa da Compra" rows="1" ${disabled} style="max-width: 18.75rem; min-width: 18.75rem">${totalGeral}</textarea>
+            <textarea type="text" name="justCompra" id="justCompra" class="FormInputs" placeholder="Justificativa da Compra" rows="1" ${disabled} style="max-width: 18.75rem; min-width: 18.75rem">${justCompra}</textarea>
         </td>
         <td ${style}><button class="btnDelete">Delete</button></td>
     </tr>`;
@@ -365,16 +363,14 @@ async function sendFormApi(tabela, somenteSalvar, cancel) {
     const dataFim = document.getElementById('dataFim');
     const limiteCartao = document.getElementById('limiteCartao');
     const valorUtilizado = document.getElementById('valorUtilizado');
-    const totalGeral = document.getElementById('totalGeral');
-    const loadingFullScreen = document.getElementById('loadingFullScreen');
     const btnADD = document.getElementById('btnADD');
 
     if(somenteSalvar) {
         formataRequisicao();
     }
     else {
-        if(validateForm(linhas, nomeResponsavel, departamentoAcessoria, nomeGestor, dataInicio, dataFim, limiteCartao, valorUtilizado,
-            totalGeral, btnADD
+        if(validateForm(linhas, nomeResponsavel, departamentoAcessoria, nomeGestor, dataInicio, dataFim, limiteCartao, 
+            valorUtilizado, btnADD
         )) {
             formataRequisicao();
         }
@@ -407,8 +403,6 @@ async function sendFormApi(tabela, somenteSalvar, cancel) {
         formData.push(limiteCartao.value);
         formIds.push('valorUtilizado');
         formData.push(valorUtilizado.value);
-        formIds.push('totalGeral');
-        formData.push(totalGeral.value);
         let data = {}
         
         let col = -1;
@@ -477,8 +471,8 @@ async function sendFormApi(tabela, somenteSalvar, cancel) {
     }
 }
 
-function validateForm(linhas, nomeResponsavel, departamentoAcessoria, nomeGestor, dataInicio, dataFim, limiteCartao, valorUtilizado,
-    totalGeral, btnADD
+function validateForm(linhas, nomeResponsavel, departamentoAcessoria, nomeGestor, dataInicio, dataFim, limiteCartao,
+    valorUtilizado, btnADD
 ) {
     let i = 0;
     for (let j = 0; j < linhas.length; j++) {
@@ -531,21 +525,10 @@ function validateForm(linhas, nomeResponsavel, departamentoAcessoria, nomeGestor
         valorUtilizado.focus();
         return false;
     }
-    if(totalGeral.value == '') {
-        alert('Deve preencher o total!');
-        totalGeral.style.background = 'red';
-        totalGeral.focus();
-        return false;
-    }
     if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
         alert('O valor utilizado deve ser menor que o limite do cartão!');
         valorUtilizado.style.background = 'red';
         valorUtilizado.focus();
-        return false;
-    }
-    else if (parseFloat(document.getElementById('totalGeral').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) != parseFloat(document.getElementById('valorUtilizado').value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-        alert('O valor total dos itens deve ser igual ao valor utilizado do cartão!');
-        btnADD.focus();
         return false;
     }
 
@@ -643,7 +626,6 @@ function authentication() {
     const dataFim = document.getElementById('dataFim');
     const limiteCartao = document.getElementById('limiteCartao');
     const valorUtilizado = document.getElementById('valorUtilizado');
-    const totalGeral =  document.getElementById('totalGeral');
 
     axios.get(baseURL + `/user/me`, {
         headers: {
@@ -696,7 +678,6 @@ function authentication() {
                 dataFim.disabled = true;
                 limiteCartao.disabled = true;
                 valorUtilizado.disabled = true;
-                totalGeral.disabled = true;
                 
                 disabled = 'disabled';
                 style = 'style="display: none;'

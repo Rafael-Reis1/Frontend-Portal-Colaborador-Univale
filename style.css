@@ -829,7 +829,7 @@ input[type=number] {
 
     .topOptionsBar {
         display: flex;
-        gap: 0;
+        gap: 0.625rem;
         padding: 1.875rem 1.25rem;
     }
 
