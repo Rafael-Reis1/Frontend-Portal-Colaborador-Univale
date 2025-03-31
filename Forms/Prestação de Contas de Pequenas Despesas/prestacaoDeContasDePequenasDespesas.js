@@ -613,7 +613,6 @@ function authentication() {
     const correcaoStorage = localStorage.getItem('correcao');
     const cancelForm = document.getElementById('cancelForm');
     const sendForm = document.getElementById('sendForm');
-    const returnToProcessCards = document.getElementById('returnToProcessCards');
     const somenteSalvar =  document.getElementById('somenteSalvar');
     const deleteTh = document.getElementById('deleteTh');
     const btnADD = document.getElementById('btnADD');
@@ -670,7 +669,6 @@ function authentication() {
 
         if(document.title == 'Form') {
             if(correcaoStorage == 'false' && adicionarlocalStorage == 'false') {
-                returnToProcessCards.style.display = 'block';
                 nomeResponsavel.disabled = true;
                 departamentoAcessoria.disabled = true;
                 nomeGestorForm.disabled = true;
