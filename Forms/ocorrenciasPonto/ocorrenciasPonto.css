@@ -492,8 +492,4 @@ tr:selected {
         visibility: hidden;
         border: 0px;
     }
-
-    #newForm {
-        margin-right: 1.25rem;
-    }
 }

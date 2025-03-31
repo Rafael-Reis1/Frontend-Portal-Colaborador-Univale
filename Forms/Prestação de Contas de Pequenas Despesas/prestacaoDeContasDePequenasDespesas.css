@@ -78,31 +78,38 @@ th {
 }
 
 th:nth-child(1) {
-    width: 6.25rem;
+    width: 9.375rem;
+    min-width: 9.375rem;
 }
 
 th:nth-child(2) {
     width: 6.25rem;
+    min-width: 6.25rem;
 }
 
 th:nth-child(3) {
-    width: 21.875rem;
+    width: 12.5rem;
+    min-width: 12.5rem;
 }
 
 th:nth-child(4) {
     width: 6.25rem;
+    min-width: 6.25rem;
 }
 
 th:nth-child(5) {
     width: 6.25rem;
+    min-width: 6.25rem;
 }  
 
 th:nth-child(6) {
-    width: 21.875rem;
+    width: 15.625rem;
+    min-width: 15.625rem;
 }
 
 th:nth-child(7) {
-    width: 50px;
+    width: 3.125rem;
+    min-width: 3.125rem;
 }
 
 tr {
@@ -448,10 +455,6 @@ tr:selected {
         display: auto;
         visibility: hidden;
         border: 0px;
-    }
-
-    #newForm {
-        margin-right: 1.25rem;
     }
 
     .form-group {

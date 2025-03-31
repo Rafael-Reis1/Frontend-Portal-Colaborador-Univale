@@ -243,6 +243,7 @@ hr {
 
 #leftForm {
     display: flex;
+    gap: 1.25rem;
     justify-content: flex-start;
     width: 50%;
     margin: 0.3125rem 0rem 0rem 1.875rem;
@@ -331,7 +332,7 @@ hr {
     align-items: center;
     display: flex;
     padding: 1.875rem 3.75rem;
-    gap: 3.125rem;
+    gap: 1.25rem;
 }
 
 .inputSearch {
@@ -829,13 +830,14 @@ input[type=number] {
 
     .topOptionsBar {
         display: flex;
-        gap: 0;
+        gap: 0.625rem;
         padding: 1.875rem 1.25rem;
     }
 
     #leftForm {
         display: flex;
         justify-content: flex-start;
+        gap: 10px;
         width: 50%;
         margin: 0.3125rem 0rem 0rem 0rem;
     }
@@ -846,8 +848,8 @@ input[type=number] {
     }
 
     #right {
-        gap: 0.9375rem;
-        margin: 0.5rem 0.625rem 0rem 15px;
+        gap: 0.3125rem;
+        margin: 0.5rem 0.625rem 0rem 0.3125rem;
     }
 
     .inputSeach {

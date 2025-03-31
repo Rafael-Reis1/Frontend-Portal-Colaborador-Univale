@@ -504,7 +504,6 @@ window.onload = function() {
         const btnADD = document.getElementById('btnADD');
         const cancelForm = document.getElementById('cancelForm');
         const sendForm = document.getElementById('sendForm');
-        const returnToProcessCards = document.getElementById('returnToProcessCards');
         const cursoSetorForm = document.getElementById('cursoSetor');
         const somenteSalvar =  document.getElementById('somenteSalvar');
         const fileUploadArea = document.getElementById('file-upload');
@@ -560,7 +559,6 @@ window.onload = function() {
                     cursoSetorForm.disabled = true;
                     obs.disabled = true;
                     relato.disabled = true;
-                    returnToProcessCards.style.display = 'block'
                     fileUploadArea.style.display = 'none';
                     aceitoAlterarPonto.disabled = true;
                     loadAnexos(5, false);
