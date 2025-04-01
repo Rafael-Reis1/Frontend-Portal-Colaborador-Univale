@@ -136,7 +136,7 @@ tr:selected {
     top: 0rem;
     left: 0px;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 2;
@@ -203,7 +203,7 @@ tr:selected {
     top: 0rem;
     left: 0rem;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 2;
@@ -241,7 +241,7 @@ tr:selected {
     top: 0rem;
     left: 0rem;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 2;
@@ -371,7 +371,7 @@ tr:selected {
     left: 0;
     background: var(--background-color);
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     z-index: -1;
 }
 

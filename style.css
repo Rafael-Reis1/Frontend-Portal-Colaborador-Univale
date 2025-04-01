@@ -62,7 +62,7 @@ hr {
 #containerLogin {
     display: flex;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
 }
 
@@ -323,7 +323,7 @@ hr {
 .mainContainer {
     background-color: var(--background-color);
     color: var(--font-color);
-    height: 100vh;
+    height: 100dvh;
     box-sizing: border-box;
     padding-top: 3.125rem;
 }
@@ -451,7 +451,7 @@ hr {
     top: 0rem;
     left: 0px;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 2;
