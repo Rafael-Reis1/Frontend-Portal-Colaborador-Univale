@@ -479,54 +479,63 @@ function validateForm(linhas, nomeResponsavel, departamentoAcessoria, nomeGestor
         i++;
     }
     if (i < 2) {
-        alert('Deve preencher ao menos uma despesa!');
+        openToast('Deve preencher ao menos uma despesa!', 'warning', 5000);
+        //alert('Deve preencher ao menos uma despesa!');
         btnADD.focus();
         return false;
     }
     if(nomeResponsavel.value == '') {
-        alert('Deve preencher seu nome!');
+        openToast('Deve preencher seu nome!', 'warning', 5000);
+        //alert('Deve preencher seu nome!');
         nomeResponsavel.style.background = 'red';
         nomeResponsavel.focus();
         return false;
     }
     if(departamentoAcessoria.value == '') {
-        alert('Deve preencher seu departamento/assessoria!');
+        openToast('Deve preencher seu departamento/assessoria!', 'warning', 5000);
+        //alert('Deve preencher seu departamento/assessoria!');
         departamentoAcessoria.style.background = 'red';
         departamentoAcessoria.focus();
         return false;
     }
     if(nomeGestor.value == '') {
-        alert('Deve preencher o nome do gestor!');
+        openToast('Deve preencher o nome do gestor!', 'warning', 5000);
+        //alert('Deve preencher o nome do gestor!');
         nomeGestor.style.background = 'red';
         nomeGestor.focus();
         return false;
     }
     if(dataInicio.value == '') {
-        alert('Deve selecionar a data de início!');
+        openToast('Deve selecionar a data de início!', 'warning', 5000);
+        //alert('Deve selecionar a data de início!');
         dataInicio.style.background = 'red';
         dataInicio.focus();
         return false;
     }
     if(dataFim.value == '') {
-        alert('Deve selecionar a data de fim!');
+        openToast('Deve selecionar a data de fim!', 'warning', 5000);
+        //alert('Deve selecionar a data de fim!');
         dataFim.style.background = 'red';
         dataFim.focus();
         return false;
     }
     if(limiteCartao.value == 'R$ ') {
-        alert('Deve preencher o limite do cartão!');
+        openToast('Deve preencher o limite do cartão!', 'warning', 5000);
+        //alert('Deve preencher o limite do cartão!');
         limiteCartao.style.background = 'red';
         limiteCartao.focus();
         return false;
     }
     if(valorUtilizado.value == 'R$ ') {
-        alert('Deve preencher o valor utilizado!');
+        openToast('Deve preencher o valor utilizado!', 'warning', 5000);
+        //alert('Deve preencher o valor utilizado!');
         valorUtilizado.style.background = 'red';
         valorUtilizado.focus();
         return false;
     }
     if (parseFloat(limiteCartao.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.')) < parseFloat(valorUtilizado.value.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.'))) {
-        alert('O valor utilizado deve ser menor que o limite do cartão!');
+        openToast('O valor utilizado deve ser menor que o limite do cartão!', 'warning', 5000);
+        //alert('O valor utilizado deve ser menor que o limite do cartão!');
         valorUtilizado.style.background = 'red';
         valorUtilizado.focus();
         return false;
@@ -696,6 +705,7 @@ function authentication() {
     })
     .catch(error =>{
         if(error.status != 401) {
+            //openToast(error.message, 'erro', 5000);
             alert(error.message);
         }
         

@@ -481,3 +481,55 @@ function adicionarTextoLoading(text, tempo) {
         }, tempo);
     }
 }
+
+function openToast(message, type, time) {
+    const toast = document.getElementById('toast');
+    const toastImg = document.getElementById('toastImg');
+    const toastIcon = document.getElementById('toastIcon');
+    const toastMessage = document.getElementById('toastMessage');
+
+    toast.style.display = 'flex';
+
+    toast.onclick = function() {
+        hideToastClick()
+    }
+
+    if(type == 'warning') {
+        toastImg.src = "../../assets/warningIcon.png";
+        toastIcon.style.backgroundColor = '#e3b420';
+    }
+    else if(type == 'erro') {
+        toastImg.src = "../../assets/errorIcon.png";
+        toastIcon.style.backgroundColor = '#cc3d3d';
+    }
+
+    setTimeout(function() {
+        toastMessage.innerHTML = message;
+        toast.style.opacity = 1;
+        hideToast(time);
+    }, 50);
+
+    function hideToast(time) {
+        setTimeout(function() {
+            toast.style.opacity = 0;
+            setDisplayNone()
+        }, time);
+
+        function setDisplayNone() {
+            setTimeout(function() {
+                toast.style.display = 'none';
+            }, 200);
+        }
+    }
+
+    function hideToastClick() {
+        toast.style.opacity = 0;
+        setDisplayNone()
+
+        function setDisplayNone() {
+            setTimeout(function() {
+                toast.style.display = 'none';
+            }, 200);
+        }
+    }
+}
