@@ -466,7 +466,7 @@ async function sendFormApi(tabela, somenteSalvar, cancel) {
         }
         else if (cardId != null) {
             processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token,
-                cpfGestorApi, 8, 'Prestação de Contas de Pequenas Despesas', 'RH', targetState, PrestacaoContas);
+                cpfGestorApi, 8, 'Prestação de Contas de Pequenas Despesas', 'RH', targetState, PrestacaoContas, cancel);
         }
     }
 }

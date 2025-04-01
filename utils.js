@@ -66,7 +66,7 @@ function processStart(formIds, formData, textAreaData, somenteSalvar, token,
 
 //Atualiza um formulário existente no fluig
 function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, token, 
-    cpfGestorApi, formFolderId, processId, processSector, targetState, nextPage) {
+    cpfGestorApi, formFolderId, processId, processSector, targetState, nextPage, cancel) {
     const loadingFullScreen = document.getElementById('loadingFullScreen');
 
     adicionarTextoLoading('Salvando formulário!', 0);
@@ -95,11 +95,11 @@ function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, t
         else {
             if(hasAttachments) {
                 enviarAttachment(cardId, formIds, formData, textAreaData, processId,
-                    processSector, targetState, cpfGestorApi, nextPage);
+                    processSector, targetState, cpfGestorApi, nextPage, cancel);
             }
             else {
                 moveRequest(cardId, formIds, formData, textAreaData, 
-                    targetState, cpfGestorApi, nextPage);
+                    targetState, cpfGestorApi, nextPage, cancel);
             }
         }
     })
@@ -112,7 +112,7 @@ function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, t
 
 //Envia os arquivos de anexo para o Fluig
 function enviarAttachment(processInstanceId, formIds, formDataJson, 
-    textAreaData, processId, processSector, targetState, cpfGestorApi, nextPage) {
+    textAreaData, processId, processSector, targetState, cpfGestorApi, nextPage, cancel) {
     const formData = new FormData();
     const token = localStorage.getItem('token');
 
@@ -148,7 +148,7 @@ function enviarAttachment(processInstanceId, formIds, formDataJson,
         formIds.push('attachmentId');
         formDataJson.push(response.data);
         moveRequest(processInstanceId, formIds, formDataJson, textAreaData, 
-            targetState, cpfGestorApi, nextPage);
+            targetState, cpfGestorApi, nextPage, cancel);
     })
     .catch(error => {
         console.error('Erro ao enviar arquivos', error);
@@ -157,12 +157,18 @@ function enviarAttachment(processInstanceId, formIds, formDataJson,
 
 //Move um formulário existente para a proxima atividade
 function moveRequest(processInstanceId, formIds, formData, textAreaData, 
-    targetState, cpfGestorApi, nextPage) {
+    targetState, cpfGestorApi, nextPage, cancel) {
     const token = localStorage.getItem('token');
     const cardId = localStorage.getItem('cardId');
     const loadingFullScreen = document.getElementById('loadingFullScreen');
 
-    adicionarTextoLoading('Enviando formulário para aprovação!', 500);
+    if(cancel) {
+        adicionarTextoLoading('Cancelando solicitação!', 500);
+    }
+    else {
+        adicionarTextoLoading('Enviando formulário para aprovação!', 500);
+    }
+    
 
     loadingFullScreen.style.display = 'flex';
     document.documentElement.style.overflow = 'hidden';
