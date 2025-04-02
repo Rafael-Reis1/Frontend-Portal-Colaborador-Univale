@@ -98,21 +98,25 @@ function login(cpf, senha){
                 loading.style.display = 'none';
                 if (error.response) {
                     if (error.response.status === 401) {
-                        alert('CPF ou senha inválidos. Verifique e tente novamente.');
+                        openToast('CPF ou senha inválidos. Verifique e tente novamente.', 'erro', 5000);
+                        //alert('CPF ou senha inválidos. Verifique e tente novamente.');
                     }
                     else {
-                        alert('Sentimos muito! Algo não saiu como esperado. Nossa equipe de suporte está pronta para ajudar — entre em contato para resolvermos isso juntos.');
+                        openToast('Sentimos muito! Algo não saiu como esperado. Nossa equipe de suporte está pronta para ajudar — entre em contato para resolvermos isso juntos.', 'erro', 5000000);
+                        //alert('Sentimos muito! Algo não saiu como esperado. Nossa equipe de suporte está pronta para ajudar — entre em contato para resolvermos isso juntos.');
                     }
                 }
             });
         }
         else {
-            alert("Campo senha é obrigatório");
+            openToast('Campo senha é obrigatório', 'warning', 5000);
+            //alert("Campo senha é obrigatório");
             senha.focus();
         }
     }
     else {
-        alert("Campo CPF é obrigatório");
+        openToast('Campo CPF é obrigatório', 'warning', 5000);
+        //alert("Campo CPF é obrigatório");
         cpf.focus();
     }
 }
@@ -188,10 +192,16 @@ function authentication() {
     })
     .catch(error =>{
         if(error.status != 401) {
-            alert(error.message);
+            openToast(error.message, "erro", 5000000, (result) => {
+                if (result) {
+                    document.location.replace(loginPage);
+                }
+            });
+            //alert(error.message);
         }
-
-        document.location.replace(loginPage);
+        else {
+            document.location.replace(loginPage);
+        }
     });
 }
 
