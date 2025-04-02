@@ -33,7 +33,8 @@ function processStart(formIds, formData, textAreaData, somenteSalvar, token,
         if(response.data[0] == "ERROR") {
             loadingFullScreen.style.display = 'none'
             document.body.style.overflow = 'auto';
-            alert(response.data[1]);
+            openToast(response.data[1], 'erro', 5000000);
+            //alert(response.data[1]);
         }
         else {
             if(somenteSalvar) {
@@ -58,7 +59,8 @@ function processStart(formIds, formData, textAreaData, somenteSalvar, token,
         }
     })
     .catch(error =>{
-        alert(JSON.stringify(error.response.data, null, 2));
+        openToast(JSON.stringify(error.response.data, null, 2), 'erro', 5000000);
+        //alert(JSON.stringify(error.response.data, null, 2));
         document.body.style.overflow = 'auto';
         loadingFullScreen.style.display = 'none'
     });
@@ -106,7 +108,8 @@ function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, t
     .catch(error =>{
         loadingFullScreen.style.display = 'none';
         document.body.style.overflow = 'auto';
-        alert(error.response.data.message.replace(/[{}]/g, ''));
+        openToast(error.response.data.message.replace(/[{}]/g, ''), 'erro', 5000000);
+        //alert(error.response.data.message.replace(/[{}]/g, ''));
     });
 }
 
@@ -151,6 +154,7 @@ function enviarAttachment(processInstanceId, formIds, formDataJson,
             targetState, cpfGestorApi, nextPage, cancel);
     })
     .catch(error => {
+        openToast('Erro ao enviar arquivos', 'erro', 5000000);
         console.error('Erro ao enviar arquivos', error);
     });
 }
@@ -203,7 +207,8 @@ function moveRequest(processInstanceId, formIds, formData, textAreaData,
         //alert(JSON.stringify(error.response.data, null, 2));
         loadingFullScreen.style.display = 'none';
         document.body.style.overflow = 'auto';
-        alert(error.response.data.message.replace(/[{}]/g, ''));
+        openToast(error.response.data.message.replace(/[{}]/g, ''), 'erro', 5000000);
+        //alert(error.response.data.message.replace(/[{}]/g, ''));
     });
 }
 
@@ -279,7 +284,8 @@ function loadAnexos(targetState, deleteIcon) {
         } 
     })
     .catch(error => {
-        alert(error.message);
+        openToast(error.message, 'erro', 5000000);
+        //alert(error.message);
     });
 }
 
@@ -291,7 +297,8 @@ function adicionarAttachments(fileInput) {
     // Função para adicionar arquivos à lista
     function addFileToList(file) {
         if (selectedFiles.has(file.name)) {
-            alert('Este arquivo já foi selecionado!');
+            openToast('Este arquivo já foi selecionado!', 'erro', 5000000);
+            //alert('Este arquivo já foi selecionado!');
             return;
         }
 
@@ -465,7 +472,8 @@ function deleteAttachment(processInstanceId, targetState, documentId, documentVe
     .catch(error =>{
         loadingFullScreen.style.display = 'none';
         document.body.style.overflow = 'auto';
-        alert(error.message);
+        openToast(error.message, 'erro', 5000000);
+        //alert(error.message);
     });
 }
 
@@ -482,7 +490,7 @@ function adicionarTextoLoading(text, tempo) {
     }
 }
 
-function openToast(message, type, time) {
+function openToast(message, type, time, callback) {
     const toast = document.getElementById('toast');
     const toastImg = document.getElementById('toastImg');
     const toastIcon = document.getElementById('toastIcon');
@@ -491,14 +499,13 @@ function openToast(message, type, time) {
     toast.style.display = 'flex';
 
     toast.onclick = function() {
-        hideToastClick()
+        hideToastClick();
     }
 
-    if(type == 'warning') {
+    if (type === 'warning') {
         toastImg.src = "../../assets/warningIcon.png";
         toastIcon.style.backgroundColor = '#e3b420';
-    }
-    else if(type == 'erro') {
+    } else if (type === 'erro') {
         toastImg.src = "../../assets/errorIcon.png";
         toastIcon.style.backgroundColor = '#cc3d3d';
     }
@@ -512,24 +519,22 @@ function openToast(message, type, time) {
     function hideToast(time) {
         setTimeout(function() {
             toast.style.opacity = 0;
-            setDisplayNone()
+            setDisplayNone();
         }, time);
+    }
 
-        function setDisplayNone() {
-            setTimeout(function() {
-                toast.style.display = 'none';
-            }, 200);
-        }
+    function setDisplayNone() {
+        setTimeout(function() {
+            toast.style.display = 'none';
+            if (callback) {
+                callback(true); // Chama o callback com true quando o toast é ocultado.
+            }
+        }, 500);
     }
 
     function hideToastClick() {
         toast.style.opacity = 0;
-        setDisplayNone()
-
-        function setDisplayNone() {
-            setTimeout(function() {
-                toast.style.display = 'none';
-            }, 200);
-        }
+        setDisplayNone();
     }
 }
+

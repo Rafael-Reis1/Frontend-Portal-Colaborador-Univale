@@ -705,10 +705,15 @@ function authentication() {
     })
     .catch(error =>{
         if(error.status != 401) {
-            //openToast(error.message, 'erro', 5000);
-            alert(error.message);
+            openToast(error.message, "erro", 5000000, (result) => {
+                if (result) {
+                    document.location.replace(loginPage);
+                }
+            });
+            //alert(error.message);
         }
-        
-        document.location.replace(loginPage);
+        else {
+            document.location.replace(loginPage);
+        }
     });
 }

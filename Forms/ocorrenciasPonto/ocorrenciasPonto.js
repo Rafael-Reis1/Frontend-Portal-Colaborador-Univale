@@ -439,36 +439,42 @@ window.onload = function() {
             i++;
         }
         if (i < 2) {
-            alert('Deve preencher ao menos uma ocorrência!');
+            openToast('Deve preencher ao menos uma ocorrência!', 'warning', 5000);
+            //alert('Deve preencher ao menos uma ocorrência!');
             btnADD.focus();
             return false;
         }
         if(nome.value == '') {
-            alert('Deve preencher seu nome!');
+            openToast('Deve preencher seu nome!', 'warning', 5000);
+            //alert('Deve preencher seu nome!');
             nome.style.background = 'red';
             nome.focus();
             return false;
         }
         if(funcao.value == '') {
-            alert('Deve preencher sua função!');
+            openToast('Deve preencher sua função!', 'warning', 5000);
+            //alert('Deve preencher sua função!');
             funcao.style.background = 'red';
             funcao.focus();
             return false;
         }
         if(cursoSetor.value == '') {
-            alert('Deve preencher o seu curso/setor');
+            openToast('Deve preencher o seu curso/setor', 'warning', 5000);
+           //alert('Deve preencher o seu curso/setor');
             cursoSetor.style.background = 'red';
             cursoSetor.focus();
             return false;
         }
         if(obs.value == '') {
-            alert('Deve descrever o motivo!');
+            openToast('Deve descrever o motivo!', 'warning', 5000);
+            //alert('Deve descrever o motivo!');
             obs.style.background = 'red';
             obs.focus();
             return false;
         }
         if(!aceitoAlterarPonto.checked) {
-            alert('Deve aceitar a alteração de ponto');
+            openToast('Deve aceitar a alteração de ponto', 'warning', 5000);
+            //alert('Deve aceitar a alteração de ponto');
             aceitoAlterarPonto.focus();
             return false;
         }
@@ -480,7 +486,9 @@ window.onload = function() {
             }
         }
         if (!radioSelecionado) {
-            alert('Deve selecionar o tipo de ocorrência!');
+            openToast('Deve selecionar o tipo de ocorrência!', 'warning', 5000);
+            return false;
+            //alert('Deve selecionar o tipo de ocorrência!');
         }
 
         return true;
@@ -587,10 +595,16 @@ window.onload = function() {
         })
         .catch(error =>{
             if(error.status != 401) {
-                alert(error.message);
+                openToast(error.message, "erro", 5000000, (result) => {
+                    if (result) {
+                        document.location.replace(loginPage);
+                    }
+                });
+                //alert(error.message);
             }
-            
-            document.location.replace(loginPage);
+            else {
+                document.location.replace(loginPage);
+            }
         });
     }
 
