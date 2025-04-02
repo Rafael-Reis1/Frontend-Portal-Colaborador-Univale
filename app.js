@@ -166,7 +166,7 @@ function authentication() {
                     }
                 });
                 
-                filtraCards(tipoAtividade[0], Estagiario, selectCursoSetor.value, response.data.nome, response.data.isGestor);
+                filtraCards(tipoAtividade[0], Estagiario, selectCursoSetor.value, response.data.nome, response.data.fluigUser);
             }
             if(cursoSetor.length > 1 && selectCursoSetorSessionStorage === null) {
                 if(sessionStorage.getItem('selectCursoSetor')) {
@@ -180,12 +180,12 @@ function authentication() {
                     selectCursoSetor.value = sessionStorage.getItem('selectCursoSetor');  
                 }
                 setorCurso.innerText = 'Setor/Curso: ' + sessionStorage.getItem('selectCursoSetor'); 
-                filtraCards(tipoAtividadelocalStorage, Estagiario, sessionStorage.getItem('selectCursoSetor'), response.data.nome, response.data.isGestor);
+                filtraCards(tipoAtividadelocalStorage, Estagiario, sessionStorage.getItem('selectCursoSetor'), response.data.nome, response.data.fluigUser);
             }
         }
         else {
             setorCurso.style.display = 'none';
-            filtraCards(tipoAtividadelocalStorage, Estagiario, sessionStorage.getItem('selectCursoSetor'), response.data.nome, response.data.isGestor);
+            filtraCards(tipoAtividadelocalStorage, Estagiario, sessionStorage.getItem('selectCursoSetor'), response.data.nome, response.data.fluigUser);
         }
 
         defineTamanhoDivNomeUser(containerUser, nomeUser);
@@ -205,7 +205,7 @@ function authentication() {
     });
 }
 
-function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, isGestor) {
+function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, fluigUser) {
     const ocorrenciasPonto = document.getElementById('ocorrenciasPonto');
     const pequenasDespesas = document.getElementById('pequenasDespesas');
     const ged =  document.getElementById('ged');
@@ -230,12 +230,7 @@ function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, isGestor) {
         }
     }
 
-    ged.style.display = 'flex';
-    minhasTarefas.style.display = 'flex';
-    aberturaVagasPTA.style.display = 'flex';
-    pagamentoReuniaoNDE.style.display = 'flex';
-
-    if(isGestor) {
+    if(fluigUser) {
         ged.style.display = 'flex';
         minhasTarefas.style.display = 'flex';
         aberturaVagasPTA.style.display = 'flex';
