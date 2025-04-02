@@ -224,7 +224,6 @@ function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, fluigUser) {
                 pequenasDespesas.style.display = 'flex';
             }
         }
-    
         else if(tipoAtividade == 'PROFESSOR') {
             ocorrenciasPonto.style.display = 'flex';
         }
@@ -254,19 +253,19 @@ function searchHome() {
 
     // Adiciona o evento de input ao campo de pesquisa
     searchInput.addEventListener('input', () => {
-      const filter = searchInput.value.toLowerCase(); // Transforma o texto digitado em minúsculas
+        const filter = searchInput.value.toLowerCase(); // Transforma o texto digitado em minúsculas
 
-      // Itera sobre todos os cards
-      cards.forEach(card => {
+        // Itera sobre todos os cards
+        cards.forEach(card => {
         const text = card.textContent.toLowerCase(); // Pega o texto do card em minúsculas
         if (text.includes(filter)) {
-          card.style.display = ''; // Mostra o card
+            card.style.display = ''; // Mostra o card
         } else {
-          card.style.display = 'none'; // Oculta o card
+            card.style.display = 'none'; // Oculta o card
         }
-      });
+        });
 
-      filtroCards.value = 'todos';
+        filtroCards.value = 'todos';
     });
 
     selectFiltraCard(filtroCards);
