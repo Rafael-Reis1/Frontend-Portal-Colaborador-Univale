@@ -230,6 +230,11 @@ function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, isGestor) {
         }
     }
 
+    ged.style.display = 'flex';
+    minhasTarefas.style.display = 'flex';
+    aberturaVagasPTA.style.display = 'flex';
+    pagamentoReuniaoNDE.style.display = 'flex';
+
     if(isGestor) {
         ged.style.display = 'flex';
         minhasTarefas.style.display = 'flex';
