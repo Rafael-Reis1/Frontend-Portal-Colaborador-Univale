@@ -19,7 +19,7 @@ window.onload = function() {
         
         loadCards();
 
-        search();
+        searchForm();
         
         newForm.onclick = function() {
             localStorage.removeItem('cardId');

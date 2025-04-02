@@ -50,7 +50,7 @@ window.onload = function() {
 
         header();
 
-        search();
+        searchHome();
 
         ocorrenciasPonto.onclick = function() {
             document.location.href = ocorrenciasPontoPage;
@@ -247,7 +247,7 @@ function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, isGestor) {
     }
 }
 
-function search() {
+function searchHome() {
     const searchInput = document.getElementById('searchForms');
     const cards = document.querySelectorAll('.formCard');
     const filtroCards = document.getElementById('filtroCards');

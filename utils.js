@@ -245,7 +245,7 @@ function populateCards(dados, bodyCardsName, pageToGo) {
     bodyCard.appendChild(fragment);
 }
 
-function search() {
+function searchForm() {
         
     const searchInput = document.getElementById('searchForms');
 
