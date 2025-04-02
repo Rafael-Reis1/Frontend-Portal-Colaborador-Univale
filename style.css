@@ -978,4 +978,15 @@ input[type=number] {
     .mainSearch {
         gap: 0.625rem;
     }
+
+    #toast {
+        height: fit-content;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+    }
+
+    #toastIcon {
+        height: 3.75rem;
+        border-radius: 8px;
+    }
 }
