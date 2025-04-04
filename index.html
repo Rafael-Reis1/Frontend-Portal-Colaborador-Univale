@@ -10,6 +10,7 @@
     <script src="header.js"></script>
     <script src="utils.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="assets/favicon-logo-FPF-White.svg" type="image/svg+xml">
     <title>Forms home</title>
@@ -25,11 +26,12 @@
             </div>
             <div id="right">
                 <div id="notification">
-                    <div id="notificationIcon" class="has-notification">
+                    <div id="notificationIcon">
                         <span class="notification-icon" alt="Notification icon"></span>
                     </div>
                     <div class="notificationList">
-                        <div class="notificationContainer">
+                        <div class="notificationContainer" id="noNotification">
+                            <p>Nenhuma notificação pendente!</p>
                         </div>
                     </div>
                 </div>

@@ -560,6 +560,11 @@ function showNextToast() {
 function initNotfication() {
     const notification = document.getElementById('notification');
     const notificationList = document.querySelector('.notificationList');
+    const token = localStorage.getItem('token');
+    const notificationIcon =  document.getElementById('notificationIcon');
+    const notificationIconElement = document.querySelector('.notification-icon');
+    notificationIconElement.style.backgroundImage = "url('assets/notifications_16dp.png')";
+    //baseURL
     
     document.onclick = function(event) {
         const isClickInsideList = notificationList.contains(event.target);
@@ -567,10 +572,114 @@ function initNotfication() {
     
         if (!isClickInsideList && !isClickInsideNotification && notificationList.classList.contains('notificationOpen')) {
             notificationList.classList.remove('notificationOpen');
+            notificationIconElement.style.backgroundImage = "url('assets/notifications_16dp.png')";
         }
         if(!isClickInsideList && isClickInsideNotification) {
             notificationList.classList.toggle('notificationOpen');
+
+            if(document.querySelector('.notificationOpen')) {
+                notificationIconElement.style.backgroundImage = "url('assets/notifications_16dp_FILL.png')";
+            }
+            else {
+                notificationIconElement.style.backgroundImage = "url('assets/notifications_16dp.png')";
+            }
         }
     }
+
+    const socket = io('http://127.0.0.1:3000', {
+        auth: {
+            authorization: `Bearer ${token}`
+        }
+    });
+    socket.emit('conectUser', {});
+
+    socket.emit('findAllNotifications', {}, (response) => {
+        response.forEach(notification => {
+            notificationList.scrollTo({
+                top: -notificationList.scrollHeight
+            });
+            if(!notification.read) {
+                notificationIcon.classList.add('has-notification');
+                notificationIconElement.title = "Você tem novas notificações!";
+            }
+            else {
+                notificationIconElement.title = "Nenhuma notificação pendente!";
+            }
+            populateCardNotification(notification.nameSender, notification.cpfReceiver,
+                notification.id, notification.instanceId, notification.processId,
+                notification.read, socket, notificationIcon, notificationIconElement
+            );
+        });
+    });
+
+    socket.on('new-notification', (notification) => {
+        populateCardNotification(notification.nameSender, notification.cpfReceiver,
+            notification.id, notification.instanceId, notification.processId,
+            notification.read, socket, notificationIcon
+        );
+        notificationList.scrollTo({
+            top: -notificationList.scrollHeight,
+            behavior: 'smooth' // Rolar suavemente (opcional)
+        });
+        notificationIcon.classList.add('has-notification');
+        notificationIconElement.title = "Você tem novas notificações!";
+    });
 }
 
+function populateCardNotification(nameSender, cpfReceiver, id, instanceId, processId,
+    read, socket, notificationIcon, notificationIconElement) {
+    const bodyCard = document.querySelector('.notificationList');
+    const fragment = document.createDocumentFragment();
+    const noNotification = document.getElementById('noNotification');
+    noNotification.style.display = 'none';
+
+    const card = document.createElement('div');
+    card.classList.add('notificationContainer');
+    card.dataset.id = instanceId;
+
+    card.innerHTML = `
+        <p><strong>${nameSender}</strong> encaminhou a <strong>solicitação ${instanceId}</strong> para correção em <strong>${processId}</strong></p>
+    `;
+
+    card.addEventListener('click', () => {
+        /*localStorage.setItem('cardId', card.dataset.id);
+        if(bodyCardsName == 'bodyCardsCorreção' || bodyCardsName == 'bodyCardsRascunho') {
+            localStorage.setItem('correcao', 'true');
+            localStorage.setItem('adicionar', 'false');
+        }
+        else {
+            localStorage.setItem('correcao', 'false');
+            localStorage.setItem('adicionar', 'false');
+        }
+        document.location.href = pageToGo;*/
+
+        socket.emit('readNotification', {
+                read: true,
+                cpfReceiver: cpfReceiver,
+                id: id
+            }, (response) => {
+                card.classList.remove('has-notification');
+                const hasNotification = document.querySelectorAll('.has-notification');
+                if(hasNotification.length <= 1) {
+                    notificationIcon.classList.remove('has-notification');
+                    notificationIconElement.title = "Nenhuma notificação pendente!";
+                }
+            }
+        );
+    });
+
+    if (read) {
+        card.classList.remove('has-notification');
+        
+    } else {
+        card.classList.add('has-notification');
+    }
+
+    fragment.appendChild(card);
+
+    if (bodyCard) {
+        bodyCard.appendChild(fragment);
+    } else {
+        console.error("Elemento com a classe 'notificationList' não encontrado.");
+    }
+}
