@@ -252,7 +252,7 @@ hr {
 
 #right {
     display: flex;
-    gap: 3.75rem;
+    gap: 20px;
     justify-content: flex-end;
     align-items: flex-start;
     width: 100%;
@@ -839,6 +839,82 @@ input[type=number] {
 
 #closeToast:hover {
     color: #cccccc;
+}
+
+#notification {
+    position: relative;
+}
+
+#notificationIcon {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2.25rem;
+    cursor: pointer;
+}
+
+.notification-icon {
+    display: block;
+    width: 25px;
+    height: 25px;
+    background-image: url('assets/notifications_16dp.png');
+    background-size: contain;
+}
+
+#notificationIcon:hover .notification-icon {
+    background-image: url('assets/notifications_16dp_FILL.png');
+}
+
+#notificationIcon::after {
+    content: '';
+    display: none;
+    position: absolute;
+    top: 0.625rem;
+    right: 0.1875rem;
+    width: 0.4375rem;
+    height: 0.4375rem;
+    background-color: red;
+    border-radius: 50%;
+    border: 1px solid white;
+}
+
+#notificationIcon.has-notification::after {
+    display: block;
+}
+
+.notificationList {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 2.625rem;
+    left: -130px;
+    height: 0;
+    width: 18.75rem;
+    padding-bottom: 10px;
+    opacity: 0;
+    background-color: var(--cards-situation-color);
+    overflow-y: auto;
+    border-radius: 0 0 8px 8px;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    transition: all 500ms cubic-bezier(.12, .12, 0, 1);
+}
+
+.notificationOpen {
+    height: 31.25rem;
+    opacity: 1;
+}
+
+.notificationContainer {
+    height: 100px;
+    min-height: 100px;
+    width: 95%;
+    margin-top: 0.625rem;
+    border-radius: 8px;
+    background-color: var(--background-color);
 }
 
 @media (max-width: 762px) {

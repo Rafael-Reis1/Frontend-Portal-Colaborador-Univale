@@ -557,5 +557,20 @@ function showNextToast() {
     });
 }
 
-
+function initNotfication() {
+    const notification = document.getElementById('notification');
+    const notificationList = document.querySelector('.notificationList');
+    
+    document.onclick = function(event) {
+        const isClickInsideList = notificationList.contains(event.target);
+        const isClickInsideNotification = notification.contains(event.target);
+    
+        if (!isClickInsideList && !isClickInsideNotification && notificationList.classList.contains('notificationOpen')) {
+            notificationList.classList.remove('notificationOpen');
+        }
+        if(!isClickInsideList && isClickInsideNotification) {
+            notificationList.classList.toggle('notificationOpen');
+        }
+    }
+}
 

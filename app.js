@@ -52,6 +52,8 @@ window.onload = function() {
 
         searchHome();
 
+        initNotfication();
+
         ocorrenciasPonto.onclick = function() {
             document.location.href = ocorrenciasPontoPage;
         }
