@@ -17,6 +17,8 @@ window.onload = function() {
 
     header();
 
+    initNotfication(false);
+
     if (document.title == 'Form process') {
         const newForm = document.getElementById('newForm');
         

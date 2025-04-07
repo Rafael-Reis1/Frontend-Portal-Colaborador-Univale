@@ -570,13 +570,26 @@ function showNextToast() {
     });
 }
 
-function initNotfication() {
+function initNotfication(index) {
     const notification = document.getElementById('notification');
     const notificationList = document.querySelector('.notificationList');
     const token = localStorage.getItem('token');
     const notificationIcon =  document.getElementById('notificationIcon');
     const notificationIconElement = document.querySelector('.notification-icon');
-    notificationIconElement.style.backgroundImage = "url('assets/notifications_16dp.png')";
+    let backgroundImage;
+    let backgroundImageFill;
+
+    if(index) {
+        backgroundImage = "url('assets/notifications_16dp.png')";
+        backgroundImageFill = "url('assets/notifications_16dp_FILL.png')";
+    }
+    else {
+        backgroundImage = "url('../../assets/notifications_16dp.png')";
+        backgroundImageFill = "url('../../assets/notifications_16dp_FILL.png')";
+    }
+
+
+    notificationIconElement.style.backgroundImage = backgroundImage;
     //baseURL
     
     document.onclick = function(event) {
@@ -585,16 +598,16 @@ function initNotfication() {
     
         if (!isClickInsideList && !isClickInsideNotification && notificationList.classList.contains('notificationOpen')) {
             notificationList.classList.remove('notificationOpen');
-            notificationIconElement.style.backgroundImage = "url('assets/notifications_16dp.png')";
+            notificationIconElement.style.backgroundImage = backgroundImage;
         }
         if(!isClickInsideList && isClickInsideNotification) {
             notificationList.classList.toggle('notificationOpen');
 
             if(document.querySelector('.notificationOpen')) {
-                notificationIconElement.style.backgroundImage = "url('assets/notifications_16dp_FILL.png')";
+                notificationIconElement.style.backgroundImage = backgroundImageFill;
             }
             else {
-                notificationIconElement.style.backgroundImage = "url('assets/notifications_16dp.png')";
+                notificationIconElement.style.backgroundImage = backgroundImage;
             }
         }
     }
@@ -620,7 +633,8 @@ function initNotfication() {
             }
             populateCardNotification(notification.nameSender, notification.cpfReceiver,
                 notification.id, notification.instanceId, notification.processId,
-                notification.read, notification.url, socket, notificationIcon, notificationIconElement, notification.acitivityName
+                notification.read, notification.url, socket, notificationIcon, notificationIconElement,
+                notification.acitivityName
             );
         });
     });
@@ -628,7 +642,8 @@ function initNotfication() {
     socket.on('new-notification', (notification) => {
         populateCardNotification(notification.nameSender, notification.cpfReceiver,
             notification.id, notification.instanceId, notification.processId,
-            notification.read, notification.url, socket, notificationIcon, notificationIconElement, notification.acitivityName
+            notification.read, notification.url, socket, notificationIcon, notificationIconElement,
+            notification.acitivityName
         );
         notificationList.scrollTo({
             top: -notificationList.scrollHeight,
