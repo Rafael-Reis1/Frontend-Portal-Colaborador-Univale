@@ -6,6 +6,7 @@ const formPrestacaoContas = 'formPrestacaoDeContasDePequenasDespesas.html';
 var tipoAtividadeApi = sessionStorage.getItem('tipoAtividade');
 var cpfGestorApi = sessionStorage.getItem('cpfGestor');
 var nomeGestorApi = sessionStorage.getItem('nomeGestor');
+var cpfUser = '';
 let disabled = '';
 let style = '';
 
@@ -405,6 +406,8 @@ async function sendFormApi(tabela, somenteSalvar, cancel) {
         formData.push(limiteCartao.value);
         formIds.push('valorUtilizado');
         formData.push(valorUtilizado.value);
+        formIds.push('cpfSolicitante');
+        formData.push(cpfUser);
         let data = {}
         
         let col = -1;
@@ -650,6 +653,7 @@ function authentication() {
         const tipoFuncionario = response.data.tipoFuncionario;
         const cpfGestor = response.data.cpfGestor;
         const nomeGestor = response.data.nomeGestor;
+        cpfUser = response.data.cpf;
        
         let i = 0;
          

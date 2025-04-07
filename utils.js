@@ -340,42 +340,46 @@ function updateUploadAreaColor() {
     const root = document.documentElement;
 
     if(document.body.classList.contains("dark-mode")) {
-        fileUploadArea.style.backgroundColor = '#000629';
+        if(fileUploadArea) {
+            fileUploadArea.style.backgroundColor = '#000629';
         
-        // Evento de arraste para dentro da área de upload
-        fileUploadArea.addEventListener('dragover', function (event) {
-            event.preventDefault(); // Impede o comportamento padrão
-            fileUploadArea.style.backgroundColor = '#001175'; // Indica que o arquivo pode ser solto
-        });
-
-        fileUploadArea.addEventListener('dragleave', function () {
-            fileUploadArea.style.backgroundColor = '#000629'; // Volta ao estilo original
-        });
-
-        // Quando o arquivo é solto
-        fileUploadArea.addEventListener('drop', function (event) {
-            event.preventDefault(); // Impede o comportamento padrão
-            fileUploadArea.style.backgroundColor = '#000629'; // Volta ao estilo original
-        });
+            // Evento de arraste para dentro da área de upload
+            fileUploadArea.addEventListener('dragover', function (event) {
+                event.preventDefault(); // Impede o comportamento padrão
+                fileUploadArea.style.backgroundColor = '#001175'; // Indica que o arquivo pode ser solto
+            });
+    
+            fileUploadArea.addEventListener('dragleave', function () {
+                fileUploadArea.style.backgroundColor = '#000629'; // Volta ao estilo original
+            });
+    
+            // Quando o arquivo é solto
+            fileUploadArea.addEventListener('drop', function (event) {
+                event.preventDefault(); // Impede o comportamento padrão
+                fileUploadArea.style.backgroundColor = '#000629'; // Volta ao estilo original
+            });
+        }
     }
     else {
-        fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--background-color');
+        if(fileUploadArea) {
+            fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--background-color');
 
-        // Evento de arraste para dentro da área de upload
-        fileUploadArea.addEventListener('dragover', function (event) {
-            event.preventDefault(); // Impede o comportamento padrão
-            fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--drag-over-background-color'); // Indica que o arquivo pode ser solto
-        });
-
-        fileUploadArea.addEventListener('dragleave', function () {
-            fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--background-color'); // Volta ao estilo original
-        });
-
-        // Quando o arquivo é solto
-        fileUploadArea.addEventListener('drop', function (event) {
-            event.preventDefault(); // Impede o comportamento padrão
-            fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--background-color'); // Volta ao estilo original
-        });
+            // Evento de arraste para dentro da área de upload
+            fileUploadArea.addEventListener('dragover', function (event) {
+                event.preventDefault(); // Impede o comportamento padrão
+                fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--drag-over-background-color'); // Indica que o arquivo pode ser solto
+            });
+    
+            fileUploadArea.addEventListener('dragleave', function () {
+                fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--background-color'); // Volta ao estilo original
+            });
+    
+            // Quando o arquivo é solto
+            fileUploadArea.addEventListener('drop', function (event) {
+                event.preventDefault(); // Impede o comportamento padrão
+                fileUploadArea.style.backgroundColor = getComputedStyle(root).getPropertyValue('--background-color'); // Volta ao estilo original
+            });
+        }
     }
 }
 
@@ -612,7 +616,7 @@ function initNotfication(index) {
         }
     }
 
-    const socket = io('http://127.0.0.1:3000', {
+    const socket = io('http://192.168.218.26:3000', {
         auth: {
             authorization: `Bearer ${token}`
         }
@@ -634,16 +638,16 @@ function initNotfication(index) {
             populateCardNotification(notification.nameSender, notification.cpfReceiver,
                 notification.id, notification.instanceId, notification.processId,
                 notification.read, notification.url, socket, notificationIcon, notificationIconElement,
-                notification.acitivityName
+                notification.acitivityName, notification.createdAt
             );
         });
     });
 
     socket.on('new-notification', (notification) => {
-        populateCardNotification(notification.nameSender, notification.cpfReceiver,
-            notification.id, notification.instanceId, notification.processId,
-            notification.read, notification.url, socket, notificationIcon, notificationIconElement,
-            notification.acitivityName
+        populateCardNotification(notification.notification.nameSender, notification.notification.cpfReceiver,
+            notification.notification.id, notification.notification.instanceId, notification.notification.processId,
+            notification.notification.read, notification.notification.url, socket, notificationIcon, notificationIconElement,
+            notification.notification.acitivityName, notification.createdAt
         );
         notificationList.scrollTo({
             top: -notificationList.scrollHeight,
@@ -655,7 +659,7 @@ function initNotfication(index) {
 }
 
 function populateCardNotification(nameSender, cpfReceiver, id, instanceId, processId,
-    read, url, socket, notificationIcon, notificationIconElement, acitivityName) {
+    read, url, socket, notificationIcon, notificationIconElement, acitivityName, createdAt) {
     const bodyCard = document.querySelector('.notificationList');
     const fragment = document.createDocumentFragment();
     const noNotification = document.getElementById('noNotification');
@@ -665,9 +669,59 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
     card.classList.add('notificationContainer');
     card.dataset.id = instanceId;
 
+    const createdAtDate = new Date(createdAt);
+
     card.innerHTML = `
         <p><strong>${nameSender}</strong> encaminhou a <strong>solicitação ${instanceId}</strong> para ${acitivityName} em <strong>${processId}</strong></p>
+        <span class="notificationTime" data-timestamp="${createdAtDate.getTime()}"></span>
     `;
+
+    const timeElement = card.querySelector('.notificationTime');
+    const timestamp = createdAtDate.getTime();
+
+    function updateTimeAgo() {
+        const now = new Date();
+        const seconds = Math.floor((now - timestamp) / 1000);
+    
+        let interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) {
+            timeElement.textContent = interval + ' ano' + (interval > 1 ? 's' : '') + ' atrás';
+            return;
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) {
+            timeElement.textContent = interval + ' mês' + (interval > 1 ? 'es' : '') + ' atrás';
+            return;
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval >= 1) {
+            timeElement.textContent = interval + ' dia' + (interval > 1 ? 's' : '') + ' atrás';
+            return;
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) {
+            timeElement.textContent = interval + ' hora' + (interval > 1 ? 's' : '') + ' atrás';
+            return;
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval >= 1) {
+            timeElement.textContent = interval + ' minuto' + (interval > 1 ? 's' : '') + ' atrás';
+            return;
+        }
+        if (seconds >= 1) {
+            timeElement.textContent = seconds + ' segundo' + (seconds > 1 ? 's' : '') + ' atrás';
+            return;
+        }
+        timeElement.textContent = 'agora';
+    }
+
+    updateTimeAgo();
+
+    const intervalId = setInterval(updateTimeAgo, 60000);
+
+    card.addEventListener('removed', () => {
+        clearInterval(intervalId);
+    });
 
     card.addEventListener('click', () => {
         socket.emit('readNotification', {
@@ -698,7 +752,7 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
 
     if (read) {
         card.classList.remove('has-notification');
-        
+
     } else {
         card.classList.add('has-notification');
     }
