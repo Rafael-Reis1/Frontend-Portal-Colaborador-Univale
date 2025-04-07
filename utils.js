@@ -615,7 +615,7 @@ function initNotfication(index) {
         }
     }
 
-    const socket = io('http://192.168.218.26:3000', {
+    const socket = io('https://portalcolaborador.univale.br:3000', {
         auth: {
             authorization: `Bearer ${token}`
         }
