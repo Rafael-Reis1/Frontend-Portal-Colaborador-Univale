@@ -738,7 +738,7 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
                 }
             );
 
-            localStorage.setItem('cardId', instanceId);
+            /*localStorage.setItem('cardId', instanceId);
             if(acitivityName.toLowerCase() == 'correção') {
                 localStorage.setItem('correcao', 'true');
                 localStorage.setItem('adicionar', 'false');
@@ -746,7 +746,7 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
             else if (acitivityName.toLowerCase() == 'aprovação') {
                 localStorage.setItem('correcao', 'false');
                 localStorage.setItem('adicionar', 'false');
-            }
+            }*/
             document.location.href = url; 
         }
 

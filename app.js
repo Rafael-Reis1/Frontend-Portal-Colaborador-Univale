@@ -210,7 +210,7 @@ function authentication() {
 function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, fluigUser) {
     const ocorrenciasPonto = document.getElementById('ocorrenciasPonto');
     const pequenasDespesas = document.getElementById('pequenasDespesas');
-    const ged =  document.getElementById('ged');
+    const ged = document.getElementById('ged');
     const minhasTarefas = document.getElementById('minhasTarefas');
     const aberturaVagasPTA = document.getElementById('aberturaVagasPTA');
     const pagamentoReuniaoNDE = document.getElementById('pagamentoReuniaoNDE');
