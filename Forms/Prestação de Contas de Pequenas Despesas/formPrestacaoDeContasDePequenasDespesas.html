@@ -11,6 +11,7 @@
     <script src="../../utils.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://nosir.github.io/cleave.js/dist/cleave.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="prestacaoDeContasDePequenasDespesas.css">
     <link rel="icon" href="../../assets/favicon-logo-FPF-White.svg" type="image/svg+xml">
@@ -27,6 +28,16 @@
                 <button id="logoHeaderSmall">FPF</button>
             </div>
             <div id="right">
+                <div id="notification">
+                    <div id="notificationIcon">
+                        <span class="notification-icon" alt="Notification icon"></span>
+                    </div>
+                    <div class="notificationList">
+                        <div class="notificationContainer notificationCenter" id="noNotification">
+                            <p>Nenhuma notificação pendente!</p>
+                        </div>
+                    </div>
+                </div>
                 <div id="containerUser">
                     <div id="optionsUser">
                         <span id="nomeUser"><div class="skeleton-text" id="userName"></div></span>
