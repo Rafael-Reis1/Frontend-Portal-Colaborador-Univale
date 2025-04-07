@@ -38,9 +38,13 @@ function processStart(formIds, formData, textAreaData, somenteSalvar, token,
         }
         else {
             if(somenteSalvar) {
-                loadingFullScreen.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                document.location.replace(nextPage);
+                if(hasAttachments) {
+                    enviarAttachment(response.data, formIds, formData, textAreaData, processId, processSector, 
+                        targetState, cpfGestorApi, nextPage, false, somenteSalvar);
+                }
+                else {
+                    document.location.replace(nextPage);
+                }
             }
             else {
                 document.body.style.overflow = 'auto';
@@ -90,9 +94,13 @@ function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, t
     })
     .then(response => {
         if(somenteSalvar) {
-            loadingFullScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            document.location.replace(nextPage);
+            if(hasAttachments) {
+                enviarAttachment(cardId, formIds, formData, textAreaData, processId, processSector, 
+                    targetState, cpfGestorApi, nextPage, false, somenteSalvar);
+            }
+            else {
+                document.location.replace(nextPage);
+            }
         }
         else {
             if(hasAttachments) {
@@ -115,7 +123,7 @@ function processUpdate(cardId, formIds, formData, textAreaData, somenteSalvar, t
 
 //Envia os arquivos de anexo para o Fluig
 function enviarAttachment(processInstanceId, formIds, formDataJson, 
-    textAreaData, processId, processSector, targetState, cpfGestorApi, nextPage, cancel) {
+    textAreaData, processId, processSector, targetState, cpfGestorApi, nextPage, cancel, somenteSalvar) {
     const formData = new FormData();
     const token = localStorage.getItem('token');
 
@@ -148,10 +156,15 @@ function enviarAttachment(processInstanceId, formIds, formDataJson,
         }
     })
     .then(response => {
-        formIds.push('attachmentId');
-        formDataJson.push(response.data);
-        moveRequest(processInstanceId, formIds, formDataJson, textAreaData, 
-            targetState, cpfGestorApi, nextPage, cancel);
+        if(somenteSalvar) {
+            document.location.replace(nextPage);
+        }
+        else {
+            formIds.push('attachmentId');
+            formDataJson.push(response.data);
+            moveRequest(processInstanceId, formIds, formDataJson, textAreaData, 
+                targetState, cpfGestorApi, nextPage, cancel);
+        }
     })
     .catch(error => {
         openToast('Erro ao enviar arquivos', 'erro', 5000000);
@@ -607,7 +620,7 @@ function initNotfication() {
             }
             populateCardNotification(notification.nameSender, notification.cpfReceiver,
                 notification.id, notification.instanceId, notification.processId,
-                notification.read, socket, notificationIcon, notificationIconElement
+                notification.read, notification.url, socket, notificationIcon, notificationIconElement, notification.acitivityName
             );
         });
     });
@@ -615,7 +628,7 @@ function initNotfication() {
     socket.on('new-notification', (notification) => {
         populateCardNotification(notification.nameSender, notification.cpfReceiver,
             notification.id, notification.instanceId, notification.processId,
-            notification.read, socket, notificationIcon
+            notification.read, notification.url, socket, notificationIcon, notificationIconElement, notification.acitivityName
         );
         notificationList.scrollTo({
             top: -notificationList.scrollHeight,
@@ -627,7 +640,7 @@ function initNotfication() {
 }
 
 function populateCardNotification(nameSender, cpfReceiver, id, instanceId, processId,
-    read, socket, notificationIcon, notificationIconElement) {
+    read, url, socket, notificationIcon, notificationIconElement, acitivityName) {
     const bodyCard = document.querySelector('.notificationList');
     const fragment = document.createDocumentFragment();
     const noNotification = document.getElementById('noNotification');
@@ -638,21 +651,10 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
     card.dataset.id = instanceId;
 
     card.innerHTML = `
-        <p><strong>${nameSender}</strong> encaminhou a <strong>solicitação ${instanceId}</strong> para correção em <strong>${processId}</strong></p>
+        <p><strong>${nameSender}</strong> encaminhou a <strong>solicitação ${instanceId}</strong> para ${acitivityName} em <strong>${processId}</strong></p>
     `;
 
     card.addEventListener('click', () => {
-        /*localStorage.setItem('cardId', card.dataset.id);
-        if(bodyCardsName == 'bodyCardsCorreção' || bodyCardsName == 'bodyCardsRascunho') {
-            localStorage.setItem('correcao', 'true');
-            localStorage.setItem('adicionar', 'false');
-        }
-        else {
-            localStorage.setItem('correcao', 'false');
-            localStorage.setItem('adicionar', 'false');
-        }
-        document.location.href = pageToGo;*/
-
         socket.emit('readNotification', {
                 read: true,
                 cpfReceiver: cpfReceiver,
@@ -666,6 +668,17 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
                 }
             }
         );
+
+        localStorage.setItem('cardId', instanceId);
+        if(acitivityName.toLowerCase() == 'correção') {
+            localStorage.setItem('correcao', 'true');
+            localStorage.setItem('adicionar', 'false');
+        }
+        else if (acitivityName.toLowerCase() == 'aprovação') {
+            localStorage.setItem('correcao', 'false');
+            localStorage.setItem('adicionar', 'false');
+        }
+        document.location.href = url;
     });
 
     if (read) {
