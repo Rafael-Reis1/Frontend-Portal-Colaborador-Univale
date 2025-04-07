@@ -7,6 +7,7 @@ var tipoAtividadeApi = sessionStorage.getItem('tipoAtividade');
 var cpfGestorApi = sessionStorage.getItem('cpfGestor');
 var nomeGestorApi = sessionStorage.getItem('nomeGestor');
 var tipoFuncApi = sessionStorage.getItem('tipoFunc');
+var cpfUser = '';
 let disabled = '';
 let style = '';
 let attachmentsQTDE = 0;
@@ -369,6 +370,8 @@ window.onload = function() {
                 valorSelecionado = '';
             }
             formData.push(valorSelecionado);
+            formIds.push('cpfSolicitante');
+            formData.push(cpfUser);
         
             let col = -1;
             linhas.forEach(linha => {
@@ -534,6 +537,7 @@ window.onload = function() {
             const tipoFuncionario = response.data.tipoFuncionario;
             const selectTipoAtividade = document.getElementById('selectTipoAtividade');
             const containerUser = document.getElementById('containerUser');
+            cpfUser = response.data.cpf;
             let i = 0;
              
             cursoSetor.forEach(cursoSetor => {
@@ -689,7 +693,7 @@ window.onload = function() {
                     cardsAprovProReitoria.style.display = 'flex';
                     populateCards(processo, 'bodyCardsProReitoria', formOcorrenciasPonto);
                 }
-                if (activity == 9) {
+                if (activity == 9 || activity == 155) {
                     cardsAprovados.style.display = 'flex';
                     populateCards(processo, 'bodyCardsAprovados', formOcorrenciasPonto);
                 }            
