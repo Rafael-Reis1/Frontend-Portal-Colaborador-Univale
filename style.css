@@ -882,8 +882,8 @@ input[type=number] {
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
-    top: 2.625rem;
-    left: -8.125rem;
+    top: 2.8125rem;
+    left: -8.75rem;
     max-height: 0;
     width: fit-content;
     min-width: 18.75rem;
@@ -891,10 +891,8 @@ input[type=number] {
     opacity: 0;
     background-color: var(--cards-situation-color);
     overflow-y: auto;
-    border-radius: 0 0 8px 8px;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
+    border-radius: 8px 8px 8px 8px;
+    border: 1px solid black;
     transition: all 500ms cubic-bezier(.12, .12, 0, 1);
 }
 
@@ -908,14 +906,14 @@ input[type=number] {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 0.9375rem;
+    padding: 0.9375rem 0.9375rem 0.625rem 0.9375rem;
     align-items: flex-start;
     word-wrap: break-word;
     height: fit-content;
-    min-height: 6.25rem;
     width: 16.875rem;
     margin-top: 0.625rem;
     border-radius: 8px;
+    gap: 0.625rem;
     background-color: var(--background-color);
     cursor: pointer;
 }
