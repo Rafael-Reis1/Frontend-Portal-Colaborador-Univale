@@ -602,11 +602,16 @@ function initNotfication(index) {
         if (!isClickInsideList && !isClickInsideNotification && notificationList.classList.contains('notificationOpen')) {
             notificationList.classList.remove('notificationOpen');
             notificationIconElement.style.backgroundImage = backgroundImage;
+            setTimeout(() => {
+                notificationList.style.display = 'none';
+            }, 500);
         }
         if(!isClickInsideList && isClickInsideNotification) {
             notificationIconElement.style.backgroundImage = backgroundImageFill;
-            notificationList.classList.toggle('notificationOpen');
-
+            setTimeout(() => {
+                notificationList.classList.toggle('notificationOpen');
+            }, 50);
+            
             if(document.querySelector('.notificationOpen')) {
                 notificationList.style.display = 'flex';
             }
