@@ -950,12 +950,12 @@ input[type=number] {
 }
 
 .notificationList::-webkit-scrollbar-track {
-    background: #656565;
+    background: var(--cards-situation-color);
     border-radius: 0;
 }
 
 .notificationList::-webkit-scrollbar-thumb {
-    background: #0033CA;
+    background: var(--background-color);
     border-radius: 0.5rem;
     width: 0.5rem;
     border: none;
@@ -963,7 +963,70 @@ input[type=number] {
 
 .notificationList {
     scrollbar-width: thin;
-    scrollbar-color: #0033CA #656565;
+    scrollbar-color: var(--base-color) var(--card-situation-color);
+}
+
+.file-list::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.file-list::-webkit-scrollbar-track {
+    background: var(--background-color);
+    border-radius: 0;
+}
+
+.file-list::-webkit-scrollbar-thumb {
+    background: var(--cards-situation-color);
+    border-radius: 0.5rem;
+    width: 0.5rem;
+    border: none;
+}
+
+.file-list {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cards-situation-color) var(--background-color);
+}
+
+.scrollTable::-webkit-scrollbar {
+    height: 0.5rem;
+}
+
+.scrollTable::-webkit-scrollbar-track {
+    background: var(--form-paper-background-color);
+    border-radius: 0;
+}
+
+.scrollTable::-webkit-scrollbar-thumb {
+    background: var(--cards-situation-color);
+    border-radius: 0.5rem;
+    height: 0.5rem;
+    border: none;
+}
+
+.scrollTable {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cards-situation-color) var(--form-paper-background-color);
+}
+
+body::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+body::-webkit-scrollbar-track {
+    background: var(--background-color);
+    border-radius: 0;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: var(--cards-situation-color);
+    border-radius: 0.5rem;
+    width: 0.5rem;
+    border: none;
+}
+
+body {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cards-situation-color) var(--background-color);
 }
 
 @media (max-width: 762px) {
