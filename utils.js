@@ -620,7 +620,6 @@ function initNotfication(index) {
         auth: {
             authorization: `Bearer ${token}`
         },
-        path
     });
     socket.emit('conectUser', {});
 
