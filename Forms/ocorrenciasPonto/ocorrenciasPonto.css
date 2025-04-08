@@ -417,6 +417,27 @@ tr:selected {
     cursor: pointer;
 }
 
+.file::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.file::-webkit-scrollbar-track {
+    background: #656565;
+    border-radius: 0;
+}
+
+.file::-webkit-scrollbar-thumb {
+    background: #0033CA;
+    border-radius: 0.5rem;
+    width: 0.5rem;
+    border: none;
+}
+
+.file {
+    scrollbar-width: thin;
+    scrollbar-color: #0033CA #656565;
+}
+
 #btnConfirmarAttachment {
     font-size: 0.875rem;
     width: 23%;
