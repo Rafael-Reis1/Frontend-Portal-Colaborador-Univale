@@ -607,13 +607,13 @@ function initNotfication(index) {
             }, 500);
         }
         if(!isClickInsideList && isClickInsideNotification) {
-            notificationList.classList.toggle('notificationOpen');
-
             if(document.querySelector('.notificationOpen')) {
                 notificationList.style.display = 'flex';
+                notificationList.classList.add('notificationOpen');
                 notificationIconElement.style.backgroundImage = backgroundImageFill;
             }
             else {
+                notificationList.classList.remove('notificationOpen');
                 notificationIconElement.style.backgroundImage = backgroundImage;
                 setTimeout(() => {
                     notificationList.style.display = 'none';
