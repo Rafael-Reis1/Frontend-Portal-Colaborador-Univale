@@ -726,34 +726,30 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
     });
 
     card.addEventListener('click', () => {
-        if(card.classList.contains('has-notification')) {
-            socket.emit('readNotification', {
-                    read: true,
-                    cpfReceiver: cpfReceiver,
-                    id: id
-                }, (response) => {
-                    card.classList.remove('has-notification');
-                    const hasNotification = document.querySelectorAll('.has-notification');
-                    if(hasNotification.length <= 1) {
-                        notificationIcon.classList.remove('has-notification');
-                        notificationIconElement.title = "Nenhuma notificação pendente!";
-                    }
+        socket.emit('readNotification', {
+                read: true,
+                cpfReceiver: cpfReceiver,
+                id: id
+            }, (response) => {
+                card.classList.remove('has-notification');
+                const hasNotification = document.querySelectorAll('.has-notification');
+                if(hasNotification.length <= 1) {
+                    notificationIcon.classList.remove('has-notification');
+                    notificationIconElement.title = "Nenhuma notificação pendente!";
                 }
-            );
-
-            /*localStorage.setItem('cardId', instanceId);
-            if(acitivityName.toLowerCase() == 'correção') {
-                localStorage.setItem('correcao', 'true');
-                localStorage.setItem('adicionar', 'false');
             }
-            else if (acitivityName.toLowerCase() == 'aprovação') {
-                localStorage.setItem('correcao', 'false');
-                localStorage.setItem('adicionar', 'false');
-            }*/
-            document.location.href = url; 
-        }
+        );
 
-        
+        /*localStorage.setItem('cardId', instanceId);
+        if(acitivityName.toLowerCase() == 'correção') {
+            localStorage.setItem('correcao', 'true');
+            localStorage.setItem('adicionar', 'false');
+        }
+        else if (acitivityName.toLowerCase() == 'aprovação') {
+            localStorage.setItem('correcao', 'false');
+            localStorage.setItem('adicionar', 'false');
+        }*/
+        document.location.href = url;
     });
 
     if (read) {
