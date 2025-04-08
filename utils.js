@@ -607,10 +607,14 @@ function initNotfication(index) {
             notificationList.classList.toggle('notificationOpen');
 
             if(document.querySelector('.notificationOpen')) {
+                notificationList.style.display = 'flex';
                 notificationIconElement.style.backgroundImage = backgroundImageFill;
             }
             else {
                 notificationIconElement.style.backgroundImage = backgroundImage;
+                setTimeout(() => {
+                    notificationList.style.display = 'none';
+                }, 500);
             }
         }
     }
