@@ -282,6 +282,7 @@ function loadAnexos(targetState, deleteIcon) {
     const token = localStorage.getItem('token');
     const cardId = localStorage.getItem('cardId');
     const fileListContainer = document.getElementById('file-list');
+    const attachements = document.getElementById('attachements');
 
     axios.get(baseURL + `/process/attachments/${cardId}`, {
         headers: {
@@ -292,6 +293,7 @@ function loadAnexos(targetState, deleteIcon) {
     .then(response => {
         if(response.data.length > 0) {
             response.data.forEach(item => {
+                attachements.value +=`,${item.documentId}`;
                 criaListaAttachment(fileListContainer, '', 'api', item.documentDescription, item.fileUrl, item, cardId, targetState, deleteIcon);
             });
         } 

@@ -318,6 +318,7 @@ window.onload = function() {
         const sendFormPopup = document.getElementById('sendFormPopup');
         const btnADD = document.getElementById('btnADD');
         const radioButtons = document.querySelectorAll('#radioButtonsTipoJus input[type="radio"]');
+        const attachements = document.getElementById('attachements');
         let valorSelecionado;
         
         if(somenteSalvar) {
@@ -372,6 +373,8 @@ window.onload = function() {
             formData.push(valorSelecionado);
             formIds.push('cpfSolicitante');
             formData.push(cpfUser);
+            formIds.push('attachmentId');
+            formData.push(attachements.value);
         
             let col = -1;
             linhas.forEach(linha => {
