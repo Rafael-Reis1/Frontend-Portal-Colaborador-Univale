@@ -608,7 +608,10 @@ function initNotfication(index) {
 
             if(document.querySelector('.notificationOpen')) {
                 notificationList.style.display = 'flex';
-                notificationIconElement.style.backgroundImage = backgroundImageFill;
+
+                setTimeout(() => {
+                    notificationIconElement.style.backgroundImage = backgroundImageFill;
+                }, 50);
             }
             else {
                 notificationIconElement.style.backgroundImage = backgroundImage;
