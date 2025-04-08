@@ -615,12 +615,11 @@ function initNotfication(index) {
         }
     }
 
-    const socket = io('http://portalcolaborador.univale.br:3000', {
+    const socket = io(baseURL, {
         auth: {
             authorization: `Bearer ${token}`
         }
     });
-    
     socket.emit('conectUser', {});
 
     socket.emit('findAllNotifications', {}, (response) => {
