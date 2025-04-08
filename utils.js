@@ -607,13 +607,11 @@ function initNotfication(index) {
             }, 500);
         }
         if(!isClickInsideList && isClickInsideNotification) {
-            notificationIconElement.style.backgroundImage = backgroundImageFill;
-            setTimeout(() => {
-                notificationList.classList.toggle('notificationOpen');
-            }, 50);
-            
+            notificationList.classList.toggle('notificationOpen');
+
             if(document.querySelector('.notificationOpen')) {
                 notificationList.style.display = 'flex';
+                notificationIconElement.style.backgroundImage = backgroundImageFill;
             }
             else {
                 notificationIconElement.style.backgroundImage = backgroundImage;
