@@ -615,48 +615,12 @@ function initNotfication(index) {
         }
     }
 
-    const socket = io(baseURL, {
+    const socket = io('http://portalcolaborador.univale.br:3000', {
         auth: {
             authorization: `Bearer ${token}`
         }
     });
-    // Evento de conexão
-    socket.on('connect', () => {
-        console.log('Conectado ao servidor Socket.IO');
-        // Aqui você pode adicionar qualquer lógica que precise ser executada na conexão
-    });
-
-    // Evento de desconexão
-    socket.on('disconnect', (reason) => {
-        console.log(`Desconectado do servidor Socket.IO devido a: ${reason}`);
-        // Aqui você pode adicionar qualquer lógica que precise ser executada na desconexão
-    });
-
-    // Opcional: Evento de erro de conexão (útil para depuração)
-    socket.on('connect_error', (err) => {
-        console.error('Erro ao conectar ao servidor Socket.IO:', err);
-    });
-
-    // Opcional: Evento de tentativa de reconexão
-    socket.io.on('reconnect_attempt', (attempt) => {
-        console.log(`Tentando reconectar (tentativa nº: ${attempt})`);
-    });
-
-    // Opcional: Evento de reconexão bem-sucedida
-    socket.io.on('reconnect', (attempt) => {
-        console.log(`Reconectado com sucesso após ${attempt} tentativas`);
-    });
-
-    // Opcional: Evento de falha na reconexão
-    socket.io.on('reconnect_error', (err) => {
-        console.error('Erro durante a reconexão:', err);
-    });
-
-    // Opcional: Evento de fim das tentativas de reconexão
-    socket.io.on('reconnect_failed', () => {
-        console.log('Falha ao reconectar após várias tentativas');
-    });
-
+    
     socket.emit('conectUser', {});
 
     socket.emit('findAllNotifications', {}, (response) => {
