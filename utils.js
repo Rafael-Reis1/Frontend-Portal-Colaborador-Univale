@@ -616,7 +616,6 @@ function initNotfication(index) {
     }
 
     const socket = io(baseURL, {
-        path: '/api/socket.io',
         auth: {
           authorization: `Bearer ${token}`
         }
