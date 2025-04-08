@@ -615,7 +615,7 @@ function initNotfication(index) {
         }
     }
 
-    const socket = io('http://192.168.218.26:3000', {
+    const socket = io(baseURL, {
         auth: {
             authorization: `Bearer ${token}`
         }
