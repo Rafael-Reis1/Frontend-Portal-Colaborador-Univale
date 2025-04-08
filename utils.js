@@ -604,14 +604,11 @@ function initNotfication(index) {
             notificationIconElement.style.backgroundImage = backgroundImage;
         }
         if(!isClickInsideList && isClickInsideNotification) {
+            notificationIconElement.style.backgroundImage = backgroundImageFill;
             notificationList.classList.toggle('notificationOpen');
 
             if(document.querySelector('.notificationOpen')) {
                 notificationList.style.display = 'flex';
-
-                setTimeout(() => {
-                    notificationIconElement.style.backgroundImage = backgroundImageFill;
-                }, 50);
             }
             else {
                 notificationIconElement.style.backgroundImage = backgroundImage;
