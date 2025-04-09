@@ -6,6 +6,7 @@ const pequenasDespesasPage = 'Forms/Prestação de Contas de Pequenas Despesas/p
 const gedPage = 'https://fluig.univale.br:8443/portal/p/001/ecmnavigation';
 const aberturaVagasPTAPage = 'https://fluig.univale.br:8443/portal/p/001/pageworkflowview?processID=Solicita%C3%A7%C3%A3o%20de%20abertura%20de%20vaga%20-%20RH';
 const pagamentoReuniaoNDEPage = 'https://fluig.univale.br:8443/portal/p/001/pageworkflowview?processID=Pgt%20de%20Reuni%C3%B5es%20do%20NDE%20Coleg%20ou%20Rep%20em%20Entidad';
+const desligamentoPTAPage = 'https://fluig.univale.br:8443/portal/p/001/pageworkflowview?processID=Solicita%C3%A7%C3%A3o%20de%20Desligamento%20de%20Pessoal%20-%20PTA';
 const tarefasPage = 'https://fluig.univale.br:8443/portal/p/001/pagecentraltask';
 var tipoAtividadeApi = sessionStorage.getItem('tipoAtividade');
 var cpfGestorApi = sessionStorage.getItem('cpfGestor');
@@ -45,6 +46,7 @@ window.onload = function() {
         const minhasTarefas = document.getElementById('minhasTarefas');
         const aberturaVagasPTA = document.getElementById('aberturaVagasPTA');
         const pagamentoReuniaoNDE = document.getElementById('pagamentoReuniaoNDE');
+        const desligamentoPTA = document.getElementById('desligamentoPTA');
 
         authentication();
 
@@ -76,6 +78,10 @@ window.onload = function() {
 
         pagamentoReuniaoNDE.onclick = function() {
             window.open(pagamentoReuniaoNDEPage, '_blank');
+        }
+
+        desligamentoPTA.onclick = function() {
+            window.open(desligamentoPTAPage, '_blank');
         }
     }
 }
@@ -214,6 +220,7 @@ function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, fluigUser) {
     const minhasTarefas = document.getElementById('minhasTarefas');
     const aberturaVagasPTA = document.getElementById('aberturaVagasPTA');
     const pagamentoReuniaoNDE = document.getElementById('pagamentoReuniaoNDE');
+    const desligamentoPTA = document.getElementById('desligamentoPTA');
 
     if(!Estagiario) {
         if(tipoAtividade == 'PTA') {
@@ -236,6 +243,7 @@ function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, fluigUser) {
         minhasTarefas.style.display = 'flex';
         aberturaVagasPTA.style.display = 'flex';
         pagamentoReuniaoNDE.style.display = 'flex';
+        desligamentoPTA.style.display = 'flex';
     }
 
     if(nome === 'RAFAEL REIS DA SILVEIRA' || nome === 'TAINARA DE OLIVEIRA') {
@@ -245,6 +253,7 @@ function filtraCards(tipoAtividade, Estagiario, cursoSetor, nome, fluigUser) {
         minhasTarefas.style.display = 'flex';
         aberturaVagasPTA.style.display = 'flex';
         pagamentoReuniaoNDE.style.display = 'flex';
+        desligamentoPTA.style.display = 'flex';
     }
 }
 
