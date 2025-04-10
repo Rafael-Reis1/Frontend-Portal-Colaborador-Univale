@@ -582,6 +582,7 @@ function initNotfication(index) {
     const token = localStorage.getItem('token');
     const notificationIcon =  document.getElementById('notificationIcon');
     const notificationIconElement = document.querySelector('.notification-icon');
+    const lerTodasNotifi = document.getElementById('lerTodasNotifi');
     let backgroundImage;
     let backgroundImageFill;
 
@@ -658,6 +659,16 @@ function initNotfication(index) {
         notificationIcon.classList.add('has-notification');
         notificationIconElement.title = "Você tem novas notificações!";
     });
+
+    lerTodasNotifi.onclick = function() {
+        const notificationContainer = document.querySelectorAll('.notificationContainer');
+
+        notificationContainer.forEach(element => {
+            if(element.classList.contains('notification')) {
+                element.classList.remove('notification');
+            }
+        });
+    }
 }
 
 function populateCardNotification(nameSender, cpfReceiver, id, instanceId, processId,

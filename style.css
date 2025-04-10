@@ -897,8 +897,29 @@ input[type=number] {
 .notificationOpen {
     max-height: 31.25rem;
     opacity: 1;
-    padding: 0 0.625rem 0.625rem 0.625rem;
+    padding: 1.25rem 0.625rem 0.625rem 0.625rem;
     border: 1px solid black;
+}
+
+.notificationHeader {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 0.9375rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 19.0625rem;
+    height: 1.5625rem;
+    font-size: 0.625rem;
+}
+
+#lerTodasNotifi {
+    cursor: pointer;
+}
+
+#lerTodasNotifi:hover {
+    text-decoration: underline;
 }
 
 .notificationContainer {
