@@ -102,8 +102,19 @@ function header() {
     darkMode.onclick = function() {
         document.body.classList.toggle("dark-mode");
 
-        document.querySelectorAll('*').forEach(element => {
-            element.style.transition = 'color 0ms ease, background-color 275ms ease';
+        document.querySelectorAll(`*:not(.notificationListContainer)`).forEach(element => {
+                 currentTransitions = element.style.transition;
+            const newTransitions = 'color 0ms ease, background-color 275ms ease';
+          
+            currentTransitions = currentTransitions ? currentTransitions.trim() : '';
+          
+            if (currentTransitions) {
+              if (!currentTransitions.includes(newTransitions)) {
+                element.style.transition = `${currentTransitions}, ${newTransitions}`;
+              }
+            } else {
+              element.style.transition = newTransitions;
+            }
         });
     
         if(localStorage.getItem('darkMode') === 'false') {
