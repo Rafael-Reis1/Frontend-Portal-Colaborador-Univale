@@ -881,6 +881,8 @@ input[type=number] {
     display: flex;
     flex-direction: column;
     flex-direction: column-reverse;
+    height: 100%;
+    overflow-y: auto;
     gap: 0.625rem;
 }
 
@@ -896,7 +898,6 @@ input[type=number] {
     min-width: 18.75rem;
     opacity: 0;
     background-color: var(--cards-situation-color);
-    overflow-y: auto;
     overflow-x: clip;
     border-radius: 8px 8px 8px 8px;
     transition: all 500ms cubic-bezier(.12, .12, 0, 1);
