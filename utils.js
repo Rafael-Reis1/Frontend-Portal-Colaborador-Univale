@@ -578,7 +578,7 @@ function showNextToast() {
 
 function initNotfication(index) {
     const notification = document.getElementById('notification');
-    const notificationList = document.querySelector('.notificationList');
+    const notificationListContainer = document.querySelector('.notificationListContainer');
     const token = localStorage.getItem('token');
     const notificationIcon =  document.getElementById('notificationIcon');
     const notificationIconElement = document.querySelector('.notification-icon');
@@ -598,15 +598,15 @@ function initNotfication(index) {
     notificationIconElement.style.backgroundImage = backgroundImage;
     
     document.onclick = function(event) {
-        const isClickInsideList = notificationList.contains(event.target);
+        const isClickInsideList = notificationListContainer.contains(event.target);
         const isClickInsideNotification = notification.contains(event.target);
     
-        if (!isClickInsideList && !isClickInsideNotification && notificationList.classList.contains('notificationOpen')) {
-            notificationList.classList.remove('notificationOpen');
+        if (!isClickInsideList && !isClickInsideNotification && notificationListContainer.classList.contains('notificationOpen')) {
+            notificationListContainer.classList.remove('notificationOpen');
             notificationIconElement.style.backgroundImage = backgroundImage;
         }
         if(!isClickInsideList && isClickInsideNotification) {
-            notificationList.classList.toggle('notificationOpen');
+            notificationListContainer.classList.toggle('notificationOpen');
 
             if(document.querySelector('.notificationOpen')) {
                 notificationIconElement.style.backgroundImage = backgroundImageFill;
@@ -627,8 +627,8 @@ function initNotfication(index) {
 
     socket.emit('findAllNotifications', {}, (response) => {
         response.forEach(notification => {
-            notificationList.scrollTo({
-                top: -notificationList.scrollHeight
+            notificationListContainer.scrollTo({
+                top: -notificationListContainer.scrollHeight
             });
             if(!notification.read) {
                 notificationIcon.classList.add('has-notification');
@@ -651,8 +651,8 @@ function initNotfication(index) {
             notification.notification.read, notification.notification.url, socket, notificationIcon, notificationIconElement,
             notification.notification.acitivityName, notification.createdAt
         );
-        notificationList.scrollTo({
-            top: -notificationList.scrollHeight,
+        notificationListContainer.scrollTo({
+            top: -notificationListContainer.scrollHeight,
             behavior: 'smooth' // Rolar suavemente (opcional)
         });
         notificationIcon.classList.add('has-notification');
@@ -768,7 +768,6 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
 }
 
 function readNotification(id, socket, cpfReceiver, notificationIcon, notificationIconElement, card) {
-    console.log(id);
     socket.emit('readNotification', {
             read: true,
             cpfReceiver: cpfReceiver,
