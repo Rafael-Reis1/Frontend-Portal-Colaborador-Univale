@@ -730,7 +730,8 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
         const hasNotification = document.querySelectorAll('.has-notification');
 
         hasNotification.forEach(element => {
-            readNotification(id, socket, cpfReceiver, notificationIcon, notificationIconElement, card);  
+            const notificationId = element.dataset.id; // Obtém o instanceId do card
+            readNotification(notificationId, socket, cpfReceiver, notificationIcon, notificationIconElement, element);
         });
     }
 
@@ -767,16 +768,16 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
 
 function readNotification(id, socket, cpfReceiver, notificationIcon, notificationIconElement, card) {
     socket.emit('readNotification', {
-        read: true,
-        cpfReceiver: cpfReceiver,
-        id: id
-    }, (response) => {
-        card.classList.remove('has-notification');
-        const hasNotification = document.querySelectorAll('.has-notification');
-        if(hasNotification.length <= 1) {
-            notificationIcon.classList.remove('has-notification');
-            notificationIconElement.title = "Nenhuma notificação pendente!";
+            read: true,
+            cpfReceiver: cpfReceiver,
+            id: id
+        }, (response) => {
+            card.classList.remove('has-notification');
+            const hasNotification = document.querySelectorAll('.has-notification');
+            if(hasNotification.length <= 1) {
+                notificationIcon.classList.remove('has-notification');
+                notificationIconElement.title = "Nenhuma notificação pendente!";
+            }
         }
-    }
-);
+    );
 }
