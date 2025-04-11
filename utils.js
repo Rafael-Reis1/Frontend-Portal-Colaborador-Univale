@@ -582,7 +582,6 @@ function initNotfication(index) {
     const token = localStorage.getItem('token');
     const notificationIcon =  document.getElementById('notificationIcon');
     const notificationIconElement = document.querySelector('.notification-icon');
-    const lerTodasNotifi = document.getElementById('lerTodasNotifi');
     let backgroundImage;
     let backgroundImageFill;
 
@@ -659,16 +658,6 @@ function initNotfication(index) {
         notificationIcon.classList.add('has-notification');
         notificationIconElement.title = "Você tem novas notificações!";
     });
-
-    lerTodasNotifi.onclick = function() {
-        const notificationContainer = document.querySelectorAll('.notificationContainer');
-
-        notificationContainer.forEach(element => {
-            if(element.classList.contains('notification')) {
-                element.classList.remove('notification');
-            }
-        });
-    }
 }
 
 function populateCardNotification(nameSender, cpfReceiver, id, instanceId, processId,
@@ -677,6 +666,7 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
     const fragment = document.createDocumentFragment();
     const noNotification = document.getElementById('noNotification');
     noNotification.style.display = 'none';
+    const lerTodasNotifi = document.getElementById('lerTodasNotifi');
 
     const card = document.createElement('div');
     card.classList.add('notificationContainer');
@@ -726,6 +716,10 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
             return;
         }
         timeElement.textContent = 'agora';
+
+        lerTodasNotifi.onclick = function() {
+            readNotification(socket, cpfReceiver, notificationIcon, notificationIconElement, card);
+        }
     }
 
     updateTimeAgo();
@@ -737,19 +731,7 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
     });
 
     card.addEventListener('click', () => {
-        socket.emit('readNotification', {
-                read: true,
-                cpfReceiver: cpfReceiver,
-                id: id
-            }, (response) => {
-                card.classList.remove('has-notification');
-                const hasNotification = document.querySelectorAll('.has-notification');
-                if(hasNotification.length <= 1) {
-                    notificationIcon.classList.remove('has-notification');
-                    notificationIconElement.title = "Nenhuma notificação pendente!";
-                }
-            }
-        );
+        readNotification(socket, cpfReceiver, notificationIcon, notificationIconElement, card);
 
         /*localStorage.setItem('cardId', instanceId);
         if(acitivityName.toLowerCase() == 'correção') {
@@ -777,4 +759,20 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
     } else {
         console.error("Elemento com a classe 'notificationList' não encontrado.");
     }
+}
+
+function readNotification(socket, cpfReceiver, notificationIcon, notificationIconElement, card) {
+    socket.emit('readNotification', {
+        read: true,
+        cpfReceiver: cpfReceiver,
+        id: id
+    }, (response) => {
+        card.classList.remove('has-notification');
+        const hasNotification = document.querySelectorAll('.has-notification');
+        if(hasNotification.length <= 1) {
+            notificationIcon.classList.remove('has-notification');
+            notificationIconElement.title = "Nenhuma notificação pendente!";
+        }
+    }
+);
 }
