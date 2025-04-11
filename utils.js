@@ -767,12 +767,12 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
 }
 
 function readNotification(id, socket, cpfReceiver, notificationIcon, notificationIconElement, card) {
+    console.log(id);
     socket.emit('readNotification', {
             read: true,
             cpfReceiver: cpfReceiver,
             id: id
         }, (response) => {
-            console.log(response);
             card.classList.remove('has-notification');
             const hasNotification = document.querySelectorAll('.has-notification');
             if(hasNotification.length <= 1) {
