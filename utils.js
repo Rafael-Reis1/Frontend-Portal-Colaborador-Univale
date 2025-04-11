@@ -716,10 +716,6 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
             return;
         }
         timeElement.textContent = 'agora';
-
-        lerTodasNotifi.onclick = function() {
-            readNotification(socket, cpfReceiver, notificationIcon, notificationIconElement, card);
-        }
     }
 
     updateTimeAgo();
@@ -730,8 +726,16 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
         clearInterval(intervalId);
     });
 
+    lerTodasNotifi.onclick = function() {
+        const hasNotification = document.querySelectorAll('.has-notification');
+
+        hasNotification.forEach(element => {
+            readNotification(id, socket, cpfReceiver, notificationIcon, notificationIconElement, card);  
+        });
+    }
+
     card.addEventListener('click', () => {
-        readNotification(socket, cpfReceiver, notificationIcon, notificationIconElement, card);
+        readNotification(id, socket, cpfReceiver, notificationIcon, notificationIconElement, card);
 
         /*localStorage.setItem('cardId', instanceId);
         if(acitivityName.toLowerCase() == 'correção') {
@@ -761,7 +765,7 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
     }
 }
 
-function readNotification(socket, cpfReceiver, notificationIcon, notificationIconElement, card) {
+function readNotification(id, socket, cpfReceiver, notificationIcon, notificationIconElement, card) {
     socket.emit('readNotification', {
         read: true,
         cpfReceiver: cpfReceiver,
