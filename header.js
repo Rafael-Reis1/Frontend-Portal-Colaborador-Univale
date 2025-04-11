@@ -117,10 +117,6 @@ function header() {
         else {
             localStorage.setItem('darkMode', 'true');
         }
-    
-        setTimeout(() => {
-            document.style.transition = '';
-        }, 1000);
 
         if (typeof updateUploadAreaColor === 'function') {
             updateUploadAreaColor();
