@@ -671,6 +671,7 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
     const card = document.createElement('div');
     card.classList.add('notificationContainer');
     card.dataset.id = instanceId;
+    card.dataset.notificationId = id;
 
     const createdAtDate = new Date(createdAt);
 
@@ -730,7 +731,7 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
         const hasNotification = document.querySelectorAll('.has-notification');
 
         hasNotification.forEach(element => {
-            const notificationId = element.dataset.id;
+            const notificationId = element.dataset.notificationId;
             readNotification(notificationId, socket, cpfReceiver, notificationIcon, notificationIconElement, element);
         });
     }
