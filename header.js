@@ -100,26 +100,11 @@ function header() {
     }
 
     darkMode.onclick = function() {
-        const mainContainer = document.querySelector('.mainContainer');
-        const inputSearch = document.querySelector('.inputSearch');
-        const cardSituation = document.querySelector('.cardSituation');
-        const cardsSituation = document.querySelector('.cardsSituation');
-        const containerUser = document.getElementById('containerUser');
-        const logoHeader = document.getElementById('logoHeader');
-        const whiteButton = document.querySelector('.whiteButton');
-        const formPaper = document.getElementById('formPaper');
-        const FormInputs = document.getElementById('FormInputs');
-        const formBackground = document.getElementById('formBackground');
-        const fileUploadArea = document.getElementById('file-upload');
-    
         document.body.classList.toggle("dark-mode");
-    
-        // Lista de elementos
-        const elements = [mainContainer, inputSearch, cardSituation, cardsSituation,
-                containerUser, logoHeader, whiteButton, formPaper, FormInputs, formBackground, fileUploadArea];
-    
-        // Aplica a transição apenas nos elementos que existem
-        elements.forEach(el => el && (el.style.transition = 'ease 275ms'));
+
+        document.querySelectorAll('*').forEach(element => {
+            element.style.transition = 'color 0ms ease, background-color 275ms ease';
+        });
     
         if(localStorage.getItem('darkMode') === 'false') {
             localStorage.setItem('darkMode', 'true');
@@ -134,14 +119,13 @@ function header() {
         }
     
         setTimeout(() => {
-            elements.forEach(el => el && (el.style.transition = ''));
+            document.style.transition = '';
         }, 1000);
 
         if (typeof updateUploadAreaColor === 'function') {
             updateUploadAreaColor();
         }
     };
-    
 }
 
 function defineTamanhoDivNomeUser(containerUser, nomeUser) {
