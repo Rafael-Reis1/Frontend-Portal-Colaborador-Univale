@@ -730,7 +730,7 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
         const hasNotification = document.querySelectorAll('.has-notification');
 
         hasNotification.forEach(element => {
-            const notificationId = element.dataset.id; // Obtém o instanceId do card
+            const notificationId = element.dataset.id;
             readNotification(notificationId, socket, cpfReceiver, notificationIcon, notificationIconElement, element);
         });
     }
@@ -772,6 +772,7 @@ function readNotification(id, socket, cpfReceiver, notificationIcon, notificatio
             cpfReceiver: cpfReceiver,
             id: id
         }, (response) => {
+            console.log(response);
             card.classList.remove('has-notification');
             const hasNotification = document.querySelectorAll('.has-notification');
             if(hasNotification.length <= 1) {
