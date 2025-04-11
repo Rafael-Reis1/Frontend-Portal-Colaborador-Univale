@@ -773,7 +773,6 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
 }
 
 function readNotification(id, socket, cpfReceiver, notificationIcon, notificationIconElement, card) {
-    console.log(id);
     socket.emit('readNotification', {
             read: true,
             cpfReceiver: cpfReceiver,
