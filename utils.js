@@ -729,8 +729,13 @@ function populateCardNotification(nameSender, cpfReceiver, id, instanceId, proce
 
     lerTodasNotifi.onclick = function() {
         const hasNotification = document.querySelectorAll('.has-notification');
+        let isFirst = true;
 
         hasNotification.forEach(element => {
+            if (isFirst) {
+                isFirst = false;
+                return; // Pula a primeira iteração
+            }
             const notificationId = element.dataset.notificationId;
             readNotification(notificationId, socket, cpfReceiver, notificationIcon, notificationIconElement, element);
         });
